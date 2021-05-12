@@ -345,16 +345,19 @@ public class mxStencilShape extends mxBasicShape
 		 */
 		while (child != null)
 		{
+			svgShape subShape = null;
 			if (isGroup(child.getNodeName()))
 			{
 				String style = ((Element) root).getAttribute("style");
 				Map<String, Object> styleMap = mxStencilShape
 						.getStylenames(style);
-				svgShape subShape = new svgShape(null, styleMap);
+				subShape = new svgShape(null, styleMap);
 				createShape(child, subShape);
 			}
-
-			svgShape subShape = createElement(child);
+			else
+			{
+				subShape = createElement(child);
+			}
 
 			if (subShape != null)
 			{
