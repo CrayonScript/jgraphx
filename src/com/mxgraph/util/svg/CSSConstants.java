@@ -32,4 +32,10 @@ public interface CSSConstants {
 	
 	String CSS_NONE_VALUE = "none";
 
+	String CSS_FONT_FAMILY = "font-family";
+
+	String CSS_FONT_STYLE = "font-style";
+
+	String CSS_FONT_WEIGHT = "font-weight";
+
 }
