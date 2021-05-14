@@ -42,6 +42,7 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import com.mxgraph.model.mxGeometry;
 import org.w3c.dom.Document;
 
 import com.mxgraph.analysis.mxDistanceCostFunction;
@@ -1490,7 +1491,18 @@ public class EditorActions
 
 			if (palette != null && icon != null)
 			{
-				palette.addTemplate(name, icon, "shape=" + name, 80, 80, "");
+				// create cell from the stencil shape
+				mxGeometry geometry = new mxGeometry();
+				geometry.setWidth(80);
+				geometry.setHeight(80);
+
+				mxCell cell = new mxCell();
+				cell.setGeometry(geometry);
+				cell.setVertex(true);
+				cell.setValue("");
+				cell.setStyle("shape=" + name);
+
+				palette.addTemplate(name, icon, cell);
 			}
 
 			return name;
@@ -1828,7 +1840,8 @@ public class EditorActions
 
 		/**
 		 * 
-		 * @param key
+		 * @param labelPosition
+		 * @param alignment
 		 */
 		public SetLabelPositionAction(String labelPosition, String alignment)
 		{
@@ -1887,7 +1900,7 @@ public class EditorActions
 
 		/**
 		 * 
-		 * @param key
+		 * @param value
 		 */
 		public SetStyleAction(String value)
 		{
@@ -2015,8 +2028,8 @@ public class EditorActions
 		protected String align;
 
 		/**
-		 * 
-		 * @param key
+		 *
+		 * @param align
 		 */
 		public AlignCellsAction(String align)
 		{
