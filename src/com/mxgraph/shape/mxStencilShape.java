@@ -421,7 +421,10 @@ public class mxStencilShape extends mxBasicShape
 			}
 		}
 
-		svgElement.boundingBox = boundingBox;
+		if (svgElement instanceof SvgGroup)
+		{
+			svgElement.shape = boundingBox;
+		}
 
 		return boundingBox;
 	}
@@ -860,8 +863,6 @@ public class mxStencilShape extends mxBasicShape
 		public List<SvgElement> subElements;
 
 		Shape shape = null;
-
-		Rectangle2D boundingBox = null;
 
 		boolean fill = false;
 		boolean stroke = true;
