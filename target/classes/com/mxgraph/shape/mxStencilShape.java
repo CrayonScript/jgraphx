@@ -127,24 +127,22 @@ public class mxStencilShape extends mxBasicShape
 				if (boundingBox != null
 						&& (boundingBox.getX() != 0 || boundingBox.getY() != 0))
 				{
-					List<SvgElement> allSubElements = rootElement.getAllSubElements();
-
-					Predicate<SvgElement> filterByValidShape = e -> e != null && e.shape != null;
-
-					List<SvgElement> validShapeElements = allSubElements
-							.stream().filter(filterByValidShape).collect(Collectors.toList());
-
-					for (SvgElement subElement : validShapeElements)
-					{
-						Shape shape = subElement.shape;
-						if (shape != null)
-						{
-							transformShape(shape, -boundingBox.getX(),
-									-boundingBox.getY(), 1.0, 1.0);
-						}
-					}
+					applyBoundingBox(rootElement, boundingBox);
 				}
 			}
+		}
+	}
+
+	public void applyBoundingBox(SvgElement element, Rectangle2D boundingBox)
+	{
+		if (element.shape != null)
+		{
+			transformShape(element.shape, -boundingBox.getX(), -boundingBox.getY(), 1.0, 1.0);
+		}
+
+		for (SvgElement subElement : element.subElements)
+		{
+			applyBoundingBox(subElement, boundingBox);
 		}
 	}
 
@@ -403,27 +401,27 @@ public class mxStencilShape extends mxBasicShape
 	 */
 	public Rectangle2D calcBoundingBox(SvgElement svgElement)
 	{
-		Rectangle2D boundingBox = null;
+		Rectangle2D boundingBox = svgElement != null
+				&& svgElement instanceof SvgShape
+				&& svgElement.shape != null
+				? (Rectangle2D) svgElement.shape.getBounds2D().clone() : null;
 
-		Predicate<SvgElement> filterBySvgShapeType = e -> e != null && e instanceof SvgShape && e.shape != null;
-
-		List<SvgElement> allSubElements = svgElement.getAllSubElements();
-
-		List<SvgElement> svgShapeSubElements = allSubElements
-				.stream().filter(filterBySvgShapeType).collect(Collectors.toList());
-
-		for (SvgElement subElement : svgShapeSubElements)
+		for (SvgElement subElement : svgElement.subElements)
 		{
-			Shape shape = subElement.shape;
-			if (boundingBox == null)
+			Rectangle2D subBoundingBox = calcBoundingBox(subElement);
+
+			if (boundingBox == null && subBoundingBox != null)
 			{
-				boundingBox = shape.getBounds2D();
+				boundingBox = (Rectangle2D) subBoundingBox.clone();
 			}
-			else
+
+			if (boundingBox != null && subBoundingBox != null && boundingBox != subBoundingBox)
 			{
-				boundingBox = boundingBox.createUnion(shape.getBounds2D());
+				boundingBox = boundingBox.createUnion(subBoundingBox);
 			}
 		}
+
+		svgElement.boundingBox = boundingBox;
 
 		return boundingBox;
 	}
@@ -863,7 +861,7 @@ public class mxStencilShape extends mxBasicShape
 
 		Shape shape = null;
 
-		Rectangle2D.Double boundingBox = null;
+		Rectangle2D boundingBox = null;
 
 		boolean fill = false;
 		boolean stroke = true;
