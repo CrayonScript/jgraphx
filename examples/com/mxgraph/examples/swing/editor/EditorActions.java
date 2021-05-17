@@ -1496,7 +1496,7 @@ public class EditorActions
 				geometry.setWidth(80);
 				geometry.setHeight(80);
 
-				mxCell cell = new mxCell();
+				mxCell cell = newShape.buildCell();
 				cell.setGeometry(geometry);
 				cell.setVertex(true);
 				cell.setValue("");

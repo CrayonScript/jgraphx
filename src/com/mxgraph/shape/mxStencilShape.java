@@ -3,6 +3,7 @@
  */
 package com.mxgraph.shape;
 
+import com.mxgraph.model.mxCell;
 import org.w3c.dom.Node;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
@@ -122,6 +123,15 @@ public class mxStencilShape extends mxBasicShape
 				applyBoundingBox(rootElement);
 			}
 		}
+	}
+
+	/**
+	 *
+	 * @return mxCell for stencil shape
+	 */
+	public mxCell buildCell()
+	{
+		return new mxCell();
 	}
 
 	/**
