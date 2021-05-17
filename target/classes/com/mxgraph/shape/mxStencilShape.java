@@ -3,38 +3,27 @@
  */
 package com.mxgraph.shape;
 
-import com.mxgraph.model.mxCell;
-import org.w3c.dom.Node;
-
 import com.mxgraph.canvas.mxGraphics2DCanvas;
+import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
-import com.mxgraph.util.svg.AWTPathProducer;
-import com.mxgraph.util.svg.AWTPolygonProducer;
-import com.mxgraph.util.svg.AWTPolylineProducer;
-import com.mxgraph.util.svg.CSSConstants;
-import com.mxgraph.util.svg.ExtendedGeneralPath;
+import com.mxgraph.util.svg.*;
 import com.mxgraph.view.mxCellState;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
-import java.util.*;
+import java.awt.geom.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
  * Stencil shape drawing that takes an XML definition of the shape and renders
@@ -162,18 +151,19 @@ public class mxStencilShape extends mxBasicShape
 		{
 			if (subElement instanceof SvgGroup)
 			{
-				mxCell groupCell = new mxCell();
+				mxStencilCell groupCell = new mxStencilCell(subElement.shape);
+
 				parentCell.insert(groupCell);
 				if (subElement.subElements != null && subElement.subElements.size() > 0)
 				{
-					groupCell = buildCell(groupCell, subElement);
+					buildCell(groupCell, subElement);
 				}
 			}
 			else
 			{
 				if (subElement.subElements != null && subElement.subElements.size() > 0)
 				{
-					parentCell = buildCell(parentCell, subElement);
+					buildCell(parentCell, subElement);
 				}
 			}
 		}
@@ -421,7 +411,10 @@ public class mxStencilShape extends mxBasicShape
 			}
 		}
 
-		svgElement.boundingBox = boundingBox;
+		if (svgElement instanceof SvgGroup)
+		{
+			svgElement.shape = boundingBox;
+		}
 
 		return boundingBox;
 	}
@@ -861,8 +854,6 @@ public class mxStencilShape extends mxBasicShape
 
 		Shape shape = null;
 
-		Rectangle2D boundingBox = null;
-
 		boolean fill = false;
 		boolean stroke = true;
 		Color fillColor = null;
@@ -915,18 +906,6 @@ public class mxStencilShape extends mxBasicShape
 			}
 		}
 
-		public List<SvgElement> getAllSubElements()
-		{
-			List<SvgElement> allSubElements = new ArrayList<SvgElement>();
-
-			for (SvgElement subElement : subElements)
-			{
-				allSubElements.add(subElement);
-				allSubElements.addAll(subElement.getAllSubElements());
-			}
-
-			return allSubElements;
-		}
 	}
 
 	protected class SvgRoot extends SvgElement
