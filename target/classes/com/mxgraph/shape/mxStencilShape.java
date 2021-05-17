@@ -120,7 +120,30 @@ public class mxStencilShape extends mxBasicShape
 			{
 				rootElement = new SvgRoot();
 				createElement(this.root, rootElement);
-				applyBoundingBox(rootElement);
+				boundingBox = calcBoundingBox(rootElement);
+
+				// If the svgShape does not butt up against either or both axis,
+				// ensure it is flush against both
+				if (boundingBox != null
+						&& (boundingBox.getX() != 0 || boundingBox.getY() != 0))
+				{
+					List<SvgElement> allSubElements = rootElement.getAllSubElements();
+
+					Predicate<SvgElement> filterByValidShape = e -> e != null && e.shape != null;
+
+					List<SvgElement> validShapeElements = allSubElements
+							.stream().filter(filterByValidShape).collect(Collectors.toList());
+
+					for (SvgElement subElement : validShapeElements)
+					{
+						Shape shape = subElement.shape;
+						if (shape != null)
+						{
+							transformShape(shape, -boundingBox.getX(),
+									-boundingBox.getY(), 1.0, 1.0);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -145,14 +168,14 @@ public class mxStencilShape extends mxBasicShape
 				parentCell.insert(groupCell);
 				if (subElement.subElements != null && subElement.subElements.size() > 0)
 				{
-					buildCell(groupCell, subElement);
+					groupCell = buildCell(groupCell, subElement);
 				}
 			}
 			else
 			{
 				if (subElement.subElements != null && subElement.subElements.size() > 0)
 				{
-					buildCell(parentCell, subElement);
+					parentCell = buildCell(parentCell, subElement);
 				}
 			}
 		}
@@ -378,19 +401,16 @@ public class mxStencilShape extends mxBasicShape
 	 *
 	 * @param svgElement
 	 */
-	public void applyBoundingBox(SvgElement svgElement)
+	public Rectangle2D calcBoundingBox(SvgElement svgElement)
 	{
-		Predicate<SvgElement> filterBySvgShapeType = e -> e != null && e instanceof SvgShape && e.shape != null;
+		Rectangle2D boundingBox = null;
 
-		Predicate<SvgElement> filterByValidShape = e -> e != null && e.shape != null;
+		Predicate<SvgElement> filterBySvgShapeType = e -> e != null && e instanceof SvgShape && e.shape != null;
 
 		List<SvgElement> allSubElements = svgElement.getAllSubElements();
 
 		List<SvgElement> svgShapeSubElements = allSubElements
 				.stream().filter(filterBySvgShapeType).collect(Collectors.toList());
-
-		List<SvgElement> validShapeElements = allSubElements
-				.stream().filter(filterByValidShape).collect(Collectors.toList());
 
 		for (SvgElement subElement : svgShapeSubElements)
 		{
@@ -405,21 +425,7 @@ public class mxStencilShape extends mxBasicShape
 			}
 		}
 
-		// If the svgShape does not butt up against either or both axis,
-		// ensure it is flush against both
-		if (boundingBox != null
-				&& (boundingBox.getX() != 0 || boundingBox.getY() != 0))
-		{
-			for (SvgElement subElement : validShapeElements)
-			{
-				Shape shape = subElement.shape;
-				if (shape != null)
-				{
-					transformShape(shape, -boundingBox.getX(),
-							-boundingBox.getY(), 1.0, 1.0);
-				}
-			}
-		}
+		return boundingBox;
 	}
 
 	/**
@@ -856,6 +862,8 @@ public class mxStencilShape extends mxBasicShape
 		public List<SvgElement> subElements;
 
 		Shape shape = null;
+
+		Rectangle2D.Double boundingBox = null;
 
 		boolean fill = false;
 		boolean stroke = true;
