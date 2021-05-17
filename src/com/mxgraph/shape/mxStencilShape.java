@@ -131,7 +131,32 @@ public class mxStencilShape extends mxBasicShape
 	 */
 	public mxCell buildCell()
 	{
-		return new mxCell();
+		mxCell cell = buildCell(new mxCell(), rootElement);
+		return cell;
+	}
+
+	protected mxCell buildCell(mxCell parentCell, SvgElement parentElement)
+	{
+		for (SvgElement subElement : parentElement.subElements)
+		{
+			if (subElement instanceof SvgGroup)
+			{
+				mxCell groupCell = new mxCell();
+				parentCell.insert(groupCell);
+				if (subElement.subElements != null && subElement.subElements.size() > 0)
+				{
+					buildCell(groupCell, subElement);
+				}
+			}
+			else
+			{
+				if (subElement.subElements != null && subElement.subElements.size() > 0)
+				{
+					buildCell(parentCell, subElement);
+				}
+			}
+		}
+		return parentCell;
 	}
 
 	/**
