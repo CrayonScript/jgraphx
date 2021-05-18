@@ -6,6 +6,7 @@ import com.mxgraph.model.mxGeometry;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class mxStencilCell extends mxCell implements Cloneable, Serializable
 {
@@ -13,11 +14,14 @@ public class mxStencilCell extends mxCell implements Cloneable, Serializable
 
     Shape shape;
 
-    ArrayList<mxStencilCell> innerStencilCells = new ArrayList<mxStencilCell>();
+    public ArrayList<mxStencilCell> innerStencilCells = new ArrayList<mxStencilCell>();
 
-    mxStencilCell(Shape shape)
+    public boolean isDropTarget;
+
+    mxStencilCell(Shape shape, boolean isDropTarget)
     {
         this.shape = shape;
+        this.isDropTarget = isDropTarget;
     }
 
     /* (non-Javadoc)

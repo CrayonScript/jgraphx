@@ -141,7 +141,7 @@ public class mxStencilShape extends mxBasicShape
 	 */
 	public mxCell buildCell()
 	{
-		mxCell cell = buildCell(new mxStencilCell(boundingBox), rootElement);
+		mxCell cell = buildCell(new mxStencilCell(boundingBox, false), rootElement);
 		return cell;
 	}
 
@@ -151,7 +151,7 @@ public class mxStencilShape extends mxBasicShape
 		{
 			if (subElement instanceof SvgGroup)
 			{
-				mxStencilCell groupCell = new mxStencilCell(subElement.shape);
+				mxStencilCell groupCell = new mxStencilCell(subElement.shape, true);
 
 				parentCell.innerStencilCells.add(groupCell);
 				if (subElement.subElements != null && subElement.subElements.size() > 0)
@@ -437,7 +437,7 @@ public class mxStencilShape extends mxBasicShape
 				String style = ((Element) root).getAttribute("style");
 				Map<String, Object> styleMap = mxStencilShape
 						.getStylenames(style);
-				subElement = new SvgGroup();
+				subElement = new SvgGroup(styleMap);
 				createElement(child, subElement);
 			}
 			else
@@ -918,9 +918,9 @@ public class mxStencilShape extends mxBasicShape
 
 	protected class SvgGroup extends SvgElement
 	{
-		public SvgGroup()
+		public SvgGroup(Map<String, Object> style)
 		{
-			super(null);
+			super(style);
 		}
 	}
 
