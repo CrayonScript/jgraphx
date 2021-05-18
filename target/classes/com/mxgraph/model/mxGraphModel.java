@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.mxgraph.shape.mxStencilCell;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource;
@@ -1060,6 +1061,11 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel,
 		}
 
 		return visible;
+	}
+
+	public boolean isStencil(Object cell)
+	{
+		return (cell instanceof mxStencilCell);
 	}
 
 	/**
