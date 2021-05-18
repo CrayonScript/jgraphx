@@ -6841,7 +6841,6 @@ public class mxGraph extends mxEventSource
 	 */
 	public boolean isValidDropTarget(Object cell, Object[] cells)
 	{
-		// TODO: fix me
 		return cell != null && ((isSplitEnabled() && isSplitTarget(cell, cells))
 				|| (!model.isEdge(cell)
 						&& (isSwimlane(cell) || (model.getChildCount(cell) > 0
