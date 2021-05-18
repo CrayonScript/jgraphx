@@ -141,11 +141,11 @@ public class mxStencilShape extends mxBasicShape
 	 */
 	public mxCell buildCell()
 	{
-		mxCell cell = buildCell(new mxCell(), rootElement);
+		mxCell cell = buildCell(new mxStencilCell(boundingBox), rootElement);
 		return cell;
 	}
 
-	protected mxCell buildCell(mxCell parentCell, SvgElement parentElement)
+	protected mxCell buildCell(mxStencilCell parentCell, SvgElement parentElement)
 	{
 		for (SvgElement subElement : parentElement.subElements)
 		{
@@ -153,7 +153,7 @@ public class mxStencilShape extends mxBasicShape
 			{
 				mxStencilCell groupCell = new mxStencilCell(subElement.shape);
 
-				parentCell.insert(groupCell);
+				parentCell.innerStencilCells.add(groupCell);
 				if (subElement.subElements != null && subElement.subElements.size() > 0)
 				{
 					buildCell(groupCell, subElement);
