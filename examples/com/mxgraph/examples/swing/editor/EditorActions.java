@@ -1491,17 +1491,7 @@ public class EditorActions
 
 			if (palette != null && icon != null)
 			{
-				// create cell from the stencil shape
-				mxGeometry geometry = new mxGeometry();
-				geometry.setWidth(80);
-				geometry.setHeight(80);
-
 				mxCell cell = newShape.buildCell();
-				cell.setGeometry(geometry);
-				cell.setVertex(true);
-				cell.setValue("");
-				cell.setStyle("shape=" + name);
-
 				palette.addTemplate(name, icon, cell);
 			}
 

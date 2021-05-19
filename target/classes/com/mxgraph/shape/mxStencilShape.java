@@ -5,6 +5,7 @@ package com.mxgraph.shape;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxGeometry;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.util.svg.*;
@@ -18,10 +19,8 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.*;
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -141,7 +140,19 @@ public class mxStencilShape extends mxBasicShape
 	 */
 	public mxCell buildCell()
 	{
-		mxCell cell = buildCell(new mxStencilCell(boundingBox, false), rootElement);
+		mxStencilCell cell = new mxStencilCell(boundingBox, false);
+		cell = (mxStencilCell) buildCell(cell, rootElement);
+
+		// create cell from the stencil shape
+		mxGeometry geometry = new mxGeometry();
+		geometry.setWidth(80);
+		geometry.setHeight(80);
+
+		cell.setGeometry(geometry);
+		cell.setVertex(true);
+		cell.setValue("");
+		cell.setStyle("shape=" + name);
+
 		return cell;
 	}
 
@@ -152,7 +163,9 @@ public class mxStencilShape extends mxBasicShape
 			if (subElement instanceof SvgGroup)
 			{
 				mxStencilCell groupCell = new mxStencilCell(subElement.shape, true);
-				groupCell.setId("group");
+				groupCell.setVertex(true);
+				groupCell.setValue("");
+				groupCell.setId(UUID.randomUUID().toString());
 
 				parentCell.insert(groupCell);
 				if (subElement.subElements != null && subElement.subElements.size() > 0)
