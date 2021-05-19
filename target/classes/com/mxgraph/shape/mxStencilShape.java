@@ -152,8 +152,9 @@ public class mxStencilShape extends mxBasicShape
 			if (subElement instanceof SvgGroup)
 			{
 				mxStencilCell groupCell = new mxStencilCell(subElement.shape, true);
+				groupCell.setId("group");
 
-				parentCell.innerStencilCells.add(groupCell);
+				parentCell.insert(groupCell);
 				if (subElement.subElements != null && subElement.subElements.size() > 0)
 				{
 					buildCell(groupCell, subElement);

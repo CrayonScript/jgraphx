@@ -1856,17 +1856,6 @@ public class mxGraphView extends mxEventSource
 	{
 		mxCellState state = new mxCellState(this, cell, graph.getCellStyle(cell));
 		states.put(cell, state);
-
-		// inner states
-		if (cell instanceof mxStencilCell)
-		{
-			mxStencilCell stencilCell = (mxStencilCell) cell;
-			for (mxStencilCell innerCell : stencilCell.innerStencilCells)
-			{
-				mxCellState innerState = new mxCellState(this, innerCell, graph.getCellStyle(innerCell));
-				states.put(innerCell, innerState);
-			}
-		}
 	}
 
 	@Override
