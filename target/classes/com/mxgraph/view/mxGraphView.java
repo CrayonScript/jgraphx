@@ -12,6 +12,7 @@ import java.util.Map;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.model.mxIGraphModel;
+import com.mxgraph.shape.mxStencilCell;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
@@ -1825,8 +1826,8 @@ public class mxGraphView extends mxEventSource
 
 			if (state == null && create && graph.isCellVisible(cell))
 			{
-				state = createState(cell);
-				states.put(cell, state);
+				createStates(cell);
+				return getState(cell, false);
 			}
 		}
 
@@ -1846,15 +1847,15 @@ public class mxGraphView extends mxEventSource
 	}
 
 	/**
-	 * Creates and returns a cell state for the given cell.
+	 * Creates cell states for the given cell.
 	 * 
 	 * @param cell
-	 *            Cell for which a new state should be created.
-	 * @return Returns a new state for the given cell.
+	 *            Cell for which a new states should be created.
 	 */
-	public mxCellState createState(Object cell)
+	public void createStates(Object cell)
 	{
-		return new mxCellState(this, cell, graph.getCellStyle(cell));
+		mxCellState state = new mxCellState(this, cell, graph.getCellStyle(cell));
+		states.put(cell, state);
 	}
 
 	@Override
