@@ -100,6 +100,17 @@ public class mxCellState extends mxRectangle
 
 	/**
 	 * Constructs a new object that represents the current state of the given
+	 * cell
+	 *
+	 * @param cell Cell that this state represents.
+	 */
+	public mxCellState(Object cell)
+	{
+		this(null, cell, null);
+	}
+
+	/**
+	 * Constructs a new object that represents the current state of the given
 	 * cell in the specified view.
 	 * 
 	 * @param view Graph view that contains the state.

@@ -1,2 +1,5 @@
 
 *.class
+
+# ignore anything in the target directory
+target/**

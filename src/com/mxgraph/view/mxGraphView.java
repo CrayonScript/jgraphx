@@ -1853,7 +1853,10 @@ public class mxGraphView extends mxEventSource
 	 */
 	public void createState(Object cell)
 	{
-		mxCellState state = new mxCellState(this, cell, graph.getCellStyle(cell));
+		mxIGraphModel model = graph.getModel();
+		mxCellState state = model.createState(cell);
+		state.setView(this);
+		state.setStyle(graph.getCellStyle(cell));
 		states.put(cell, state);
 	}
 
