@@ -77,9 +77,9 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	protected mxICell parent, source, target;
 
 	/**
-	 * Holds the child cells and connected edges.
+	 * Holds the child cells, components and connected edges.
 	 */
-	protected List<Object> children, edges;
+	protected List<Object> children, components, edges;
 
 	/**
 	 * Constructs a new cell with an empty user object.
@@ -437,6 +437,99 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		{
 			parent.remove(this);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#getComponentCount()
+	 */
+	public int getComponentCount()
+	{
+		return (components != null) ? components.size() : 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#getComponentIndex(com.mxgraph.model.mxICellComponent)
+	 */
+	public int getComponentIndex(mxICellComponent component)
+	{
+		return (components != null) ? components.indexOf(component) : -1;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#getComponentAt(int)
+	 */
+	public mxICellComponent getComponentAt(int index)
+	{
+		return (components != null) ? (mxICellComponent) components.get(index) : null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#insertComponent(com.mxgraph.model.mxICellComponent)
+	 */
+	public mxICellComponent insertComponent(mxICellComponent component)
+	{
+		int index = getComponentCount();
+
+		if (component.getOwner() == this)
+		{
+			index--;
+		}
+
+		return insertComponent(component, index);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#insertComponent(com.mxgraph.model.mxICellComponent, int)
+	 */
+	public mxICellComponent insertComponent(mxICellComponent component, int index)
+	{
+		if (component != null)
+		{
+			component.removeFromOwner();
+			component.setOwner(this);
+
+			if (components == null)
+			{
+				components = new ArrayList<Object>();
+				components.add(component);
+			}
+			else
+			{
+				components.add(index, component);
+			}
+		}
+
+		return component;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#removeComponent(int)
+	 */
+	public mxICellComponent removeComponent(int index)
+	{
+		mxICellComponent component = null;
+
+		if (components != null && index >= 0)
+		{
+			component = getComponentAt(index);
+			removeComponent(component);
+		}
+
+		return component;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#removeComponent(com.mxgraph.model.mxICellComponent)
+	 */
+	public mxICellComponent removeComponent(mxICellComponent component)
+	{
+		if (component != null && components != null)
+		{
+			components.remove(component);
+			component.setOwner(null);
+		}
+
+		return component;
 	}
 
 	/* (non-Javadoc)

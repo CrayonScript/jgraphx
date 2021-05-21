@@ -212,6 +212,69 @@ public interface mxICell
 	void removeFromParent();
 
 	/**
+	 * Returns the number of component cells.
+	 *
+	 * @return Returns the number of components.
+	 */
+	int getComponentCount();
+
+	/**
+	 * Returns the index of the specified component in the component array.
+	 *
+	 * @param component Component whose index should be returned.
+	 * @return Returns the index of the given component.
+	 */
+	int getComponentIndex(mxICellComponent component);
+
+	/**
+	 * Returns the component at the specified index.
+	 *
+	 * @param index Integer that specifies the component to be returned.
+	 * @return Returns the component at the given index.
+	 */
+	mxICellComponent getComponentAt(int index);
+
+	/**
+	 * Appends the specified component into the component array and updates the parent
+	 * reference of the component. Returns the appended component.
+	 *
+	 * @param component Cell component to be appended to the component array.
+	 * @return Returns the new component.
+	 */
+	mxICellComponent insertComponent(mxICellComponent component);
+
+	/**
+	 * Inserts the specified component into the component array at the specified index
+	 * and updates the parent reference of the component. Returns the inserted component.
+	 *
+	 * @param component Cell component to be inserted into the component array.
+	 * @param index Integer that specifies the index at which the component should
+	 * be inserted into the component array.
+	 * @return Returns the new component.
+	 */
+	mxICellComponent insertComponent(mxICellComponent component, int index);
+
+	/**
+	 * Removes the component at the specified index from the component array and
+	 * returns the component that was removed. Will remove the owner reference of
+	 * the component.
+	 *
+	 * @param index Integer that specifies the index of the component to be
+	 * removed.
+	 * @return Returns the component that was removed.
+	 */
+	mxICellComponent removeComponent(int index);
+
+	/**
+	 * Removes the given component from the component array and returns it. Will remove
+	 * the parent reference of the component.
+	 *
+	 * @param component Cell that represents the component to be removed.
+	 * @return Returns the component that was removed.
+	 */
+	mxICellComponent removeComponent(mxICellComponent component);
+
+	/**
 	 * Returns the number of edges in the edge array.
 	 * 
 	 * @return Returns the number of edges.
