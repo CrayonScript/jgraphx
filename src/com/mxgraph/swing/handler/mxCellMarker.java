@@ -459,7 +459,7 @@ public class mxCellMarker extends JComponent
 	{
 		if (markedState != null)
 		{
-			Rectangle bounds = markedState.getRectangle();
+			Rectangle bounds = markedState.getHighlightSource().getRectangle();
 			bounds.grow(3, 3);
 			bounds.width += 1;
 			bounds.height += 1;

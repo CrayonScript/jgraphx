@@ -13,7 +13,7 @@ import com.mxgraph.util.mxRectangle;
 /**
  * Represents the current state of a cell in a given graph view.
  */
-public class mxCellState extends mxRectangle
+public class mxCellState extends mxRectangle implements mxIHighlightSource
 {
 	/**
 	 * 
@@ -509,6 +509,11 @@ public class mxCellState extends mxRectangle
 		{
 			visibleTargetState = terminalState;
 		}
+	}
+
+	public mxIHighlightSource getHighlightSource()
+	{
+		return this;
 	}
 
 	/**
