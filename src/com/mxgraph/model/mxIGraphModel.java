@@ -5,7 +5,6 @@ package com.mxgraph.model;
 
 import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxUndoableEdit.mxUndoableChange;
-import com.mxgraph.view.mxCellState;
 
 /**
  * Defines the requirements for a graph model to be used with mxGraph.
@@ -309,15 +308,6 @@ public interface mxIGraphModel
 	 * @return
 	 */
 	boolean isStencil(Object cell);
-
-
-	/**
-	 * Returns the generated state for the cell
-	 *
-	 * @param cell
-	 * @return cell state
-	 */
-	mxCellState createState(Object cell);
 
 	/**
 	 * Increments the updateLevel by one. The event notification is queued

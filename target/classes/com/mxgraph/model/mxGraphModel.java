@@ -3,27 +3,15 @@
  */
 package com.mxgraph.model;
 
+import com.mxgraph.shape.mxStencilCell;
+import com.mxgraph.util.*;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.mxgraph.shape.mxStencilCell;
-import com.mxgraph.util.mxEvent;
-import com.mxgraph.util.mxEventObject;
-import com.mxgraph.util.mxEventSource;
-import com.mxgraph.util.mxPoint;
-import com.mxgraph.util.mxUndoableEdit;
 
 /**
  * Extends mxEventSource to implement a graph model. The graph model acts as
