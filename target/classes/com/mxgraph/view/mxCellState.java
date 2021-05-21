@@ -484,7 +484,7 @@ public class mxCellState extends mxRectangle
 	/**
 	 * Returns the visible source or target terminal state.
 	 * 
-	 * @param Boolean that specifies if the source or target state should be
+	 * @param source that specifies if the source or target state should be
 	 * returned.
 	 */
 	public mxCellState getVisibleTerminalState(boolean source)
