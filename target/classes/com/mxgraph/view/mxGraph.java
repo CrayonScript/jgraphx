@@ -6844,7 +6844,7 @@ public class mxGraph extends mxEventSource
 		return cell != null && ((isSplitEnabled() && isSplitTarget(cell, cells))
 				|| (!model.isEdge(cell)
 						&& (isSwimlane(cell) || (model.getChildCount(cell) > 0
-								&& !isCellCollapsed(cell)) || model.isStencil(cell))));
+								&& !isCellCollapsed(cell)) || model.isDropTarget(cell))));
 	}
 
 	/**

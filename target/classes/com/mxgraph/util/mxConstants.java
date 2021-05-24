@@ -26,9 +26,9 @@ public class mxConstants
 
 	/**
 	 * Defines the portion of the cell which is to be used as a connectable
-	 * region. Default is 0.3.
+	 * region. Default is 0.8.
 	 */
-	public static double DEFAULT_HOTSPOT = 0.3;
+	public static double DEFAULT_HOTSPOT = 0.8;
 
 	/**
 	 * Defines the minimum size in pixels of the portion of the cell which is

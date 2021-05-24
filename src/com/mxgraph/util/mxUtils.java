@@ -1284,65 +1284,6 @@ public class mxUtils
 		return mxStyleUtils.setStyleFlag(style, key, flag, value);
 	}
 
-	public static boolean intersectsHotspot(mxCellState state, int x, int y,
-			double hotspot)
-	{
-		return intersectsHotspot(state, x, y, hotspot, 0, 0);
-	}
-
-	/**
-	 * Returns true if the given coordinate pair intersects the hotspot of the
-	 * given state.
-	 */
-	public static boolean intersectsHotspot(mxCellState state, int x, int y,
-			double hotspot, int min, int max)
-	{
-		if (hotspot > 0)
-		{
-			int cx = (int) Math.round(state.getCenterX());
-			int cy = (int) Math.round(state.getCenterY());
-			int width = (int) Math.round(state.getWidth());
-			int height = (int) Math.round(state.getHeight());
-
-			if (mxUtils
-					.getString(state.getStyle(), mxConstants.STYLE_SHAPE, "")
-					.equals(mxConstants.SHAPE_SWIMLANE))
-			{
-				int start = mxUtils.getInt(state.getStyle(),
-						mxConstants.STYLE_STARTSIZE,
-						mxConstants.DEFAULT_STARTSIZE);
-
-				if (mxUtils.isTrue(state.getStyle(),
-						mxConstants.STYLE_HORIZONTAL, true))
-				{
-					cy = (int) Math.round(state.getY() + start / 2);
-					height = start;
-				}
-				else
-				{
-					cx = (int) Math.round(state.getX() + start / 2);
-					width = start;
-				}
-			}
-
-			int w = (int) Math.max(min, width * hotspot);
-			int h = (int) Math.max(min, height * hotspot);
-
-			if (max > 0)
-			{
-				w = Math.min(w, max);
-				h = Math.min(h, max);
-			}
-
-			Rectangle rect = new Rectangle(Math.round(cx - w / 2),
-					Math.round(cy - h / 2), w, h);
-
-			return rect.contains(x, y);
-		}
-
-		return true;
-	}
-
 	/**
 	 * Returns true if the dictionary contains true for the given key or false
 	 * if no value is defined for the key.

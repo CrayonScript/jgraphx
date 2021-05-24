@@ -11,6 +11,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
+import java.util.Date;
+import java.util.Timer;
 
 import javax.swing.JComponent;
 
@@ -21,9 +23,9 @@ import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
-import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraphView;
+import com.mxgraph.view.mxIHighlightSource;
 
 /**
  * Implements a mouse tracker that marks cells under the mouse.
@@ -187,6 +189,11 @@ public class mxCellMarker extends JComponent
 	 * Holds the marked state.
 	 */
 	protected transient mxCellState markedState;
+
+	/**
+	 * Holds the marked highlight
+	 */
+	protected transient mxIHighlightSource markedHighlight;
 
 	/**
 	 * Constructs a new marker for the given graph component.
@@ -365,6 +372,11 @@ public class mxCellMarker extends JComponent
 	public void setMarkedState(mxCellState value)
 	{
 		markedState = value;
+		markedHighlight = null;
+		if (markedState != null)
+		{
+			markedHighlight = markedState.getHighlightSource();
+		}
 	}
 
 	/**
@@ -385,6 +397,7 @@ public class mxCellMarker extends JComponent
 		if (markedState != null)
 		{
 			markedState = null;
+			markedHighlight = null;
 			unmark();
 		}
 	}
@@ -420,7 +433,7 @@ public class mxCellMarker extends JComponent
 	{
 		highlight(state, color, true);
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -435,18 +448,26 @@ public class mxCellMarker extends JComponent
 			validState = null;
 		}
 
-		if (state != markedState || color != currentColor)
+		mxIHighlightSource highlight = null;
+		if (state != null)
+		{
+			highlight = state.getHighlightSource();
+		}
+
+		if (highlight != markedHighlight || color != currentColor)
 		{
 			currentColor = color;
 
-			if (state != null && currentColor != null)
+			if (highlight != null && currentColor != null)
 			{
 				markedState = state;
+				markedHighlight = highlight;
 				mark();
 			}
 			else if (markedState != null)
 			{
 				markedState = null;
+				markedHighlight = null;
 				unmark();
 			}
 		}
@@ -459,7 +480,7 @@ public class mxCellMarker extends JComponent
 	{
 		if (markedState != null)
 		{
-			Rectangle bounds = markedState.getHighlightSource().getRectangle();
+			Rectangle bounds = markedHighlight.getRectangle();
 			bounds.grow(3, 3);
 			bounds.width += 1;
 			bounds.height += 1;
@@ -558,11 +579,11 @@ public class mxCellMarker extends JComponent
 	{
 		if (isHotspotEnabled())
 		{
-			return mxUtils.intersectsHotspot(state, e.getX(), e.getY(),
+			state.updateHotspots(e.getX(), e.getY(),
 					hotspot, mxConstants.MIN_HOTSPOT_SIZE,
 					mxConstants.MAX_HOTSPOT_SIZE);
+			return state.getIsHotspot() || state.getIsComponentHotspot();
 		}
-
 		return true;
 	}
 
@@ -600,22 +621,24 @@ public class mxCellMarker extends JComponent
 			((Graphics2D) g).setStroke(DEFAULT_STROKE);
 			g.setColor(currentColor);
 
-			if (markedState.getAbsolutePointCount() > 0)
-			{
-				Point last = markedState.getAbsolutePoint(0).getPoint();
+//			if (markedState.getAbsolutePointCount() > 0)
+//			{
+//				Point last = markedState.getAbsolutePoint(0).getPoint();
+//
+//				for (int i = 1; i < markedState.getAbsolutePointCount(); i++)
+//				{
+//					Point current = markedState.getAbsolutePoint(i).getPoint();
+//					g.drawLine(last.x - getX(), last.y - getY(), current.x
+//							- getX(), current.y - getY());
+//					last = current;
+//				}
+//			}
+//			else
+//			{
+//				g.drawRect(1, 1, getWidth() - 3, getHeight() - 3);
+//			}
 
-				for (int i = 1; i < markedState.getAbsolutePointCount(); i++)
-				{
-					Point current = markedState.getAbsolutePoint(i).getPoint();
-					g.drawLine(last.x - getX(), last.y - getY(), current.x
-							- getX(), current.y - getY());
-					last = current;
-				}
-			}
-			else
-			{
-				g.drawRect(1, 1, getWidth() - 3, getHeight() - 3);
-			}
+			g.drawRect(1, 1, getWidth() - 3, getHeight() - 3);
 		}
 	}
 

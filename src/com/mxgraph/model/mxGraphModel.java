@@ -3,7 +3,6 @@
  */
 package com.mxgraph.model;
 
-import com.mxgraph.shape.mxStencilCell;
 import com.mxgraph.util.*;
 
 import java.io.IOException;
@@ -1051,9 +1050,9 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel,
 		return visible;
 	}
 
-	public boolean isStencil(Object cell)
+	public boolean isDropTarget(Object cell)
 	{
-		return (cell instanceof mxStencilCell);
+		return (cell instanceof mxICell && ((mxICell) cell).getComponentCount() > 0);
 	}
 
 	/**

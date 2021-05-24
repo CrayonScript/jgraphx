@@ -81,6 +81,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 */
 	protected List<Object> children, components, edges;
 
+	protected double boundingBoxWidth = Double.NaN, boundingBoxHeight = Double.NaN;
+
 	/**
 	 * Constructs a new cell with an empty user object.
 	 */
@@ -102,16 +104,34 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	/**
 	 * Constructs a new cell for the given parameters.
-	 * 
+	 *
 	 * @param value Object that represents the value of the cell.
 	 * @param geometry Specifies the geometry of the cell.
 	 * @param style Specifies the style as a formatted string.
 	 */
 	public mxCell(Object value, mxGeometry geometry, String style)
 	{
+		this(value, geometry, style, Double.NaN, Double.NaN);
+	}
+
+
+	/**
+	 * Constructs a new cell for the given parameters.
+	 * 
+	 * @param value Object that represents the value of the cell.
+	 * @param geometry Specifies the geometry of the cell.
+	 * @param style Specifies the style as a formatted string.
+	 * @param boundingBoxWidth Bounding box width
+	 * @param boundingBoxHeight Bounding box height
+	 */
+	public mxCell(Object value, mxGeometry geometry, String style, double boundingBoxWidth, double boundingBoxHeight)
+	{
 		setValue(value);
 		setGeometry(geometry);
 		setStyle(style);
+
+		this.boundingBoxWidth = boundingBoxWidth;
+		this.boundingBoxHeight = boundingBoxHeight;
 	}
 
 	/* (non-Javadoc)
@@ -159,6 +179,31 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 */
 	public void setGeometry(mxGeometry geometry)
 	{
+		if (geometry != null && !Double.isNaN(boundingBoxWidth) && !Double.isNaN(boundingBoxHeight))
+		{
+			double scaleX = geometry.getWidth() / boundingBoxWidth;
+			double scaleY = geometry.getHeight() / boundingBoxHeight;
+
+			if (getComponentCount() > 0)
+			{
+				for (int i = 0; i < getComponentCount(); i++)
+				{
+					mxICellComponent component = getComponentAt(i);
+
+					double x = component.getBoundingBox().getX(); // relative
+					double y = component.getBoundingBox().getY(); // relative
+
+					double w = component.getBoundingBox().getWidth();
+					double h = component.getBoundingBox().getHeight();
+
+					component.getGeometry().setRect(
+							(scaleX) * x,
+							(scaleY) * y,
+							(scaleX) * w,
+							(scaleY) * h);
+				}
+			}
+		}
 		this.geometry = geometry;
 	}
 
@@ -667,6 +712,10 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			element.setAttribute(name, value);
 		}
 	}
+
+	public double getBoundingBoxWidth() { return boundingBoxWidth; }
+
+	public double getBoundingBoxHeight() { return boundingBoxHeight; }
 
 	/**
 	 * Returns a clone of the cell.

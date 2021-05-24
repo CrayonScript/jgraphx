@@ -55,7 +55,6 @@ import com.mxgraph.canvas.mxICanvas;
 import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.model.mxGraphModel.Filter;
 import com.mxgraph.model.mxIGraphModel;
-import com.mxgraph.shape.mxStencilCell;
 import com.mxgraph.swing.handler.mxCellHandler;
 import com.mxgraph.swing.handler.mxConnectionHandler;
 import com.mxgraph.swing.handler.mxEdgeHandler;

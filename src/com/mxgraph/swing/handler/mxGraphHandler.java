@@ -493,6 +493,8 @@ public class mxGraphHandler extends mxMouseAdapter implements
 		// Swimlane content area will not be transparent drop targets
 		marker.setSwimlaneContentEnabled(true);
 
+		marker.setHotspotEnabled(true); // needed by drag and drop
+
 		return marker;
 	}
 

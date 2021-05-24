@@ -3,12 +3,17 @@
  */
 package com.mxgraph.view;
 
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxICellComponent;
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxPoint;
+import com.mxgraph.util.mxRectangle;
+import com.mxgraph.util.mxUtils;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.mxgraph.util.mxPoint;
-import com.mxgraph.util.mxRectangle;
 
 /**
  * Represents the current state of a cell in a given graph view.
@@ -91,6 +96,16 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource
 	protected mxCellState visibleSourceState, visibleTargetState;
 
 	/**
+	 * Reference to the list of cell components that is represented by this state.
+	 */
+	protected List<mxCellComponentState> cellComponentStates;
+
+	/**
+	 * Reference to the last marked hotspot
+	 */
+	protected transient boolean isHotspot;
+
+	/**
 	 * Constructs an empty cell state.
 	 */
 	public mxCellState()
@@ -111,6 +126,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource
 		setView(view);
 		setCell(cell);
 		setStyle(style);
+		initializeCellComponentStates(getView(), cell);
 	}
 
 	/**
@@ -513,7 +529,126 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource
 
 	public mxIHighlightSource getHighlightSource()
 	{
+		int componentStateCount = getComponentStateCount();
+		for (int i = 0; i < componentStateCount; i++)
+		{
+			mxCellComponentState componentState = getCellComponentState(i);
+			if (componentState.isHotspot)
+			{
+				return componentState;
+			}
+		}
 		return this;
+	}
+
+
+	public void initializeCellComponentStates(mxGraphView view, Object obj)
+	{
+		if (obj != null)
+		{
+			mxCell cell = (mxCell) obj;
+			int componentCount = cell.getComponentCount();
+			for (int i = 0; i < componentCount; i++)
+			{
+				mxICellComponent cellComponent = cell.getComponentAt(i);
+				mxCellComponentState cellComponentState = new mxCellComponentState(view, cellComponent);
+				if (this.cellComponentStates == null) { this.cellComponentStates = new ArrayList<>(); }
+				this.cellComponentStates.add(cellComponentState);
+			}
+		}
+	}
+
+	public int getComponentStateCount() { return this.cellComponentStates != null ? this.cellComponentStates.size() : 0; }
+
+	public mxCellComponentState getCellComponentState(int index) { return this.cellComponentStates.get(index); }
+
+	public void updateHotspots(int x, int y,
+							   double hotspot, int min, int max)
+	{
+		this.isHotspot = intersects(x, y, hotspot, min, max);
+		int componentStateCount = getComponentStateCount();
+		for (int i = 0; i < componentStateCount; i++)
+		{
+			mxCellComponentState componentState = getCellComponentState(i);
+			componentState.updateIntersects(x, y, hotspot, min, max);
+		}
+	}
+
+	public boolean getIsHotspot()
+	{
+		return this.isHotspot;
+	}
+
+	public boolean getIsComponentHotspot()
+	{
+		int componentStateCount = getComponentStateCount();
+		for (int i = 0; i < componentStateCount; i++)
+		{
+			mxCellComponentState componentState = getCellComponentState(i);
+			if (componentState.isHotspot) return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns true if the given coordinate pair intersects the hotspot of the
+	 * given state.
+	 *
+	 * @param x
+	 * @param y
+	 * @param hotspot
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	protected boolean intersects(int x, int y,
+							  double hotspot, int min, int max)
+	{
+		mxCellState state = this;
+		if (hotspot > 0)
+		{
+			int cx = (int) Math.round(state.getCenterX());
+			int cy = (int) Math.round(state.getCenterY());
+			int width = (int) Math.round(state.getWidth());
+			int height = (int) Math.round(state.getHeight());
+
+			if (mxUtils
+					.getString(state.getStyle(), mxConstants.STYLE_SHAPE, "")
+					.equals(mxConstants.SHAPE_SWIMLANE))
+			{
+				int start = mxUtils.getInt(state.getStyle(),
+						mxConstants.STYLE_STARTSIZE,
+						mxConstants.DEFAULT_STARTSIZE);
+
+				if (mxUtils.isTrue(state.getStyle(),
+						mxConstants.STYLE_HORIZONTAL, true))
+				{
+					cy = (int) Math.round(state.getY() + start / 2);
+					height = start;
+				}
+				else
+				{
+					cx = (int) Math.round(state.getX() + start / 2);
+					width = start;
+				}
+			}
+
+			int w = (int) Math.max(min, width * hotspot);
+			int h = (int) Math.max(min, height * hotspot);
+
+			if (max > 0)
+			{
+				w = Math.min(w, max);
+				h = Math.min(h, max);
+			}
+
+			Rectangle rect = new Rectangle(Math.round(cx - w / 2),
+					Math.round(cy - h / 2), w, h);
+
+			return rect.contains(x, y);
+		}
+
+		return true;
 	}
 
 	/**

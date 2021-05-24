@@ -5,6 +5,7 @@ package com.mxgraph.shape;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxCellComponent;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
@@ -123,9 +124,9 @@ public class mxStencilShape extends mxBasicShape
 
 	public void applyBoundingBox(SvgElement element, Rectangle2D boundingBox)
 	{
-		if (element.shape != null)
+		if (element.boundingBox != null)
 		{
-			transformShape(element.shape, -boundingBox.getX(), -boundingBox.getY(), 1.0, 1.0);
+			transformShape(element.boundingBox, -boundingBox.getX(), -boundingBox.getY(), 1.0, 1.0);
 		}
 
 		for (SvgElement subElement : element.subElements)
@@ -140,48 +141,60 @@ public class mxStencilShape extends mxBasicShape
 	 */
 	public mxCell buildCell()
 	{
-		mxStencilCell cell = new mxStencilCell(boundingBox, false);
-		cell = (mxStencilCell) buildCell(cell, rootElement);
-
 		// create cell from the stencil shape
-		mxGeometry geometry = new mxGeometry();
-		geometry.setWidth(80);
-		geometry.setHeight(80);
-
-		cell.setGeometry(geometry);
+		mxGeometry geometry = new mxGeometry(0, 0, 80, 80);
+		mxCell cell = new mxCell("", geometry, "shape=" + name, boundingBox.getWidth(), boundingBox.getHeight());
 		cell.setVertex(true);
-		cell.setValue("");
-		cell.setStyle("shape=" + name);
-
+		// cell geometry should be set before invoking buildCellComponents
+		buildCellComponents(cell, rootElement);
 		return cell;
 	}
 
-	protected mxCell buildCell(mxStencilCell parentCell, SvgElement parentElement)
+	/**
+	 * build cell components
+	 *
+	 * @param cell
+	 * @param parentElement
+	 */
+	protected void buildCellComponents(mxCell cell, SvgElement parentElement)
 	{
+		double scaleX = cell.getGeometry().getWidth() / cell.getBoundingBoxWidth();
+		double scaleY = cell.getGeometry().getHeight() / cell.getBoundingBoxHeight();
+
 		for (SvgElement subElement : parentElement.subElements)
 		{
 			if (subElement instanceof SvgGroup)
 			{
-				mxStencilCell groupCell = new mxStencilCell(subElement.shape, true);
-				groupCell.setVertex(true);
-				groupCell.setValue("");
-				groupCell.setId(UUID.randomUUID().toString());
+				double x = subElement.boundingBox.getBounds2D().getX() - boundingBox.getX(); // relative
+				double y = -subElement.boundingBox.getBounds2D().getY() + boundingBox.getY(); // relative
 
-				parentCell.insert(groupCell);
+				double w = subElement.boundingBox.getBounds2D().getWidth();
+				double h = subElement.boundingBox.getBounds2D().getHeight();
+
+				mxGeometry groupGeometry = new mxGeometry(
+						(scaleX) * x,
+						(scaleY) * y,
+						(scaleX) * w,
+						(scaleY) * h);
+
+				mxCellComponent groupCellComponent = new mxCellComponent(
+						groupGeometry,
+						subElement.boundingBox.getBounds2D());
+
+				cell.insertComponent(groupCellComponent);
 				if (subElement.subElements != null && subElement.subElements.size() > 0)
 				{
-					buildCell(groupCell, subElement);
+					buildCellComponents(cell, subElement);
 				}
 			}
 			else
 			{
 				if (subElement.subElements != null && subElement.subElements.size() > 0)
 				{
-					buildCell(parentCell, subElement);
+					buildCellComponents(cell, subElement);
 				}
 			}
 		}
-		return parentCell;
 	}
 
 	/**
@@ -247,7 +260,7 @@ public class mxStencilShape extends mxBasicShape
 
 			if (widthRatio != 1 || heightRatio != 1)
 			{
-				transformShape(svgText.shape, 0.0, 0.0, widthRatio,
+				transformShape(svgText.boundingBox, 0.0, 0.0, widthRatio,
 						heightRatio);
 				wasScaled = true;
 			}
@@ -258,7 +271,7 @@ public class mxStencilShape extends mxBasicShape
 			{
 				canvas.getGraphics().setFont(font);
 
-				Rectangle2D.Double rect = (Rectangle2D.Double) svgText.shape;
+				Rectangle2D.Double rect = (Rectangle2D.Double) svgText.boundingBox;
 				canvas.getGraphics().drawString(
 				        svgText.text,
 						(int) rect.x,
@@ -267,7 +280,7 @@ public class mxStencilShape extends mxBasicShape
 
 			if (wasScaled)
 			{
-				transformShape(svgText.shape, 0.0, 0.0, 1.0 / widthRatio,
+				transformShape(svgText.boundingBox, 0.0, 0.0, 1.0 / widthRatio,
 						1.0 / heightRatio);
 			}
 		}
@@ -279,13 +292,14 @@ public class mxStencilShape extends mxBasicShape
 	public void paintShapeElement(mxGraphics2DCanvas canvas, mxCellState state,
 								  SvgShape svgShape, double widthRatio, double heightRatio)
 	{
-		if (svgShape.shape != null)
+		if (svgShape.boundingBox != null)
 		{
 			boolean wasScaled = false;
 
 			if (widthRatio != 1 || heightRatio != 1)
 			{
-				transformShape(svgShape.shape, 0.0, 0.0, widthRatio,
+				Rectangle2D rect = (Rectangle2D) svgShape.boundingBox;
+				transformShape(svgShape.boundingBox, 0.0, 0.0, widthRatio,
 						heightRatio);
 				wasScaled = true;
 			}
@@ -298,7 +312,7 @@ public class mxStencilShape extends mxBasicShape
 					canvas.getGraphics().setColor(svgShape.fillColor);
 				}
 
-				canvas.getGraphics().fill(svgShape.shape);
+				canvas.getGraphics().fill(svgShape.boundingBox);
 			}
 
 			// Paints the foreground
@@ -309,12 +323,12 @@ public class mxStencilShape extends mxBasicShape
 					canvas.getGraphics().setColor(svgShape.strokeColor);
 				}
 
-				canvas.getGraphics().draw(svgShape.shape);
+				canvas.getGraphics().draw(svgShape.boundingBox);
 			}
 
 			if (wasScaled)
 			{
-				transformShape(svgShape.shape, 0.0, 0.0, 1.0 / widthRatio,
+				transformShape(svgShape.boundingBox, 0.0, 0.0, 1.0 / widthRatio,
 						1.0 / heightRatio);
 			}
 		}
@@ -407,11 +421,13 @@ public class mxStencilShape extends mxBasicShape
 	{
 		Rectangle2D boundingBox = svgElement != null
 				&& svgElement instanceof SvgShape
-				&& svgElement.shape != null
-				? (Rectangle2D) svgElement.shape.getBounds2D().clone() : null;
+				&& svgElement.boundingBox != null
+				? (Rectangle2D) svgElement.boundingBox.getBounds2D().clone() : null;
 
 		for (SvgElement subElement : svgElement.subElements)
 		{
+			if (!subElement.isBoundsSource()) continue;
+
 			Rectangle2D subBoundingBox = calcBoundingBox(subElement);
 
 			if (boundingBox == null && subBoundingBox != null)
@@ -427,7 +443,7 @@ public class mxStencilShape extends mxBasicShape
 
 		if (svgElement instanceof SvgGroup)
 		{
-			svgElement.shape = boundingBox;
+			svgElement.boundingBox = boundingBox;
 		}
 
 		return boundingBox;
@@ -866,7 +882,7 @@ public class mxStencilShape extends mxBasicShape
 
 		public List<SvgElement> subElements;
 
-		Shape shape = null;
+		Shape boundingBox = null;
 
 		boolean fill = false;
 		boolean stroke = true;
@@ -920,6 +936,10 @@ public class mxStencilShape extends mxBasicShape
 			}
 		}
 
+		public boolean isBoundsSource()
+		{
+			return true;
+		}
 	}
 
 	protected class SvgRoot extends SvgElement
@@ -949,7 +969,12 @@ public class mxStencilShape extends mxBasicShape
 			super(style);
 			this.text = text;
 			this.font = font;
-			this.shape = textShape;
+			this.boundingBox = textShape;
+		}
+
+		public boolean isBoundsSource()
+		{
+			return false;
 		}
 	}
 
@@ -968,7 +993,7 @@ public class mxStencilShape extends mxBasicShape
 		public SvgShape(Shape shape, Map<String, Object> style)
 		{
 			super(style);
-			this.shape = shape;
+			this.boundingBox = shape;
 		}
 
 		public double getCurrentXScale()

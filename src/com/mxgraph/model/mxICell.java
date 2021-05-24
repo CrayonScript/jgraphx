@@ -333,4 +333,7 @@ public interface mxICell
 	 */
 	Object clone() throws CloneNotSupportedException;
 
+	double getBoundingBoxWidth();
+
+	double getBoundingBoxHeight();
 }

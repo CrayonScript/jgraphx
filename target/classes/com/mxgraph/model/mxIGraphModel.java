@@ -302,12 +302,12 @@ public interface mxIGraphModel
 	boolean setVisible(Object cell, boolean visible);
 
 	/**
-	 * Return true if this is a Stencil cell
+	 * Return true if this cell has a drop target
 	 *
 	 * @param cell
 	 * @return
 	 */
-	boolean isStencil(Object cell);
+	boolean isDropTarget(Object cell);
 
 	/**
 	 * Increments the updateLevel by one. The event notification is queued
