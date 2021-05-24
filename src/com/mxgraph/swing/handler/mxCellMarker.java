@@ -191,11 +191,6 @@ public class mxCellMarker extends JComponent
 	protected transient mxCellState markedState;
 
 	/**
-	 * Holds the marked highlight
-	 */
-	protected transient mxIHighlightSource markedHighlight;
-
-	/**
 	 * Constructs a new marker for the given graph component.
 	 * 
 	 * @param graphComponent
@@ -372,11 +367,6 @@ public class mxCellMarker extends JComponent
 	public void setMarkedState(mxCellState value)
 	{
 		markedState = value;
-		markedHighlight = null;
-		if (markedState != null)
-		{
-			markedHighlight = markedState.getHighlightSource();
-		}
 	}
 
 	/**
@@ -397,7 +387,6 @@ public class mxCellMarker extends JComponent
 		if (markedState != null)
 		{
 			markedState = null;
-			markedHighlight = null;
 			unmark();
 		}
 	}
@@ -454,22 +443,17 @@ public class mxCellMarker extends JComponent
 			highlight = state.getHighlightSource();
 		}
 
-		if (highlight != markedHighlight || color != currentColor)
-		{
-			currentColor = color;
+		currentColor = color;
 
-			if (highlight != null && currentColor != null)
-			{
-				markedState = state;
-				markedHighlight = highlight;
-				mark();
-			}
-			else if (markedState != null)
-			{
-				markedState = null;
-				markedHighlight = null;
-				unmark();
-			}
+		if (highlight != null && currentColor != null)
+		{
+			markedState = state;
+			mark();
+		}
+		else if (markedState != null)
+		{
+			markedState = null;
+			unmark();
 		}
 	}
 
@@ -480,7 +464,7 @@ public class mxCellMarker extends JComponent
 	{
 		if (markedState != null)
 		{
-			Rectangle bounds = markedHighlight.getRectangle();
+			Rectangle bounds = markedState.getHighlightSource().getRectangle();
 			bounds.grow(3, 3);
 			bounds.width += 1;
 			bounds.height += 1;
