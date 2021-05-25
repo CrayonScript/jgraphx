@@ -4,7 +4,7 @@
 package com.mxgraph.view;
 
 import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxICellComponent;
+import com.mxgraph.model.mxCellComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxRectangle;
@@ -99,11 +99,6 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource
 	 * Reference to the list of cell components that is represented by this state.
 	 */
 	protected List<mxCellComponentState> cellComponentStates;
-
-	/**
-	 * Reference to the last marked hotspot
-	 */
-	protected transient boolean isHotspot;
 
 	/**
 	 * Constructs an empty cell state.
@@ -533,7 +528,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource
 		for (int i = 0; i < componentStateCount; i++)
 		{
 			mxCellComponentState componentState = getCellComponentState(i);
-			if (componentState.isHotspot)
+			if (componentState.cellComponent.isHotspot)
 			{
 				return componentState;
 			}
@@ -550,7 +545,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource
 			int componentCount = cell.getComponentCount();
 			for (int i = 0; i < componentCount; i++)
 			{
-				mxICellComponent cellComponent = cell.getComponentAt(i);
+				mxCellComponent cellComponent = cell.getComponentAt(i);
 				mxCellComponentState cellComponentState = new mxCellComponentState(view, cellComponent);
 				if (this.cellComponentStates == null) { this.cellComponentStates = new ArrayList<>(); }
 				this.cellComponentStates.add(cellComponentState);
@@ -565,7 +560,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource
 	public void updateHotspots(int x, int y,
 							   double hotspot, int min, int max)
 	{
-		this.isHotspot = intersects(x, y, hotspot, min, max);
+		((mxCell) this.cell).isHotspot = intersects(x, y, hotspot, min, max);
 		int componentStateCount = getComponentStateCount();
 		for (int i = 0; i < componentStateCount; i++)
 		{
@@ -574,18 +569,13 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource
 		}
 	}
 
-	public boolean getIsHotspot()
-	{
-		return this.isHotspot;
-	}
-
 	public boolean getIsComponentHotspot()
 	{
 		int componentStateCount = getComponentStateCount();
 		for (int i = 0; i < componentStateCount; i++)
 		{
 			mxCellComponentState componentState = getCellComponentState(i);
-			if (componentState.isHotspot) return true;
+			if (componentState.cellComponent.isHotspot) return true;
 		}
 		return false;
 	}

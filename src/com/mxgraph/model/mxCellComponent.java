@@ -3,7 +3,7 @@ package com.mxgraph.model;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
-public class mxCellComponent implements mxICellComponent, Cloneable, Serializable
+public class mxCellComponent implements Cloneable, Serializable
 {
     private static final long serialVersionUID = 1046000944721945439L;
 
@@ -16,13 +16,17 @@ public class mxCellComponent implements mxICellComponent, Cloneable, Serializabl
      */
     protected mxGeometry geometry;
 
+    /**
+     * Reference to the last marked hotspot
+     */
+    public transient boolean isHotspot;
+
     public mxCellComponent(mxGeometry geometry, Rectangle2D boundingBox)
     {
         this.geometry = geometry;
         this.boundingBox= boundingBox;
     }
 
-    @Override
     public void removeFromOwner()
     {
         if (this.owner != null)

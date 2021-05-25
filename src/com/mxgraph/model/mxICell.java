@@ -224,7 +224,7 @@ public interface mxICell
 	 * @param component Component whose index should be returned.
 	 * @return Returns the index of the given component.
 	 */
-	int getComponentIndex(mxICellComponent component);
+	int getComponentIndex(mxCellComponent component);
 
 	/**
 	 * Returns the component at the specified index.
@@ -232,7 +232,7 @@ public interface mxICell
 	 * @param index Integer that specifies the component to be returned.
 	 * @return Returns the component at the given index.
 	 */
-	mxICellComponent getComponentAt(int index);
+	mxCellComponent getComponentAt(int index);
 
 	/**
 	 * Appends the specified component into the component array and updates the parent
@@ -241,7 +241,7 @@ public interface mxICell
 	 * @param component Cell component to be appended to the component array.
 	 * @return Returns the new component.
 	 */
-	mxICellComponent insertComponent(mxICellComponent component);
+	mxCellComponent insertComponent(mxCellComponent component);
 
 	/**
 	 * Inserts the specified component into the component array at the specified index
@@ -252,7 +252,7 @@ public interface mxICell
 	 * be inserted into the component array.
 	 * @return Returns the new component.
 	 */
-	mxICellComponent insertComponent(mxICellComponent component, int index);
+	mxCellComponent insertComponent(mxCellComponent component, int index);
 
 	/**
 	 * Removes the component at the specified index from the component array and
@@ -263,7 +263,7 @@ public interface mxICell
 	 * removed.
 	 * @return Returns the component that was removed.
 	 */
-	mxICellComponent removeComponent(int index);
+	mxCellComponent removeComponent(int index);
 
 	/**
 	 * Removes the given component from the component array and returns it. Will remove
@@ -272,7 +272,7 @@ public interface mxICell
 	 * @param component Cell that represents the component to be removed.
 	 * @return Returns the component that was removed.
 	 */
-	mxICellComponent removeComponent(mxICellComponent component);
+	mxCellComponent removeComponent(mxCellComponent component);
 
 	/**
 	 * Returns the number of edges in the edge array.

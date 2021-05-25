@@ -1,6 +1,6 @@
 package com.mxgraph.view;
 
-import com.mxgraph.model.mxICellComponent;
+import com.mxgraph.model.mxCellComponent;
 import com.mxgraph.util.mxRectangle;
 
 import java.awt.*;
@@ -20,12 +20,7 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
     /**
      * Reference to the cellComponent that is represented by this state.
      */
-    protected mxICellComponent cellComponent;
-
-    /**
-     * Reference to the last marked hotspot
-     */
-    protected transient boolean isHotspot;
+    protected mxCellComponent cellComponent;
 
     /**
      * Constructs a new object that represents the current state of the given
@@ -34,7 +29,7 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
      * @param view Graph view that contains the state.
      * @param cellComponent Cell that this state represents.
      */
-    public mxCellComponentState(mxGraphView view, mxICellComponent cellComponent)
+    public mxCellComponentState(mxGraphView view, mxCellComponent cellComponent)
     {
         setView(view);
         setCellComponent(cellComponent);
@@ -65,7 +60,7 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
      *
      * @return the cellComponent
      */
-    public mxICellComponent getCellComponent()
+    public mxCellComponent getCellComponent()
     {
         return cellComponent;
     }
@@ -75,7 +70,7 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
      *
      * @param cellComponent the cellComponent to set
      */
-    public void setCellComponent(mxICellComponent cellComponent)
+    public void setCellComponent(mxCellComponent cellComponent)
     {
         this.cellComponent = cellComponent;
     }
@@ -83,7 +78,7 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
     public void updateIntersects(int x, int y,
                                  double hotspot, int min, int max)
     {
-        this.isHotspot = intersects(x, y, hotspot, min, max);
+        this.cellComponent.isHotspot = intersects(x, y, hotspot, min, max);
     }
 
     /**

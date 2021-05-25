@@ -84,6 +84,11 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	protected double boundingBoxWidth = Double.NaN, boundingBoxHeight = Double.NaN;
 
 	/**
+	 * Reference to the last marked hotspot
+	 */
+	public transient boolean isHotspot;
+
+	/**
 	 * Constructs a new cell with an empty user object.
 	 */
 	public mxCell()
@@ -188,7 +193,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			{
 				for (int i = 0; i < getComponentCount(); i++)
 				{
-					mxICellComponent component = getComponentAt(i);
+					mxCellComponent component = getComponentAt(i);
 
 					double x = component.getBoundingBox().getX(); // relative
 					double y = component.getBoundingBox().getY(); // relative
@@ -495,7 +500,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#getComponentIndex(com.mxgraph.model.mxICellComponent)
 	 */
-	public int getComponentIndex(mxICellComponent component)
+	public int getComponentIndex(mxCellComponent component)
 	{
 		return (components != null) ? components.indexOf(component) : -1;
 	}
@@ -503,15 +508,15 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#getComponentAt(int)
 	 */
-	public mxICellComponent getComponentAt(int index)
+	public mxCellComponent getComponentAt(int index)
 	{
-		return (components != null) ? (mxICellComponent) components.get(index) : null;
+		return (components != null) ? (mxCellComponent) components.get(index) : null;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#insertComponent(com.mxgraph.model.mxICellComponent)
 	 */
-	public mxICellComponent insertComponent(mxICellComponent component)
+	public mxCellComponent insertComponent(mxCellComponent component)
 	{
 		int index = getComponentCount();
 
@@ -526,7 +531,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#insertComponent(com.mxgraph.model.mxICellComponent, int)
 	 */
-	public mxICellComponent insertComponent(mxICellComponent component, int index)
+	public mxCellComponent insertComponent(mxCellComponent component, int index)
 	{
 		if (component != null)
 		{
@@ -550,9 +555,9 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#removeComponent(int)
 	 */
-	public mxICellComponent removeComponent(int index)
+	public mxCellComponent removeComponent(int index)
 	{
-		mxICellComponent component = null;
+		mxCellComponent component = null;
 
 		if (components != null && index >= 0)
 		{
@@ -566,7 +571,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#removeComponent(com.mxgraph.model.mxICellComponent)
 	 */
-	public mxICellComponent removeComponent(mxICellComponent component)
+	public mxCellComponent removeComponent(mxCellComponent component)
 	{
 		if (component != null && components != null)
 		{

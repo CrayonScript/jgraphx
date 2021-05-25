@@ -16,6 +16,7 @@ import java.util.Timer;
 
 import javax.swing.JComponent;
 
+import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.util.mxSwingConstants;
 import com.mxgraph.util.mxConstants;
@@ -566,7 +567,7 @@ public class mxCellMarker extends JComponent
 			state.updateHotspots(e.getX(), e.getY(),
 					hotspot, mxConstants.MIN_HOTSPOT_SIZE,
 					mxConstants.MAX_HOTSPOT_SIZE);
-			return state.getIsHotspot() || state.getIsComponentHotspot();
+			return ((mxCell) state.getCell()).isHotspot || state.getIsComponentHotspot();
 		}
 		return true;
 	}
