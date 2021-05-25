@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -3803,8 +3804,11 @@ public class mxGraph extends mxEventSource
 					setAllowNegativeCoordinates(true);
 				}
 
-				cellsMoved(cells, dx, dy, !clone && isDisconnectOnMove()
-						&& isAllowDanglingEdges(), target == null);
+				if (!cellsResized(cells, target))
+				{
+					cellsMoved(cells, dx, dy, !clone && isDisconnectOnMove()
+							&& isAllowDanglingEdges(), target == null);
+				}
 
 				setAllowNegativeCoordinates(previous);
 
@@ -3825,6 +3829,59 @@ public class mxGraph extends mxEventSource
 		}
 
 		return cells;
+	}
+
+	public boolean cellsResized(Object[] cells, Object target)
+	{
+		mxCell targetCell = (mxCell) target;
+		if (targetCell == null) return false;
+		Rectangle2D rect = null;
+		// find the target geometry
+		mxGeometry targetCellGeometry = targetCell.getGeometry();
+		if (targetCellGeometry == null) return false;
+		Rectangle targetRect = targetCellGeometry.getRectangle();
+		mxGeometry targetGeometry = null;
+		for (int i = 0; i < targetCell.getComponentCount(); i++)
+		{
+			if (targetCell.getComponentAt(i).isHotspot)
+			{
+				targetGeometry = targetCell.getComponentAt(i).getGeometry();
+				rect = targetGeometry.getRectangle();
+				rect = new Rectangle2D.Double(
+						targetRect.getX() + rect.getX(),
+						targetRect.getY() + rect.getY(),
+						rect.getWidth(),
+						rect.getHeight());
+			}
+		}
+		if (rect == null)
+		{
+			if (targetCell.isHotspot)
+			{
+				rect = targetGeometry.getRectangle();
+				rect = new Rectangle2D.Double(
+						rect.getX(),
+						rect.getY(),
+						rect.getWidth(),
+						rect.getHeight());
+			}
+		}
+
+		boolean canResize = rect != null;
+
+		if (!canResize) return false;
+
+		mxRectangle[] mxRectangles = new mxRectangle[cells.length];
+
+		// update the geometry
+		for (int i = 0; i < cells.length; i++)
+		{
+			mxRectangles[i] = new mxRectangle(rect);
+		}
+
+		resizeCells(cells, mxRectangles);
+
+		return true;
 	}
 
 	/**
