@@ -2,7 +2,8 @@
   <configuration default="false" name="GraphEditor" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.mxgraph.examples.swing.GraphEditor" />
     <module name="jgraphx" />
-    <option name="VM_PARAMETERS" value="-classpath ./examples;./lib/*" />
-    <method v="2" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
   </configuration>
 </component>
