@@ -4437,7 +4437,7 @@ public class mxGraphComponent extends JScrollPane implements Printable
 		 */
 		protected void cellDrawn(mxICanvas canvas, mxCellState state)
 		{
-			if (isFoldingEnabled() && canvas instanceof mxGraphics2DCanvas)
+			if (isFoldingEnabled() && canvas instanceof mxGraphics2DCanvas && !state.hasComponents())
 			{
 				mxIGraphModel model = graph.getModel();
 				mxGraphics2DCanvas g2c = (mxGraphics2DCanvas) canvas;

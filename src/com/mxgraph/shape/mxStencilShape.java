@@ -142,7 +142,7 @@ public class mxStencilShape extends mxBasicShape
 	public mxCell buildCell()
 	{
 		// create cell from the stencil shape
-		mxGeometry geometry = new mxGeometry(0, 0, 80, 80);
+		mxGeometry geometry = new mxGeometry(0, 0, 320, 160);
 		mxCell cell = new mxCell("", geometry, "shape=" + name, boundingBox.getWidth(), boundingBox.getHeight());
 		cell.setVertex(true);
 		// cell geometry should be set before invoking buildCellComponents

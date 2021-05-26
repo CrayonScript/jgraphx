@@ -557,6 +557,8 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource
 
 	public mxCellComponentState getCellComponentState(int index) { return this.cellComponentStates.get(index); }
 
+	public boolean hasComponents() { return getComponentStateCount() > 0; }
+
 	public void updateHotspots(int x, int y,
 							   double hotspot, int min, int max)
 	{
