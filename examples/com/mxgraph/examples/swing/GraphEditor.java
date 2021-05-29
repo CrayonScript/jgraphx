@@ -96,6 +96,14 @@ public class GraphEditor extends BasicGraphEditor
 
 		});
 
+		shapesPalette
+		.addTemplate(
+				"Parallel",
+				new ImageIcon(
+						GraphEditor.class
+								.getResource("/com/mxgraph/crayonscript/images/Parallel.png")),
+				"parallel", 120, 160, "Parallel");
+
 //		// Adds some template cells for dropping into the graph
 //		shapesPalette
 //				.addTemplate(
@@ -627,7 +635,6 @@ public class GraphEditor extends BasicGraphEditor
 		 * Overrides the method to use the currently selected edge template for
 		 * new edges.
 		 * 
-		 * @param graph
 		 * @param parent
 		 * @param id
 		 * @param value

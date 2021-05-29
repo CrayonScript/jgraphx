@@ -270,13 +270,13 @@ public class EditorPalette extends JPanel
 		{
 			if (icon.getIconWidth() > 32 || icon.getIconHeight() > 32)
 			{
-				icon = new ImageIcon(icon.getImage().getScaledInstance(32, 32,
+				icon = new ImageIcon(icon.getImage().getScaledInstance(48, 64,
 						0));
 			}
 		}
 
 		final JLabel entry = new JLabel(icon);
-		entry.setPreferredSize(new Dimension(50, 50));
+		entry.setPreferredSize(new Dimension(60, 80));
 		entry.setBackground(EditorPalette.this.getBackground().brighter());
 		entry.setFont(new Font(entry.getFont().getFamily(), 0, 10));
 
@@ -386,7 +386,6 @@ public class EditorPalette extends JPanel
 	/**
 	 * @param eventName
 	 * @param listener
-	 * @see com.mxgraph.util.mxEventSource#removeListener(java.lang.String, com.mxgraph.util.mxEventSource.mxIEventListener)
 	 */
 	public void removeListener(mxIEventListener listener, String eventName)
 	{
