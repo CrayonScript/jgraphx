@@ -4267,7 +4267,7 @@ public class mxGraphComponent extends JScrollPane implements Printable
 				try
 				{
 					mxUtils.setAntiAlias(g2, antiAlias, textAntiAlias);
-					drawGraph(g2, true);
+					drawGraph(g2, false);
 				}
 				finally
 				{
