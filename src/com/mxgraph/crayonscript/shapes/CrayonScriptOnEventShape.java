@@ -4,12 +4,11 @@ import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.view.mxCellState;
 
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
-public class CrayonScriptForShape extends CrayonScriptBasicShape {
+public class CrayonScriptOnEventShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptForShape() {
+    public CrayonScriptOnEventShape() {
         super();
     }
 

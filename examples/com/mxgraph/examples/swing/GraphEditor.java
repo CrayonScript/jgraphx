@@ -94,77 +94,24 @@ public class GraphEditor extends BasicGraphEditor
 
 		});
 
-		blocks
-				.addTemplate(
-						"Extender",
-						new ImageIcon(
-								GraphEditor.class
-										.getResource("/com/mxgraph/crayonscript/images/VExtender2.png")),
-						"vextender", 120, 160, "Extender");
+		URL vExtender2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/VExtender2.png");
+		URL hExtender2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/HExtender2.png");
+		URL vertical2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.png");
+		URL vertical3URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.png");
 
-		blocks
-				.addTemplate(
-						"Assign",
-						new ImageIcon(
-								GraphEditor.class
-										.getResource("/com/mxgraph/crayonscript/images/HExtender2.png")),
-						"assign", 400, 70, "Assign");
+		blocks.addTemplate("Extender", new ImageIcon(vExtender2URL), "vextender", 120, 160, "Extender");
+		blocks.addTemplate("Assign", new ImageIcon(hExtender2URL), "assign", 400, 70, "Assign");
+		blocks.addTemplate("Expression", new ImageIcon(hExtender2URL), "expression", 400, 70, "Expression");
+		blocks.addTemplate("Parallel", new ImageIcon(vertical2URL), "parallel", 120, 160, "Parallel");
+		blocks.addTemplate("Sequential", new ImageIcon(vertical2URL), "sequential", 120, 160, "Sequential");
+		blocks.addTemplate("If", new ImageIcon(vertical2URL), "if", 120, 160, "If");
+		blocks.addTemplate("If-Else", new ImageIcon(vertical3URL), "if-else", 120, 160, "If-Else");
+		blocks.addTemplate("While", new ImageIcon(vertical2URL), "while", 120, 160, "While");
+		blocks.addTemplate("For", new ImageIcon(vertical2URL), "for", 120, 160, "For");
 
-		blocks
-				.addTemplate(
-						"Expression",
-						new ImageIcon(
-								GraphEditor.class
-										.getResource("/com/mxgraph/crayonscript/images/HExtender2.png")),
-						"expression", 400, 70, "Expression");
+		events.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
 
-		blocks
-		.addTemplate(
-				"Parallel",
-				new ImageIcon(
-						GraphEditor.class
-								.getResource("/com/mxgraph/crayonscript/images/Vertical2.png")),
-				"parallel", 120, 160, "Parallel");
-
-		blocks
-				.addTemplate(
-						"Sequential",
-						new ImageIcon(
-								GraphEditor.class
-										.getResource("/com/mxgraph/crayonscript/images/Vertical2.png")),
-						"sequential", 120, 160, "Sequential");
-
-		blocks
-				.addTemplate(
-						"If",
-						new ImageIcon(
-								GraphEditor.class
-										.getResource("/com/mxgraph/crayonscript/images/Vertical2.png")),
-						"if", 120, 160, "If");
-
-		blocks
-				.addTemplate(
-						"If-Else",
-						new ImageIcon(
-								GraphEditor.class
-										.getResource("/com/mxgraph/crayonscript/images/Vertical3.png")),
-						"if-else", 120, 160, "If-Else");
-
-		blocks
-				.addTemplate(
-						"While",
-						new ImageIcon(
-								GraphEditor.class
-										.getResource("/com/mxgraph/crayonscript/images/Vertical2.png")),
-						"while", 120, 160, "While");
-
-		blocks
-				.addTemplate(
-						"For",
-						new ImageIcon(
-								GraphEditor.class
-										.getResource("/com/mxgraph/crayonscript/images/Vertical3.png")),
-						"for", 120, 160, "For");
+		graphs.addTemplate("Main", new ImageIcon(vertical2URL), "graph-main", 120, 160, "Main");
 
 	}
 

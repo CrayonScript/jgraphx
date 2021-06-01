@@ -24,28 +24,9 @@ import java.util.logging.Logger;
 import javax.swing.CellRendererPane;
 
 import com.mxgraph.crayonscript.shapes.*;
-import com.mxgraph.shape.mxActorShape;
-import com.mxgraph.shape.mxArrowShape;
-import com.mxgraph.shape.mxCloudShape;
-import com.mxgraph.shape.mxConnectorShape;
-import com.mxgraph.shape.mxCurveShape;
-import com.mxgraph.shape.mxCylinderShape;
-import com.mxgraph.shape.mxDefaultTextShape;
-import com.mxgraph.shape.mxDoubleEllipseShape;
-import com.mxgraph.shape.mxDoubleRectangleShape;
-import com.mxgraph.shape.mxEllipseShape;
-import com.mxgraph.shape.mxHexagonShape;
-import com.mxgraph.shape.mxHtmlTextShape;
 import com.mxgraph.shape.mxIShape;
 import com.mxgraph.shape.mxITextShape;
-import com.mxgraph.shape.mxImageShape;
-import com.mxgraph.shape.mxLabelShape;
-import com.mxgraph.shape.mxLineShape;
-import com.mxgraph.shape.mxRectangleShape;
-import com.mxgraph.shape.mxRhombusShape;
 import com.mxgraph.shape.mxStencilRegistry;
-import com.mxgraph.shape.mxSwimlaneShape;
-import com.mxgraph.shape.mxTriangleShape;
 import com.mxgraph.swing.util.mxSwingConstants;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
@@ -102,25 +83,9 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_WHILE, new CrayonScriptWhileShape());
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_FOR, new CrayonScriptForShape());
 
-		putShape(mxConstants.SHAPE_ACTOR, new mxActorShape());
-		putShape(mxConstants.SHAPE_ARROW, new mxArrowShape());
-		putShape(mxConstants.SHAPE_CLOUD, new mxCloudShape());
-		putShape(mxConstants.SHAPE_CONNECTOR, new mxConnectorShape());
-		putShape(mxConstants.SHAPE_CYLINDER, new mxCylinderShape());
-		putShape(mxConstants.SHAPE_CURVE, new mxCurveShape());
-		putShape(mxConstants.SHAPE_DOUBLE_RECTANGLE, new mxDoubleRectangleShape());
-		putShape(mxConstants.SHAPE_DOUBLE_ELLIPSE, new mxDoubleEllipseShape());
-		putShape(mxConstants.SHAPE_ELLIPSE, new mxEllipseShape());
-		putShape(mxConstants.SHAPE_HEXAGON, new mxHexagonShape());
-		putShape(mxConstants.SHAPE_IMAGE, new mxImageShape());
-		putShape(mxConstants.SHAPE_LABEL, new mxLabelShape());
-		putShape(mxConstants.SHAPE_LINE, new mxLineShape());
-		putShape(mxConstants.SHAPE_RECTANGLE, new mxRectangleShape());
-		putShape(mxConstants.SHAPE_RHOMBUS, new mxRhombusShape());
-		putShape(mxConstants.SHAPE_SWIMLANE, new mxSwimlaneShape());
-		putShape(mxConstants.SHAPE_TRIANGLE, new mxTriangleShape());
-		putTextShape(TEXT_SHAPE_DEFAULT, new mxDefaultTextShape());
-		putTextShape(TEXT_SHAPE_HTML, new mxHtmlTextShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_EVENT_ON_LOAD, new CrayonScriptOnEventShape());
+
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_GRAPH_MAIN, new CrayonScriptGraphMainShape());
 	}
 
 	/**

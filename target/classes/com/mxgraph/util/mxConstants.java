@@ -1010,6 +1010,10 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_EXPRESSION = "expression";
 
+	public static final String CRAYONSCRIPT_SHAPE_EVENT_ON_LOAD = "event-onload";
+
+	public static final String CRAYONSCRIPT_SHAPE_GRAPH_MAIN = "graph-main";
+
 	/**
 	 * SHAPE_RECTANGLE
 	 */
