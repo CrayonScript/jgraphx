@@ -7,10 +7,16 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
-public class CrayonScriptParallelShape extends CrayonScriptBasicShape {
+public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptParallelShape() {
+    private String name;
+
+    private int argCount;
+
+    public CrayonScriptFunctionShape(String name, int argCount) {
         super();
+        this.name = name;
+        this.argCount = argCount;
     }
 
     @Override

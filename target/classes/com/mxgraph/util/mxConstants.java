@@ -990,7 +990,22 @@ public class mxConstants
 	 * FONT_STRIKETHROUGH
 	 */
 	public static final int FONT_STRIKETHROUGH= 8;
-	
+
+
+	public static final String CRAYONSCRIPT_SHAPE_PARALLEL = "parallel";
+
+	public static final String CRAYONSCRIPT_SHAPE_SEQUENTIAL = "sequential";
+
+	public static final String CRAYONSCRIPT_SHAPE_IF = "if";
+
+	public static final String CRAYONSCRIPT_SHAPE_IF_ELSE = "if-else";
+
+	public static final String CRAYONSCRIPT_SHAPE_WHILE = "while";
+
+	public static final String CRAYONSCRIPT_SHAPE_FOR = "for";
+
+	public static final String CRAYONSCRIPT_SHAPE_FUNCTION = "function";
+
 	/**
 	 * SHAPE_RECTANGLE
 	 */

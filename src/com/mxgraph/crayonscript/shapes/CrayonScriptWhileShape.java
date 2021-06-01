@@ -7,9 +7,9 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
-public class CrayonScriptParallelShape extends CrayonScriptBasicShape {
+public class CrayonScriptWhileShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptParallelShape() {
+    public CrayonScriptWhileShape() {
         super();
     }
 

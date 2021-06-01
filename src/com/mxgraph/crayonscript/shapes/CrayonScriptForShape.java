@@ -7,9 +7,9 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
-public class CrayonScriptParallelShape extends CrayonScriptBasicShape {
+public class CrayonScriptForShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptParallelShape() {
+    public CrayonScriptForShape() {
         super();
     }
 
@@ -19,7 +19,7 @@ public class CrayonScriptParallelShape extends CrayonScriptBasicShape {
         initialize();
 
         Rectangle stateRect = state.getRectangle();
-        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.VERTICAL2);
+        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.VERTICAL3);
 
         SvgElement first = svgElements.get(0);
         SvgElement second = svgElements.get(1);

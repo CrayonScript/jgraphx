@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import javax.swing.CellRendererPane;
 
+import com.mxgraph.crayonscript.shapes.*;
 import com.mxgraph.shape.mxActorShape;
 import com.mxgraph.shape.mxArrowShape;
 import com.mxgraph.shape.mxCloudShape;
@@ -91,6 +92,14 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 	 */
 	static
 	{
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL, new CrayonScriptParallelShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL, new CrayonScriptSequentialShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_IF, new CrayonScriptIfShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_IF_ELSE, new CrayonScriptIfElseShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_WHILE, new CrayonScriptWhileShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_FOR, new CrayonScriptForShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_FUNCTION, new CrayonScriptForShape());
+
 		putShape(mxConstants.SHAPE_ACTOR, new mxActorShape());
 		putShape(mxConstants.SHAPE_ARROW, new mxArrowShape());
 		putShape(mxConstants.SHAPE_CLOUD, new mxCloudShape());
