@@ -1008,6 +1008,7 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_ASSIGN = "assign";
 
+	public static final String CRAYONSCRIPT_SHAPE_EXPRESSION = "expression";
 
 	/**
 	 * SHAPE_RECTANGLE

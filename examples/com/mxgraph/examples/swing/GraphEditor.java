@@ -111,6 +111,14 @@ public class GraphEditor extends BasicGraphEditor
 						"assign", 400, 70, "Assign");
 
 		blocks
+				.addTemplate(
+						"Expression",
+						new ImageIcon(
+								GraphEditor.class
+										.getResource("/com/mxgraph/crayonscript/images/HExtender2.png")),
+						"expression", 400, 70, "Expression");
+
+		blocks
 		.addTemplate(
 				"Parallel",
 				new ImageIcon(

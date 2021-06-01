@@ -94,6 +94,7 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 	{
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_VEXTENDER, new CrayonScriptVExtenderShape());
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN, new CrayonScriptAssignShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_EXPRESSION, new CrayonScriptExpressionShape());
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL, new CrayonScriptParallelShape());
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL, new CrayonScriptSequentialShape());
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_IF, new CrayonScriptIfShape());
