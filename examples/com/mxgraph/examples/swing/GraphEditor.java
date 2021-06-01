@@ -109,7 +109,7 @@ public class GraphEditor extends BasicGraphEditor
 		blocks.addTemplate("While", new ImageIcon(vertical2URL), "while", 120, 160, "While");
 		blocks.addTemplate("For", new ImageIcon(vertical2URL), "for", 120, 160, "For");
 
-		events.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
+//		events.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
 
 		graphs.addTemplate("Main", new ImageIcon(vertical2URL), "graph-main", 120, 160, "Main");
 
