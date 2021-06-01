@@ -41,6 +41,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.svg")));
 		svgElementsMap.put(ShapeStructureType.VEXTENDER2,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/VExtender2.svg")));
+		svgElementsMap.put(ShapeStructureType.HEXTENDER2,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/HExtender2.svg")));
 		initialized = true;
 	}
 
@@ -112,6 +114,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	}
 
 	protected enum ShapeStructureType {
+		HEXTENDER2,
 		VERTICAL0,
 		VERTICAL1,
 		VERTICAL2,

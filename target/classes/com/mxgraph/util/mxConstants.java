@@ -1006,6 +1006,8 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_VEXTENDER = "vextender";
 
+	public static final String CRAYONSCRIPT_SHAPE_ASSIGN = "assign";
+
 
 	/**
 	 * SHAPE_RECTANGLE

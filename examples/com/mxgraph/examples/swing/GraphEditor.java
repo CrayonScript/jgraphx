@@ -103,6 +103,14 @@ public class GraphEditor extends BasicGraphEditor
 						"vextender", 120, 160, "Extender");
 
 		blocks
+				.addTemplate(
+						"Assign",
+						new ImageIcon(
+								GraphEditor.class
+										.getResource("/com/mxgraph/crayonscript/images/HExtender2.png")),
+						"assign", 400, 70, "Assign");
+
+		blocks
 		.addTemplate(
 				"Parallel",
 				new ImageIcon(
