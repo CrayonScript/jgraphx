@@ -200,7 +200,7 @@ public class BasicGraphEditor extends JPanel
 		// palettes and the graph outline on the left side of the window
 		JSplitPane inner = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 				libraryPane, graphOutline);
-		inner.setDividerLocation(320);
+		inner.setDividerLocation(640);
 		inner.setResizeWeight(1);
 		inner.setDividerSize(6);
 		inner.setBorder(null);

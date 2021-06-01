@@ -1004,7 +1004,8 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_FOR = "for";
 
-	public static final String CRAYONSCRIPT_SHAPE_FUNCTION = "function";
+	public static final String CRAYONSCRIPT_SHAPE_VEXTENDER = "vextender";
+
 
 	/**
 	 * SHAPE_RECTANGLE

@@ -95,6 +95,14 @@ public class GraphEditor extends BasicGraphEditor
 		});
 
 		blocks
+				.addTemplate(
+						"Extender",
+						new ImageIcon(
+								GraphEditor.class
+										.getResource("/com/mxgraph/crayonscript/images/VExtender2.png")),
+						"vextender", 120, 160, "Extender");
+
+		blocks
 		.addTemplate(
 				"Parallel",
 				new ImageIcon(
