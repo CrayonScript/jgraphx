@@ -518,10 +518,10 @@ public class GraphEditor extends BasicGraphEditor
 //					"/com/mxgraph/examples/swing/resources/default-style.xml")
 //					.toString());
 //			codec.decode(doc.getDocumentElement(), graph.getStylesheet());
-			Document doc = mxUtils.loadDocument(GraphEditor.class.getResource(
-					"/com/mxgraph/crayonscript/resources/crayonscript-stylesheet.xml")
-					.toString());
-			codec.decode(doc.getDocumentElement(), graph.getStylesheet());
+//			Document doc = mxUtils.loadDocument(GraphEditor.class.getResource(
+//					"/com/mxgraph/crayonscript/resources/crayonscript-stylesheet.xml")
+//					.toString());
+//			codec.decode(doc.getDocumentElement(), graph.getStylesheet());
 
 			// Sets the background to white
 			getViewport().setOpaque(true);

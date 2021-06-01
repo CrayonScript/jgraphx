@@ -1190,6 +1190,10 @@ public class mxGraph extends mxEventSource
 				: stylesheet.getDefaultVertexStyle();
 
 		String name = model.getStyle(cell);
+		if (name != null)
+		{
+			style.put(mxConstants.STYLE_SHAPE, name);
+		}
 
 		if (name != null)
 		{
