@@ -120,6 +120,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		VERTICAL2,
 		VERTICAL3,
 		VEXTENDER2,
+		TEMPLATE,
 	}
 
 	protected static class SvgElement
