@@ -43,6 +43,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/VExtender2.svg")));
 		svgElementsMap.put(ShapeStructureType.HEXTENDER2,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/HExtender2.svg")));
+		svgElementsMap.put(ShapeStructureType.TEMPLATE,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Template.svg")));
 		initialized = true;
 	}
 

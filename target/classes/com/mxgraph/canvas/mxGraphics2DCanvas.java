@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 import javax.swing.CellRendererPane;
 
 import com.mxgraph.crayonscript.shapes.*;
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxGeometry;
 import com.mxgraph.shape.mxIShape;
 import com.mxgraph.shape.mxITextShape;
 import com.mxgraph.shape.mxStencilRegistry;
@@ -86,6 +88,8 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 //		putShape(mxConstants.CRAYONSCRIPT_SHAPE_EVENT_ON_LOAD, new CrayonScriptOnEventShape());
 
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_GRAPH_MAIN, new CrayonScriptGraphMainShape());
+
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE, new CrayonScriptGraphTemplateShape());
 	}
 
 	/**

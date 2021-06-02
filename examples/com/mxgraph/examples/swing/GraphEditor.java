@@ -2,6 +2,7 @@
  * Copyright (c) 2006-2012, JGraph Ltd */
 package com.mxgraph.examples.swing;
 
+import com.mxgraph.crayonscript.shapes.CrayonScriptGraphTemplateShape;
 import com.mxgraph.crayonscript.view.CrayonScriptStylesheet;
 import com.mxgraph.examples.swing.editor.BasicGraphEditor;
 import com.mxgraph.examples.swing.editor.EditorMenuBar;
@@ -66,15 +67,15 @@ public class GraphEditor extends BasicGraphEditor
 		final mxGraph graph = graphComponent.getGraph();
 
 		// Creates the shapes palette
-		EditorPalette graphs = insertPalette("Graphs");
-		EditorPalette functions = insertPalette("Functions");
-		EditorPalette blocks = insertPalette("Blocks");
-		EditorPalette events = insertPalette("Events");
-		EditorPalette data = insertPalette("Data");
+		EditorPalette graphTemplates = insertPalette("Graphs");
+		EditorPalette functionTemplates = insertPalette("Functions");
+		EditorPalette blockTemplates = insertPalette("Blocks");
+		EditorPalette eventTemplates = insertPalette("Events");
+		EditorPalette dataTemplates = insertPalette("Data");
 
 		// Sets the edge template to be used for creating new edges if an edge
 		// is clicked in the shape palette
-		blocks.addListener(mxEvent.SELECT, new mxIEventListener()
+		blockTemplates.addListener(mxEvent.SELECT, new mxIEventListener()
 		{
 			public void invoke(Object sender, mxEventObject evt)
 			{
@@ -99,20 +100,34 @@ public class GraphEditor extends BasicGraphEditor
 		URL vertical2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.png");
 		URL vertical3URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.png");
 
-		blocks.addTemplate("Extender", new ImageIcon(vExtender2URL), "vextender", 120, 160, "Extender");
-		blocks.addTemplate("Assign", new ImageIcon(hExtender2URL), "assign", 400, 70, "Assign");
-		blocks.addTemplate("Expression", new ImageIcon(hExtender2URL), "expression", 400, 70, "Expression");
-		blocks.addTemplate("Parallel", new ImageIcon(vertical2URL), "parallel", 120, 160, "Parallel");
-		blocks.addTemplate("Sequential", new ImageIcon(vertical2URL), "sequential", 120, 160, "Sequential");
-		blocks.addTemplate("If", new ImageIcon(vertical2URL), "if", 120, 160, "If");
-		blocks.addTemplate("If-Else", new ImageIcon(vertical3URL), "if-else", 120, 160, "If-Else");
-		blocks.addTemplate("While", new ImageIcon(vertical2URL), "while", 120, 160, "While");
-		blocks.addTemplate("For", new ImageIcon(vertical2URL), "for", 120, 160, "For");
+		blockTemplates.addTemplate("Extender", new ImageIcon(vExtender2URL), "vextender", 120, 160, "Extender");
+		blockTemplates.addTemplate("Assign", new ImageIcon(hExtender2URL), "assign", 400, 70, "Assign");
+		blockTemplates.addTemplate("Expression", new ImageIcon(hExtender2URL), "expression", 400, 70, "Expression");
+		blockTemplates.addTemplate("Parallel", new ImageIcon(vertical2URL), "parallel", 120, 160, "Parallel");
+		blockTemplates.addTemplate("Sequential", new ImageIcon(vertical2URL), "sequential", 120, 160, "Sequential");
+		blockTemplates.addTemplate("If", new ImageIcon(vertical2URL), "if", 120, 160, "If");
+		blockTemplates.addTemplate("If-Else", new ImageIcon(vertical3URL), "if-else", 120, 160, "If-Else");
+		blockTemplates.addTemplate("While", new ImageIcon(vertical2URL), "while", 120, 160, "While");
+		blockTemplates.addTemplate("For", new ImageIcon(vertical2URL), "for", 120, 160, "For");
 
-//		events.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
+//		eventTemplates.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
 
-		graphs.addTemplate("Main", new ImageIcon(vertical2URL), "graph-main", 120, 160, "Main");
+		graphTemplates.addTemplate("Main", new ImageIcon(vertical2URL), "graph-main", 120, 160, "Main");
 
+		// create template cells, template cell styles
+		int templateCount = 10;
+		for (int i = 0; i < templateCount; i++)
+		{
+			mxCell cell = new mxCell();
+			cell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
+			cell.setGeometry(new mxGeometry(300, 180*(i+1), 120, 160));
+			cell.setVertex(true);
+			graph.getModel().add(graph.getModel().getRoot(), cell, i+1);
+			mxCellState cellState = graph.getView().getState(cell, true);
+			graph.getView().updateCellState(cellState);
+		}
+
+		graphComponent.repaint();
 	}
 
 	/**
