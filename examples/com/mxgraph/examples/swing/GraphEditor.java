@@ -114,7 +114,7 @@ public class GraphEditor extends BasicGraphEditor
 
 //		eventTemplates.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
 
-		graphTemplates.addTemplate("Main", new ImageIcon(vertical2URL), "graph-main", 120, 160, "Main");
+//		graphTemplates.addTemplate("Main", new ImageIcon(vertical2URL), "graph-main", 120, 160, "Main");
 
 		// create template cells, template cell styles
 		int templateCount = 10;
