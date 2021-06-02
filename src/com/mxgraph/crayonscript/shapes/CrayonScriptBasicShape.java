@@ -82,12 +82,15 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 			SvgElement root,
 			SvgElement target)
 	{
-		int x = (int) (stateRect.x + (target.rect.getX() - root.rect.getX()) * stateRect.getWidth() / root.rect.getWidth());
-		int y = (int) (stateRect.y + (target.rect.getY() - root.rect.getY()) * stateRect.getHeight() / root.rect.getHeight());
-		int w = (int) (stateRect.width * target.rect.getWidth() / root.rect.getWidth());
-		int h = (int) (stateRect.height * target.rect.getHeight() / root.rect.getHeight());
-		int rw = (int) (target.rect.getArcWidth() * stateRect.getWidth() / root.rect.getWidth());
-		int rh = (int) (target.rect.getArcHeight() * stateRect.getHeight() / root.rect.getHeight());
+		double widthRatio = stateRect.getWidth() / root.rect.getWidth();
+		double heightRatio = stateRect.getHeight() / root.rect.getHeight();
+
+		int x = (int) (stateRect.x + (target.rect.getX() - root.rect.getX()) * widthRatio);
+		int y = (int) (stateRect.y + (target.rect.getY() - root.rect.getY()) * heightRatio);
+		int w = (int) (target.rect.getWidth() * widthRatio);
+		int h = (int) (target.rect.getHeight() * heightRatio);
+		int rw = (int) (target.rect.getArcWidth() * widthRatio);
+		int rh = (int) (target.rect.getArcHeight() * heightRatio);
 
 		RoundRectangle2D scaledRect = new RoundRectangle2D.Double(x, y, w, h, rw, rh);
 		return scaledRect;
