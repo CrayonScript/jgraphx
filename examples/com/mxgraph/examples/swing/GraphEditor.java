@@ -26,6 +26,8 @@ import com.mxgraph.view.mxStylesheet;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Iterator;
@@ -120,13 +122,18 @@ public class GraphEditor extends BasicGraphEditor
 		{
 			mxCell cell = new mxCell();
 			cell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
-			cell.setGeometry(new mxGeometry(300, 180*(i+1), 120, 160));
+			cell.setGeometry(new mxGeometry(graphComponent.getPageFormat().getWidth() * 0.7 - 60, 200*(i+1), 120, 160));
 			cell.setVertex(true);
 			graph.getModel().add(graph.getModel().getRoot(), cell, i+1);
 			mxCellState cellState = graph.getView().getState(cell, true);
 			graph.getView().updateCellState(cellState);
 		}
 
+		graphComponent.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_WIDTH);
+		graphComponent.setPreferPageSize(true);
+		graphComponent.setPageScale(1.4);
+		graphComponent.setVerticalPageCount(2);
+		graphComponent.zoomTo(0.6, true);
 		graphComponent.repaint();
 	}
 
