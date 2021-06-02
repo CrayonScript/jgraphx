@@ -88,6 +88,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		int h = (int) (stateRect.height * target.rect.getHeight() / root.rect.getHeight());
 		int rw = (int) (target.rect.getArcWidth() * stateRect.getWidth() / root.rect.getWidth());
 		int rh = (int) (target.rect.getArcHeight() * stateRect.getHeight() / root.rect.getHeight());
+
 		RoundRectangle2D scaledRect = new RoundRectangle2D.Double(x, y, w, h, rw, rh);
 		return scaledRect;
 	}

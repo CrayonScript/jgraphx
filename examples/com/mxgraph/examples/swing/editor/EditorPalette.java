@@ -68,6 +68,7 @@ public class EditorPalette extends JPanel
 	{
 		setBackground(new Color(149, 230, 190));
 		setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
+		setPreferredWidth(200);
 
 		// Clears the current selection when the background is clicked
 		addMouseListener(new MouseListener()
@@ -205,9 +206,8 @@ public class EditorPalette extends JPanel
 	 */
 	public void setPreferredWidth(int width)
 	{
-		int cols = Math.max(1, width / 55);
 		setPreferredSize(new Dimension(width,
-				(getComponentCount() * 55 / cols) + 30));
+				(getComponentCount() * 240) + 30));
 		revalidate();
 	}
 
@@ -266,22 +266,27 @@ public class EditorPalette extends JPanel
 				new Object[] { cell }, bounds);
 
 		// Scales the image if it's too large for the library
-		if (icon != null)
-		{
-			int width = 48;
-			double aspectRatio = cell.getGeometry().getHeight() / cell.getGeometry().getWidth();
-			int height = (int) (width * aspectRatio);
-			icon = new ImageIcon(icon.getImage().getScaledInstance(width, height, 0));
-		}
+		int width = 100;
+		double aspectRatio = cell.getGeometry().getHeight() / cell.getGeometry().getWidth();
+		int height = (int) (width * aspectRatio);
+		icon = new ImageIcon(icon.getImage().getScaledInstance(width, height, 0));
 
 		final JLabel entry = new JLabel(icon);
-		entry.setPreferredSize(new Dimension(60, 80));
+		if (aspectRatio < 1)
+		{
+			entry.setPreferredSize(new Dimension(200, 80));
+		}
+		else
+		{
+			entry.setPreferredSize(new Dimension(200, 200));
+		}
 		entry.setBackground(EditorPalette.this.getBackground().brighter());
 		entry.setFont(new Font(entry.getFont().getFamily(), 0, 10));
 
+		entry.setVerticalAlignment(JLabel.CENTER);
 		entry.setVerticalTextPosition(JLabel.BOTTOM);
 		entry.setHorizontalTextPosition(JLabel.CENTER);
-		entry.setIconTextGap(0);
+		entry.setIconTextGap(10);
 
 		entry.setToolTipText(name);
 		entry.setText(name);

@@ -2,7 +2,6 @@
  * Copyright (c) 2006-2012, JGraph Ltd */
 package com.mxgraph.examples.swing;
 
-import com.mxgraph.crayonscript.shapes.CrayonScriptGraphTemplateShape;
 import com.mxgraph.crayonscript.view.CrayonScriptStylesheet;
 import com.mxgraph.examples.swing.editor.BasicGraphEditor;
 import com.mxgraph.examples.swing.editor.EditorMenuBar;
@@ -26,8 +25,6 @@ import com.mxgraph.view.mxStylesheet;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Iterator;
@@ -102,9 +99,9 @@ public class GraphEditor extends BasicGraphEditor
 		URL vertical2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.png");
 		URL vertical3URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.png");
 
-		blockTemplates.addTemplate("Extender", new ImageIcon(vExtender2URL), "vextender", 120, 160, "Extender");
 		blockTemplates.addTemplate("Assign", new ImageIcon(hExtender2URL), "assign", 400, 70, "Assign");
 		blockTemplates.addTemplate("Expression", new ImageIcon(hExtender2URL), "expression", 400, 70, "Expression");
+		blockTemplates.addTemplate("Extender", new ImageIcon(vExtender2URL), "vextender", 120, 160, "Extender");
 		blockTemplates.addTemplate("Parallel", new ImageIcon(vertical2URL), "parallel", 120, 160, "Parallel");
 		blockTemplates.addTemplate("Sequential", new ImageIcon(vertical2URL), "sequential", 120, 160, "Sequential");
 		blockTemplates.addTemplate("If", new ImageIcon(vertical2URL), "if", 120, 160, "If");
@@ -117,12 +114,12 @@ public class GraphEditor extends BasicGraphEditor
 //		graphTemplates.addTemplate("Main", new ImageIcon(vertical2URL), "graph-main", 120, 160, "Main");
 
 		// create template cells, template cell styles
-		int templateCount = 10;
+		int templateCount = 16;
 		for (int i = 0; i < templateCount; i++)
 		{
 			mxCell cell = new mxCell();
 			cell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
-			cell.setGeometry(new mxGeometry(graphComponent.getPageFormat().getWidth() * 0.7 - 60, 200*(i+1), 120, 160));
+			cell.setGeometry(new mxGeometry(graphComponent.getPageFormat().getWidth() * 0.7 - 120, 324*(i) + 80, 240, 320));
 			cell.setVertex(true);
 			graph.getModel().add(graph.getModel().getRoot(), cell, i+1);
 			mxCellState cellState = graph.getView().getState(cell, true);
@@ -132,7 +129,7 @@ public class GraphEditor extends BasicGraphEditor
 		graphComponent.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_WIDTH);
 		graphComponent.setPreferPageSize(true);
 		graphComponent.setPageScale(1.4);
-		graphComponent.setVerticalPageCount(2);
+		graphComponent.setVerticalPageCount(5);
 		graphComponent.zoomTo(0.6, true);
 		graphComponent.repaint();
 	}
