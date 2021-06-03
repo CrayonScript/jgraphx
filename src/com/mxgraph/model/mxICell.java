@@ -62,6 +62,13 @@ public interface mxICell
 	void setStyle(String style);
 
 	/**
+	 * Returns true if the cell is a template.
+	 *
+	 * @return Returns true if the cell is a template.
+	 */
+	boolean isTemplate();
+
+	/**
 	 * Returns true if the cell is a vertex.
 	 * 
 	 * @return Returns true if the cell is a vertex.

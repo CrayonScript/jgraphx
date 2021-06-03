@@ -1052,7 +1052,9 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel,
 
 	public boolean isDropTarget(Object cell)
 	{
-		return (cell instanceof mxICell && ((mxICell) cell).getComponentCount() > 0);
+		return (cell instanceof mxICell &&
+				(((mxICell) cell).getComponentCount() > 0 || ((mxICell) cell).isTemplate())
+		);
 	}
 
 	/**
