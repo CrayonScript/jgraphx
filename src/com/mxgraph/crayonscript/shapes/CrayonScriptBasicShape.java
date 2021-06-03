@@ -126,15 +126,15 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		if (isFrame)
 		{
 			Path2D path = new Path2D.Double();
-			path.moveTo(x, y);
+			path.moveTo(x, y+arcSize);
 			path.lineTo(x, y+h);
 			path.lineTo(x+w/2-arcSize/2-3, y+h);
 			path.curveTo(x+w/2-arcSize/2, y+h-arcSize, x+w/2+arcSize/2,y+h-arcSize, x+w/2+arcSize/2+3, y+h);
 			path.lineTo(x+w, y+h);
-			path.lineTo(x+w, y);
-			path.lineTo(x+w/2+arcSize/2, y);
-			path.curveTo(x+w/2+arcSize/2, y-arcSize, x+w/2-arcSize/2,y-arcSize, x+w/2-arcSize/2, y);
-			path.lineTo(x, y);
+			path.lineTo(x+w, y+arcSize);
+			path.lineTo(x+w/2+arcSize/2, y+arcSize);
+			path.curveTo(x+w/2+arcSize/2, y, x+w/2-arcSize/2,y, x+w/2-arcSize/2, y+arcSize);
+			path.lineTo(x, y+arcSize);
 			path.closePath();
 			canvas.getGraphics().fill(path);
 			canvas.getGraphics().draw(path);
