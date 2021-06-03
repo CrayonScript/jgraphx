@@ -99,15 +99,15 @@ public class GraphEditor extends BasicGraphEditor
 		URL vertical2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.png");
 		URL vertical3URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.png");
 
-		blockTemplates.addTemplate("Assign", new ImageIcon(hExtender2URL), "assign", 400, 70, "Assign");
-		blockTemplates.addTemplate("Expression", new ImageIcon(hExtender2URL), "expression", 400, 70, "Expression");
-		blockTemplates.addTemplate("Extender", new ImageIcon(vExtender2URL), "vextender", 120, 160, "Extender");
-		blockTemplates.addTemplate("Parallel", new ImageIcon(vertical2URL), "parallel", 120, 160, "Parallel");
-		blockTemplates.addTemplate("Sequential", new ImageIcon(vertical2URL), "sequential", 120, 160, "Sequential");
-		blockTemplates.addTemplate("If", new ImageIcon(vertical2URL), "if", 120, 160, "If");
-		blockTemplates.addTemplate("If-Else", new ImageIcon(vertical3URL), "if-else", 120, 160, "If-Else");
-		blockTemplates.addTemplate("While", new ImageIcon(vertical2URL), "while", 120, 160, "While");
-		blockTemplates.addTemplate("For", new ImageIcon(vertical2URL), "for", 120, 160, "For");
+		blockTemplates.addTemplate("Assign", new ImageIcon(hExtender2URL), "assign", 400, 60, "Assign");
+		blockTemplates.addTemplate("Expression", new ImageIcon(hExtender2URL), "expression", 400, 60, "Expression");
+		blockTemplates.addTemplate("Extender", new ImageIcon(vExtender2URL), "vextender", 240, 180, "Extender");
+		blockTemplates.addTemplate("Parallel", new ImageIcon(vertical2URL), "parallel", 240, 320, "Parallel");
+		blockTemplates.addTemplate("Sequential", new ImageIcon(vertical2URL), "sequential", 240, 320, "Sequential");
+		blockTemplates.addTemplate("If", new ImageIcon(vertical2URL), "if", 240, 320, "If");
+		blockTemplates.addTemplate("If-Else", new ImageIcon(vertical3URL), "if-else", 240, 320, "If-Else");
+		blockTemplates.addTemplate("While", new ImageIcon(vertical2URL), "while", 240, 320, "While");
+		blockTemplates.addTemplate("For", new ImageIcon(vertical2URL), "for", 240, 320, "For");
 
 //		eventTemplates.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
 

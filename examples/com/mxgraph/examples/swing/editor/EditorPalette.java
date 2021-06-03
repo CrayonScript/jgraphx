@@ -272,14 +272,8 @@ public class EditorPalette extends JPanel
 		icon = new ImageIcon(icon.getImage().getScaledInstance(width, height, 0));
 
 		final JLabel entry = new JLabel(icon);
-		if (aspectRatio < 1)
-		{
-			entry.setPreferredSize(new Dimension(200, 80));
-		}
-		else
-		{
-			entry.setPreferredSize(new Dimension(200, 200));
-		}
+		entry.setPreferredSize(new Dimension(width + 30, height + 30));
+
 		entry.setBackground(EditorPalette.this.getBackground().brighter());
 		entry.setFont(new Font(entry.getFont().getFamily(), 0, 10));
 
