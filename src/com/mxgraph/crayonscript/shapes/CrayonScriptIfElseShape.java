@@ -26,7 +26,7 @@ public class CrayonScriptIfElseShape extends CrayonScriptBasicShape {
         SvgElement third = svgElements.get(2);
         SvgElement fourth = svgElements.get(3);
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), first.fillColor);
+        paintRectangle(canvas, scaleRectangle(stateRect, first, first), first.fillColor, true);
         paintRectangle(canvas, scaleRectangle(stateRect, first, second), second.fillColor);
         paintRectangle(canvas, scaleRectangle(stateRect, first, third), third.fillColor);
         paintRectangle(canvas, scaleRectangle(stateRect, first, fourth), fourth.fillColor);
