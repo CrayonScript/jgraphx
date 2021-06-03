@@ -120,13 +120,15 @@ public class GraphEditor extends BasicGraphEditor
 
 		// create template cells, template cell styles
 		int templateCount = 16;
+		Object templateParent = graph.getDefaultParent();
 		for (int i = 0; i < templateCount; i++)
 		{
 			mxCell cell = new mxCell();
+			cell.setTemplate(true);
 			cell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
 			cell.setGeometry(new mxGeometry(graphComponent.getPageFormat().getWidth() * 0.7 - 120, 294*(i) + 80, 240, 320));
 			cell.setVertex(true);
-			graph.getModel().add(graph.getModel().getRoot(), cell, i+1);
+			graph.getModel().add(templateParent, cell, i);
 			mxCellState cellState = graph.getView().getState(cell, true);
 			graph.getView().updateCellState(cellState);
 		}

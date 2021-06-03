@@ -228,6 +228,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		this.style = style;
 	}
 
+	public void setTemplate(boolean template) { this.template = template; }
+
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#isTemplate()
 	 */
