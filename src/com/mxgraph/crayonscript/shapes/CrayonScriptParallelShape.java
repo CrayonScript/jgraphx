@@ -24,7 +24,7 @@ public class CrayonScriptParallelShape extends CrayonScriptBasicShape {
         SvgElement second = svgElements.get(1);
         SvgElement third = svgElements.get(2);
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), ColorCode.JAZZ_BERRY_JAM.color, true);
+        paintRectangle(canvas, scaleRectangle(stateRect, first, first), first.fillColor, true);
         paintRectangle(canvas, scaleRectangle(stateRect, first, second), second.fillColor);
         paintRectangle(canvas, scaleRectangle(stateRect, first, third), third.fillColor);
     }

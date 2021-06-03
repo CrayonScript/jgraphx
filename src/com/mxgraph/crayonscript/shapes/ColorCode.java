@@ -5,6 +5,7 @@ import java.awt.*;
 public enum ColorCode {
 
     // https://pin.it/3ThtK6U
+    DEFAULT_COLOR("#E4DB8C"),
     FUCHSIA("#C364C5"),
     MAROON("#C8385A"),
     NEON_CARROT("#FFA343"),
