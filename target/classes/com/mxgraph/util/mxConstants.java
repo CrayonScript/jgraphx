@@ -3,6 +3,8 @@
  */
 package com.mxgraph.util;
 
+import java.awt.*;
+
 /**
  * Contains all global constants.
  */
@@ -220,6 +222,11 @@ public class mxConstants
 	 * Defines the size of the arrowhead in the arrow shape. Default is 30.
 	 */
 	public static int ARROW_SIZE = 30;
+
+	/**
+	 *
+	 */
+	public static Color PNG_COLOR = Color.decode("0xE4DB8C");
 
 	/**
 	 * Defines the value for none. Default is "none".

@@ -2,6 +2,7 @@
  * Copyright (c) 2006-2012, JGraph Ltd */
 package com.mxgraph.examples.swing;
 
+import com.mxgraph.crayonscript.shapes.ColorCode;
 import com.mxgraph.crayonscript.view.CrayonScriptStylesheet;
 import com.mxgraph.examples.swing.editor.BasicGraphEditor;
 import com.mxgraph.examples.swing.editor.EditorMenuBar;
@@ -23,8 +24,12 @@ import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Iterator;
@@ -99,15 +104,15 @@ public class GraphEditor extends BasicGraphEditor
 		URL vertical2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.png");
 		URL vertical3URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.png");
 
-		blockTemplates.addTemplate("Assign", new ImageIcon(hExtender2URL), "assign", 400, 60, "Assign");
-		blockTemplates.addTemplate("Expression", new ImageIcon(hExtender2URL), "expression", 400, 60, "Expression");
-		blockTemplates.addTemplate("Extender", new ImageIcon(vExtender2URL), "vextender", 240, 180, "Extender");
-		blockTemplates.addTemplate("Parallel", new ImageIcon(vertical2URL), "parallel", 240, 320, "Parallel");
-		blockTemplates.addTemplate("Sequential", new ImageIcon(vertical2URL), "sequential", 240, 320, "Sequential");
-		blockTemplates.addTemplate("If", new ImageIcon(vertical2URL), "if", 240, 320, "If");
-		blockTemplates.addTemplate("If-Else", new ImageIcon(vertical3URL), "if-else", 240, 320, "If-Else");
-		blockTemplates.addTemplate("While", new ImageIcon(vertical2URL), "while", 240, 320, "While");
-		blockTemplates.addTemplate("For", new ImageIcon(vertical2URL), "for", 240, 320, "For");
+		blockTemplates.addTemplate("Assign", new CustomImageIcon(hExtender2URL, mxConstants.PNG_COLOR, ColorCode.ATOMIC_TANGERINE.color).imageIcon, "assign", 400, 60, "Assign");
+		blockTemplates.addTemplate("Expression", new CustomImageIcon(hExtender2URL, mxConstants.PNG_COLOR, ColorCode.INCH_WORM.color).imageIcon, "expression", 400, 60, "Expression");
+		blockTemplates.addTemplate("Extender", new CustomImageIcon(vExtender2URL, mxConstants.PNG_COLOR, ColorCode.JUNGLE_GREEN.color).imageIcon, "vextender", 240, 180, "Extender");
+		blockTemplates.addTemplate("Parallel", new CustomImageIcon(vertical2URL, mxConstants.PNG_COLOR, ColorCode.JAZZ_BERRY_JAM.color).imageIcon, "parallel", 240, 320, "Parallel");
+		blockTemplates.addTemplate("Sequential", new CustomImageIcon(vertical2URL, mxConstants.PNG_COLOR, ColorCode.TROPICAL_RAIN_FOREST.color).imageIcon, "sequential", 240, 320, "Sequential");
+		blockTemplates.addTemplate("If", new CustomImageIcon(vertical2URL, mxConstants.PNG_COLOR, ColorCode.WILD_WATERMELON.color).imageIcon, "if", 240, 320, "If");
+		blockTemplates.addTemplate("If-Else", new CustomImageIcon(vertical3URL, mxConstants.PNG_COLOR, ColorCode.SHAMROCK.color).imageIcon, "if-else", 240, 320, "If-Else");
+		blockTemplates.addTemplate("While", new CustomImageIcon(vertical2URL, mxConstants.PNG_COLOR, ColorCode.CERISE.color).imageIcon, "while", 240, 320, "While");
+		blockTemplates.addTemplate("For", new CustomImageIcon(vertical2URL, mxConstants.PNG_COLOR, ColorCode.PINE_GREEN.color).imageIcon, "for", 240, 320, "For");
 
 //		eventTemplates.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
 
@@ -132,6 +137,39 @@ public class GraphEditor extends BasicGraphEditor
 		graphComponent.setVerticalPageCount(5);
 		graphComponent.zoomTo(0.6, true);
 		graphComponent.repaint();
+	}
+
+	public static class CustomImageIcon
+	{
+		ImageIcon imageIcon;
+
+		public CustomImageIcon(URL resource, Color sourceColor, Color targetColor)
+		{
+			try
+			{
+				BufferedImage bufferedImage = ImageIO.read(resource);
+				int width = bufferedImage.getWidth();
+				int height = bufferedImage.getHeight();
+				int targetRGB = targetColor.getRGB();
+				int sourceRGB = sourceColor.getRGB();
+				for (int i = 0; i < width; i++)
+				{
+					for (int j = 0; j < height; j++)
+					{
+						int rgb = bufferedImage.getRGB(i, j);
+						if (rgb == sourceRGB)
+						{
+							bufferedImage.setRGB(i, j, targetRGB);
+						}
+					}
+				}
+				imageIcon = new ImageIcon(bufferedImage);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
