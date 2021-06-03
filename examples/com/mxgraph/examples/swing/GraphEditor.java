@@ -119,7 +119,7 @@ public class GraphEditor extends BasicGraphEditor
 		{
 			mxCell cell = new mxCell();
 			cell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
-			cell.setGeometry(new mxGeometry(graphComponent.getPageFormat().getWidth() * 0.7 - 120, 324*(i) + 80, 240, 320));
+			cell.setGeometry(new mxGeometry(graphComponent.getPageFormat().getWidth() * 0.7 - 120, 328*(i) + 80, 240, 320));
 			cell.setVertex(true);
 			graph.getModel().add(graph.getModel().getRoot(), cell, i+1);
 			mxCellState cellState = graph.getView().getState(cell, true);

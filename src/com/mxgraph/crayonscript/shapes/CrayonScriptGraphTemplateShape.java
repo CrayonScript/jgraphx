@@ -22,6 +22,6 @@ public class CrayonScriptGraphTemplateShape extends CrayonScriptBasicShape {
 
         SvgElement first = svgElements.get(0);
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), first.fillColor);
+        paintRectangle(canvas, scaleRectangle(stateRect, first, first), first.fillColor, true);
     }
 }

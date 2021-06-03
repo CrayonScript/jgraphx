@@ -16,6 +16,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.*;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
 import java.util.ArrayList;
@@ -98,19 +100,49 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor)
 	{
-		int x = (int) roundedRect.getX();
-		int y = (int) roundedRect.getY();
-		int w = (int) roundedRect.getWidth();
-		int h = (int) roundedRect.getHeight();
-		int rx = (int) roundedRect.getArcWidth();
-		int ry = (int) roundedRect.getArcHeight();
+		paintRectangle(canvas, roundedRect, fillColor, false);
+	}
+
+	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor, boolean isFrame)
+	{
+		double x = roundedRect.getX();
+		double y = roundedRect.getY();
+		double w = roundedRect.getWidth();
+		double h = roundedRect.getHeight();
+		double rx = roundedRect.getArcWidth();
+		double ry = roundedRect.getArcHeight();
 
 		Color color = fillColor;
 		if (color != null)
 		{
 			canvas.getGraphics().setColor(color);
 		}
-		canvas.getGraphics().fillRoundRect((int) x, (int) y, (int) w, (int) h, (int) rx, (int) ry);
+
+		double normalizedRxSize = 18;
+		double normalizedArcSize = 18;
+		double arcSize = normalizedArcSize * rx / normalizedRxSize;
+
+		if (isFrame)
+		{
+			Path2D path = new Path2D.Double();
+			path.moveTo(x, y);
+			path.lineTo(x, y+h);
+			path.lineTo(x+w/2-arcSize/2-3, y+h);
+			path.curveTo(x+w/2-arcSize/2, y+h-arcSize, x+w/2+arcSize/2,y+h-arcSize, x+w/2+arcSize/2+3, y+h);
+			path.lineTo(x+w, y+h);
+			path.lineTo(x+w, y);
+			path.lineTo(x+w/2+arcSize/2, y);
+			path.curveTo(x+w/2+arcSize/2, y-arcSize, x+w/2-arcSize/2,y-arcSize, x+w/2-arcSize/2, y);
+			path.lineTo(x, y);
+			path.closePath();
+			canvas.getGraphics().fill(path);
+			canvas.getGraphics().draw(path);
+		}
+		else
+		{
+			canvas.getGraphics().fillRoundRect((int) x, (int) y, (int) w, (int) h, (int) rx, (int) ry);
+		}
+
 	}
 
 	protected enum SvgElementType {
