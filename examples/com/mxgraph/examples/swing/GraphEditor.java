@@ -134,6 +134,7 @@ public class GraphEditor extends BasicGraphEditor
 			graph.getView().updateCellState(cellState);
 		}
 
+		graphComponent.setConnectable(false);
 		graphComponent.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_WIDTH);
 		graphComponent.setPreferPageSize(true);
 		graphComponent.setPageScale(1.4);
