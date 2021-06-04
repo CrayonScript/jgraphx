@@ -6796,7 +6796,8 @@ public class mxGraph extends mxEventSource
 				: getCellStyle(cell);
 
 		return model.getChildCount(cell) > 0
-				&& mxUtils.isTrue(style, mxConstants.STYLE_FOLDABLE, true);
+				&& mxUtils.isTrue(style, mxConstants.STYLE_FOLDABLE, true)
+				&& !model.isTemplate(cell);
 	}
 
 	/**

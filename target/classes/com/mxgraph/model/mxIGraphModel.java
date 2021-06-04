@@ -310,6 +310,14 @@ public interface mxIGraphModel
 	boolean isDropTarget(Object cell);
 
 	/**
+	 * Return true if this cell is a template cell
+	 *
+	 * @param cell
+	 * @return
+	 */
+	boolean isTemplate(Object cell);
+
+	/**
 	 * Increments the updateLevel by one. The event notification is queued
 	 * until updateLevel reaches 0 by use of endUpdate.
 	 */

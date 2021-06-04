@@ -2837,6 +2837,8 @@ public class mxGraphComponent extends JScrollPane implements Printable
 	 */
 	public mxCellHandler createHandler(mxCellState state)
 	{
+		// CrayonScript - removing all special vertex and edge handlers
+		//
 		/*if (graph.getModel().isVertex(state.getCell()))
 		{
 			return new mxVertexHandler(this, state);
