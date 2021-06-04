@@ -432,7 +432,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 	 */
 	protected mxCellMarker createMarker()
 	{
-		mxCellMarker marker = new mxCellMarker(graphComponent, Color.BLUE)
+		mxCellMarker marker = new mxCellMarker(graphComponent, Color.GREEN)
 		{
 			/**
 			 * 

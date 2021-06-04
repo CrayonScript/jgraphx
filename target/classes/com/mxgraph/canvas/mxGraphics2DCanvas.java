@@ -139,21 +139,6 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 	}
 
 	/**
-	 *
-	 */
-	public mxIShape getShape(String name)
-	{
-		mxIShape shape = shapes.get(name);
-
-		if (shape == null && name != null)
-		{
-			shape = mxStencilRegistry.getStencil(name);
-		}
-
-		return shape;
-	}
-
-	/**
 	 * 
 	 */
 	public mxIShape getShape(Map<String, Object> style)
