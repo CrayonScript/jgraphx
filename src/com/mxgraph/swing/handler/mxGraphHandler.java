@@ -298,7 +298,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 
 						if (t != null)
 						{
-							e.startDrag(null, mxSwingConstants.EMPTY_IMAGE,
+							e.startDrag(Cursor.getDefaultCursor(), mxSwingConstants.EMPTY_IMAGE,
 									new Point(), t, new DragSourceAdapter()
 									{
 
@@ -732,7 +732,9 @@ public class mxGraphHandler extends mxMouseAdapter implements
 				}
 				else if (graphComponent.getGraph().isCellMovable(cell))
 				{
-					cursor = MOVE_CURSOR;
+					//cursor = MOVE_CURSOR;
+					// use hand cursor for move
+					cursor = DEFAULT_CURSOR;
 				}
 			}
 		}

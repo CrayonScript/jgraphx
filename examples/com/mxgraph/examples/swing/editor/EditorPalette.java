@@ -3,15 +3,7 @@
  */
 package com.mxgraph.examples.swing.editor;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
@@ -340,7 +332,7 @@ public class EditorPalette extends JPanel
 			public void dragGestureRecognized(DragGestureEvent e)
 			{
 				e
-						.startDrag(null, mxSwingConstants.EMPTY_IMAGE, new Point(),
+						.startDrag(Cursor.getDefaultCursor(), mxSwingConstants.EMPTY_IMAGE, new Point(),
 								t, null);
 			}
 
