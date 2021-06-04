@@ -11,6 +11,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Path2D;
 import java.util.Date;
 import java.util.Timer;
 
@@ -466,9 +467,6 @@ public class mxCellMarker extends JComponent
 		if (markedState != null)
 		{
 			Rectangle bounds = markedState.getHighlightSource().getRectangle();
-			bounds.grow(3, 3);
-			bounds.width += 1;
-			bounds.height += 1;
 			setBounds(bounds);
 
 			if (getParent() == null)
@@ -606,24 +604,11 @@ public class mxCellMarker extends JComponent
 			((Graphics2D) g).setStroke(DEFAULT_STROKE);
 			g.setColor(currentColor);
 
-//			if (markedState.getAbsolutePointCount() > 0)
-//			{
-//				Point last = markedState.getAbsolutePoint(0).getPoint();
-//
-//				for (int i = 1; i < markedState.getAbsolutePointCount(); i++)
-//				{
-//					Point current = markedState.getAbsolutePoint(i).getPoint();
-//					g.drawLine(last.x - getX(), last.y - getY(), current.x
-//							- getX(), current.y - getY());
-//					last = current;
-//				}
-//			}
-//			else
-//			{
-//				g.drawRect(1, 1, getWidth() - 3, getHeight() - 3);
-//			}
+			mxIHighlightSource highlightSource = markedState.getHighlightSource();
+			Path2D path = highlightSource.getPath();
 
-			g.drawRect(1, 1, getWidth() - 3, getHeight() - 3);
+			((Graphics2D) g).fill(path);
+			((Graphics2D) g).draw(path);
 		}
 	}
 

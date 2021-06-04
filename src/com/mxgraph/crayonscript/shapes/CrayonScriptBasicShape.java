@@ -29,13 +29,13 @@ import java.util.logging.Logger;
 public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 {
 
-	protected Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
+	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
 
 	private static final Logger log = Logger.getLogger(mxStencilShape.class.getName());
 
-	protected boolean initialized;
+	protected static boolean initialized;
 
-	protected void initialize() {
+	protected static void initialize() {
 		if (initialized) return;
 		svgElementsMap = new HashMap<>();
 		svgElementsMap.put(ShapeStructureType.VERTICAL2,
@@ -51,7 +51,13 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		initialized = true;
 	}
 
-	protected ArrayList<SvgElement> readSvgElements(URL url) {
+	public static SvgElement getTemplate()
+	{
+		ArrayList<SvgElement> templates = svgElementsMap.get(ShapeStructureType.TEMPLATE);
+		return templates.get(0);
+	}
+
+	protected static ArrayList<SvgElement> readSvgElements(URL url) {
 		ArrayList<SvgElement> svgElements = new ArrayList<>();
 		Document doc = mxUtils.loadDocument(url.toString());
 		Node rootElement = doc.getDocumentElement();
@@ -80,7 +86,38 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return svgElements;
 	}
 
-	protected RoundRectangle2D scaleRectangle(
+	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor)
+	{
+		paintRectangle(canvas, roundedRect, fillColor, false);
+	}
+
+	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor, boolean isFrame)
+	{
+		Color color = fillColor;
+		if (color != null)
+		{
+			canvas.getGraphics().setColor(color);
+		}
+
+		if (isFrame)
+		{
+			Path2D path = getFramePath(roundedRect);
+			canvas.getGraphics().fill(path);
+			canvas.getGraphics().draw(path);
+		}
+		else
+		{
+			canvas.getGraphics().fillRoundRect(
+					(int) roundedRect.getX(),
+					(int) roundedRect.getY(),
+					(int) roundedRect.getWidth(),
+					(int) roundedRect.getHeight(),
+					(int) roundedRect.getArcWidth(),
+					(int) roundedRect.getArcHeight());
+		}
+	}
+
+	public static RoundRectangle2D scaleRectangle(
 			Rectangle stateRect,
 			SvgElement root,
 			SvgElement target)
@@ -99,12 +136,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return scaledRect;
 	}
 
-	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor)
-	{
-		paintRectangle(canvas, roundedRect, fillColor, false);
-	}
-
-	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor, boolean isFrame)
+	public static Path2D getFramePath(RoundRectangle2D roundedRect)
 	{
 		double x = roundedRect.getX();
 		double y = roundedRect.getY();
@@ -113,37 +145,23 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		double rx = roundedRect.getArcWidth();
 		double ry = roundedRect.getArcHeight();
 
-		Color color = fillColor;
-		if (color != null)
-		{
-			canvas.getGraphics().setColor(color);
-		}
-
 		double normalizedRxSize = 18;
 		double normalizedArcSize = 18;
 		double arcSize = normalizedArcSize * rx / normalizedRxSize;
 
-		if (isFrame)
-		{
-			Path2D path = new Path2D.Double();
-			path.moveTo(x, y+arcSize);
-			path.lineTo(x, y+h);
-			path.lineTo(x+w/2-arcSize/2-3, y+h);
-			path.curveTo(x+w/2-arcSize/2, y+h-arcSize, x+w/2+arcSize/2,y+h-arcSize, x+w/2+arcSize/2+3, y+h);
-			path.lineTo(x+w, y+h);
-			path.lineTo(x+w, y+arcSize);
-			path.lineTo(x+w/2+arcSize/2, y+arcSize);
-			path.curveTo(x+w/2+arcSize/2, y, x+w/2-arcSize/2,y, x+w/2-arcSize/2, y+arcSize);
-			path.lineTo(x, y+arcSize);
-			path.closePath();
-			canvas.getGraphics().fill(path);
-			canvas.getGraphics().draw(path);
-		}
-		else
-		{
-			canvas.getGraphics().fillRoundRect((int) x, (int) y, (int) w, (int) h, (int) rx, (int) ry);
-		}
+		Path2D path = new Path2D.Double();
+		path.moveTo(x, y + arcSize);
+		path.lineTo(x, y + h);
+		path.lineTo(x + w / 2 - arcSize / 2 - 3, y + h);
+		path.curveTo(x + w / 2 - arcSize / 2, y + h - arcSize, x + w / 2 + arcSize / 2, y + h - arcSize, x + w / 2 + arcSize / 2 + 3, y + h);
+		path.lineTo(x + w, y + h);
+		path.lineTo(x + w, y + arcSize);
+		path.lineTo(x + w / 2 + arcSize / 2, y + arcSize);
+		path.curveTo(x + w / 2 + arcSize / 2, y, x + w / 2 - arcSize / 2, y, x + w / 2 - arcSize / 2, y + arcSize);
+		path.lineTo(x, y + arcSize);
+		path.closePath();
 
+		return path;
 	}
 
 	protected enum SvgElementType {
@@ -162,7 +180,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		TEMPLATE,
 	}
 
-	protected static class SvgElement
+	public static class SvgElement
 	{
 		Color fillColor = null;
 		Color strokeColor = null;

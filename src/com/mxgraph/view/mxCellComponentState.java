@@ -4,6 +4,7 @@ import com.mxgraph.model.mxCellComponent;
 import com.mxgraph.util.mxRectangle;
 
 import java.awt.*;
+import java.awt.geom.Path2D;
 
 public class mxCellComponentState extends mxRectangle implements mxIHighlightSource {
 
@@ -26,11 +27,10 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
      * Constructs a new object that represents the current state of the given
      * cellComponent in the specified view.
      *
-     * @param view Graph view that contains the state.
+     * @param view          Graph view that contains the state.
      * @param cellComponent Cell that this state represents.
      */
-    public mxCellComponentState(mxGraphView view, mxCellComponent cellComponent)
-    {
+    public mxCellComponentState(mxGraphView view, mxCellComponent cellComponent) {
         setView(view);
         setCellComponent(cellComponent);
     }
@@ -40,8 +40,7 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
      *
      * @return the view
      */
-    public mxGraphView getView()
-    {
+    public mxGraphView getView() {
         return view;
     }
 
@@ -50,8 +49,7 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
      *
      * @param view the view to set
      */
-    public void setView(mxGraphView view)
-    {
+    public void setView(mxGraphView view) {
         this.view = view;
     }
 
@@ -60,8 +58,7 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
      *
      * @return the cellComponent
      */
-    public mxCellComponent getCellComponent()
-    {
+    public mxCellComponent getCellComponent() {
         return cellComponent;
     }
 
@@ -70,14 +67,12 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
      *
      * @param cellComponent the cellComponent to set
      */
-    public void setCellComponent(mxCellComponent cellComponent)
-    {
+    public void setCellComponent(mxCellComponent cellComponent) {
         this.cellComponent = cellComponent;
     }
 
     public void updateIntersects(int x, int y,
-                                 double hotspot, int min, int max)
-    {
+                                 double hotspot, int min, int max) {
         this.cellComponent.isHotspot = intersects(x, y, hotspot, min, max);
     }
 
@@ -93,11 +88,9 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
      * @return
      */
     protected boolean intersects(int x, int y,
-                                     double hotspot, int min, int max)
-    {
+                                 double hotspot, int min, int max) {
         mxCellComponentState state = this;
-        if (hotspot > 0)
-        {
+        if (hotspot > 0) {
             int cx = (int) Math.round(state.getCenterX());
             int cy = (int) Math.round(state.getCenterY());
             int width = (int) Math.round(state.getWidth());
@@ -106,8 +99,7 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
             int w = (int) Math.max(min, width * hotspot);
             int h = (int) Math.max(min, height * hotspot);
 
-            if (max > 0)
-            {
+            if (max > 0) {
                 w = Math.min(w, max);
                 h = Math.min(h, max);
             }
@@ -118,6 +110,20 @@ public class mxCellComponentState extends mxRectangle implements mxIHighlightSou
             return rect.contains(x, y);
         }
         return true;
+    }
+
+    public Path2D getPath()
+    {
+        Rectangle rect = getRectangle();
+        Path2D path = new Path2D.Double();
+        path.moveTo(rect.getX(), rect.getY());
+        path.lineTo(rect.getX(), rect.getY() + rect.getHeight());
+        path.lineTo(rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+        path.lineTo(rect.getX() + rect.getWidth(), rect.getY());
+        path.lineTo(rect.getX(), rect.getY());
+        path.closePath();
+        
+        return path;
     }
 
 }
