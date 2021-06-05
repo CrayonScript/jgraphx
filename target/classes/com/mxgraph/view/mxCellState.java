@@ -97,11 +97,6 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
     protected mxCellState visibleSourceState, visibleTargetState;
 
     /**
-     * Reference to the list of cell components that is represented by this state.
-     */
-    protected List<mxCellComponentState> cellComponentStates;
-
-    /**
      * Constructs an empty cell state.
      */
     public mxCellState() {
