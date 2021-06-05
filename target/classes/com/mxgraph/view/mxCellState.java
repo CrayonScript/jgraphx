@@ -12,6 +12,7 @@ import com.mxgraph.util.mxUtils;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -486,29 +487,12 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      */
     protected boolean intersects(int x, int y,
                                  double hotspot, int min, int max) {
-        mxCellState state = this;
+        Rectangle2D rectangle2D = getRectangle();
         if (hotspot > 0) {
-            int cx = (int) Math.round(state.getCenterX());
-            int cy = (int) Math.round(state.getCenterY());
-            int width = (int) Math.round(state.getWidth());
-            int height = (int) Math.round(state.getHeight());
-
-            if (mxUtils
-                    .getString(state.getStyle(), mxConstants.STYLE_SHAPE, "")
-                    .equals(mxConstants.SHAPE_SWIMLANE)) {
-                int start = mxUtils.getInt(state.getStyle(),
-                        mxConstants.STYLE_STARTSIZE,
-                        mxConstants.DEFAULT_STARTSIZE);
-
-                if (mxUtils.isTrue(state.getStyle(),
-                        mxConstants.STYLE_HORIZONTAL, true)) {
-                    cy = (int) Math.round(state.getY() + start / 2);
-                    height = start;
-                } else {
-                    cx = (int) Math.round(state.getX() + start / 2);
-                    width = start;
-                }
-            }
+            int cx = (int) Math.round(rectangle2D.getCenterX());
+            int cy = (int) Math.round(rectangle2D.getCenterY());
+            int width = (int) Math.round(rectangle2D.getWidth());
+            int height = (int) Math.round(rectangle2D.getHeight());
 
             int w = (int) Math.max(min, width * hotspot);
             int h = (int) Math.max(min, height * hotspot);
