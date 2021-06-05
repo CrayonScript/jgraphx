@@ -139,11 +139,10 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 	}
 
 	/**
-	 * 
+	 *
 	 */
-	public mxIShape getShape(Map<String, Object> style)
+	public static mxIShape getShape(String name)
 	{
-		String name = mxUtils.getString(style, mxConstants.STYLE_SHAPE, null);
 		mxIShape shape = shapes.get(name);
 
 		if (shape == null && name != null)
@@ -152,6 +151,15 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 		}
 
 		return shape;
+	}
+
+	/**
+	 * 
+	 */
+	public static mxIShape getShape(Map<String, Object> style)
+	{
+		String name = mxUtils.getString(style, mxConstants.STYLE_SHAPE, null);
+		return getShape(name);
 	}
 
 	/**

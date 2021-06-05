@@ -3843,21 +3843,7 @@ public class mxGraph extends mxEventSource
 		// find the target geometry
 		mxGeometry targetCellGeometry = targetCell.getGeometry();
 		if (targetCellGeometry == null) return false;
-		Rectangle targetRect = targetCellGeometry.getRectangle();
 		mxGeometry targetGeometry = targetCellGeometry;
-		for (int i = 0; i < targetCell.getComponentCount(); i++)
-		{
-			if (targetCell.getComponentAt(i).isHotspot)
-			{
-				targetGeometry = targetCell.getComponentAt(i).getGeometry();
-				rect = targetGeometry.getRectangle();
-				rect = new Rectangle2D.Double(
-						targetRect.getX() + rect.getX(),
-						targetRect.getY() + rect.getY(),
-						rect.getWidth(),
-						rect.getHeight());
-			}
-		}
 		if (rect == null)
 		{
 			if (targetCell.isHotspot)

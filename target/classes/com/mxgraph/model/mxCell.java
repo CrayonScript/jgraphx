@@ -79,7 +79,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	/**
 	 * Holds the child cells, components and connected edges.
 	 */
-	protected List<Object> children, components, edges;
+	protected List<Object> children, edges;
 
 	protected double boundingBoxWidth = Double.NaN, boundingBoxHeight = Double.NaN;
 
@@ -184,31 +184,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 */
 	public void setGeometry(mxGeometry geometry)
 	{
-		if (geometry != null && !Double.isNaN(boundingBoxWidth) && !Double.isNaN(boundingBoxHeight))
-		{
-			double scaleX = geometry.getWidth() / boundingBoxWidth;
-			double scaleY = geometry.getHeight() / boundingBoxHeight;
-
-			if (getComponentCount() > 0)
-			{
-				for (int i = 0; i < getComponentCount(); i++)
-				{
-					mxCellComponent component = getComponentAt(i);
-
-					double x = component.getBoundingBox().getX(); // relative
-					double y = component.getBoundingBox().getY(); // relative
-
-					double w = component.getBoundingBox().getWidth();
-					double h = component.getBoundingBox().getHeight();
-
-					component.getGeometry().setRect(
-							(scaleX) * x,
-							(scaleY) * y,
-							(scaleX) * w,
-							(scaleY) * h);
-				}
-			}
-		}
 		this.geometry = geometry;
 	}
 
@@ -236,6 +211,14 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public boolean isTemplate()
 	{
 		return template;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#isDropTarget()
+	 */
+	public boolean isDropTarget()
+	{
+		return isTemplate();
 	}
 
 	/* (non-Javadoc)
@@ -497,99 +480,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		{
 			parent.remove(this);
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mxgraph.model.mxICell#getComponentCount()
-	 */
-	public int getComponentCount()
-	{
-		return (components != null) ? components.size() : 0;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mxgraph.model.mxICell#getComponentIndex(com.mxgraph.model.mxICellComponent)
-	 */
-	public int getComponentIndex(mxCellComponent component)
-	{
-		return (components != null) ? components.indexOf(component) : -1;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mxgraph.model.mxICell#getComponentAt(int)
-	 */
-	public mxCellComponent getComponentAt(int index)
-	{
-		return (components != null) ? (mxCellComponent) components.get(index) : null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mxgraph.model.mxICell#insertComponent(com.mxgraph.model.mxICellComponent)
-	 */
-	public mxCellComponent insertComponent(mxCellComponent component)
-	{
-		int index = getComponentCount();
-
-		if (component.getOwner() == this)
-		{
-			index--;
-		}
-
-		return insertComponent(component, index);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mxgraph.model.mxICell#insertComponent(com.mxgraph.model.mxICellComponent, int)
-	 */
-	public mxCellComponent insertComponent(mxCellComponent component, int index)
-	{
-		if (component != null)
-		{
-			component.removeFromOwner();
-			component.setOwner(this);
-
-			if (components == null)
-			{
-				components = new ArrayList<Object>();
-				components.add(component);
-			}
-			else
-			{
-				components.add(index, component);
-			}
-		}
-
-		return component;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mxgraph.model.mxICell#removeComponent(int)
-	 */
-	public mxCellComponent removeComponent(int index)
-	{
-		mxCellComponent component = null;
-
-		if (components != null && index >= 0)
-		{
-			component = getComponentAt(index);
-			removeComponent(component);
-		}
-
-		return component;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mxgraph.model.mxICell#removeComponent(com.mxgraph.model.mxICellComponent)
-	 */
-	public mxCellComponent removeComponent(mxCellComponent component)
-	{
-		if (component != null && components != null)
-		{
-			components.remove(component);
-			component.setOwner(null);
-		}
-
-		return component;
 	}
 
 	/* (non-Javadoc)

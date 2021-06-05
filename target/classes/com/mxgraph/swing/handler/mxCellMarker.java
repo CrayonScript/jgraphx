@@ -565,7 +565,7 @@ public class mxCellMarker extends JComponent
 			state.updateHotspots(e.getX(), e.getY(),
 					hotspot, mxConstants.MIN_HOTSPOT_SIZE,
 					mxConstants.MAX_HOTSPOT_SIZE);
-			return ((mxCell) state.getCell()).isHotspot || state.getIsComponentHotspot();
+			return ((mxCell) state.getCell()).isHotspot;
 		}
 		return true;
 	}

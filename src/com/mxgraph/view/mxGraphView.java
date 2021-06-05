@@ -721,18 +721,6 @@ public class mxGraphView extends mxEventSource
 				state.setWidth(scale * geo.getWidth());
 				state.setHeight(scale * geo.getHeight());
 
-				int componentStateCount = state.getComponentStateCount();
-				for (int componentIndex = 0; componentIndex < componentStateCount; componentIndex++)
-				{
-					mxCellComponentState componentState = state.getCellComponentState(componentIndex);
-					mxGeometry componentGeo = componentState.getCellComponent().getGeometry();
-					// this should be the absolute x and y
-					componentState.setX(state.getX() + scale * (componentGeo.getX()));
-					componentState.setY(state.getY() + scale * (componentGeo.getY()));
-					componentState.setWidth(scale * componentGeo.getWidth());
-					componentState.setHeight(scale * componentGeo.getHeight());
-				}
-
 				if (model.isVertex(state.getCell()))
 				{
 					updateVertexState(state, geo);

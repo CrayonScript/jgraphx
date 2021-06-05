@@ -5,7 +5,6 @@ package com.mxgraph.view;
 
 import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
 import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxCellComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxRectangle;
@@ -121,7 +120,6 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         setView(view);
         setCell(cell);
         setStyle(style);
-        initializeCellComponentStates(getView(), cell);
     }
 
     /**
@@ -472,61 +470,12 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
     }
 
     public mxIHighlightSource getHighlightSource() {
-        int componentStateCount = getComponentStateCount();
-        for (int i = 0; i < componentStateCount; i++) {
-            mxCellComponentState componentState = getCellComponentState(i);
-            if (componentState.cellComponent.isHotspot) {
-                return componentState;
-            }
-        }
         return this;
-    }
-
-
-    public void initializeCellComponentStates(mxGraphView view, Object obj) {
-        if (obj != null) {
-            mxCell cell = (mxCell) obj;
-            int componentCount = cell.getComponentCount();
-            for (int i = 0; i < componentCount; i++) {
-                mxCellComponent cellComponent = cell.getComponentAt(i);
-                mxCellComponentState cellComponentState = new mxCellComponentState(view, cellComponent);
-                if (this.cellComponentStates == null) {
-                    this.cellComponentStates = new ArrayList<>();
-                }
-                this.cellComponentStates.add(cellComponentState);
-            }
-        }
-    }
-
-    public int getComponentStateCount() {
-        return this.cellComponentStates != null ? this.cellComponentStates.size() : 0;
-    }
-
-    public mxCellComponentState getCellComponentState(int index) {
-        return this.cellComponentStates.get(index);
-    }
-
-    public boolean hasComponents() {
-        return getComponentStateCount() > 0;
     }
 
     public void updateHotspots(int x, int y,
                                double hotspot, int min, int max) {
         ((mxCell) this.cell).isHotspot = intersects(x, y, hotspot, min, max);
-        int componentStateCount = getComponentStateCount();
-        for (int i = 0; i < componentStateCount; i++) {
-            mxCellComponentState componentState = getCellComponentState(i);
-            componentState.updateIntersects(x, y, hotspot, min, max);
-        }
-    }
-
-    public boolean getIsComponentHotspot() {
-        int componentStateCount = getComponentStateCount();
-        for (int i = 0; i < componentStateCount; i++) {
-            mxCellComponentState componentState = getCellComponentState(i);
-            if (componentState.cellComponent.isHotspot) return true;
-        }
-        return false;
     }
 
     /**

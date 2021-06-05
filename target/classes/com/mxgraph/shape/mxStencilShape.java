@@ -5,7 +5,6 @@ package com.mxgraph.shape;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxCellComponent;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
@@ -145,56 +144,7 @@ public class mxStencilShape extends mxBasicShape
 		mxGeometry geometry = new mxGeometry(0, 0, 320, 160);
 		mxCell cell = new mxCell("", geometry, "shape=" + name, boundingBox.getWidth(), boundingBox.getHeight());
 		cell.setVertex(true);
-		// cell geometry should be set before invoking buildCellComponents
-		buildCellComponents(cell, rootElement);
 		return cell;
-	}
-
-	/**
-	 * build cell components
-	 *
-	 * @param cell
-	 * @param parentElement
-	 */
-	protected void buildCellComponents(mxCell cell, SvgElement parentElement)
-	{
-		double scaleX = cell.getGeometry().getWidth() / cell.getBoundingBoxWidth();
-		double scaleY = cell.getGeometry().getHeight() / cell.getBoundingBoxHeight();
-
-		for (SvgElement subElement : parentElement.subElements)
-		{
-			if (subElement instanceof SvgGroup)
-			{
-				double x = subElement.boundingBox.getBounds2D().getX() - boundingBox.getX(); // relative
-				double y = -subElement.boundingBox.getBounds2D().getY() + boundingBox.getY(); // relative
-
-				double w = subElement.boundingBox.getBounds2D().getWidth();
-				double h = subElement.boundingBox.getBounds2D().getHeight();
-
-				mxGeometry groupGeometry = new mxGeometry(
-						(scaleX) * x,
-						(scaleY) * y,
-						(scaleX) * w,
-						(scaleY) * h);
-
-				mxCellComponent groupCellComponent = new mxCellComponent(
-						groupGeometry,
-						subElement.boundingBox.getBounds2D());
-
-				cell.insertComponent(groupCellComponent);
-				if (subElement.subElements != null && subElement.subElements.size() > 0)
-				{
-					buildCellComponents(cell, subElement);
-				}
-			}
-			else
-			{
-				if (subElement.subElements != null && subElement.subElements.size() > 0)
-				{
-					buildCellComponents(cell, subElement);
-				}
-			}
-		}
 	}
 
 	/**
