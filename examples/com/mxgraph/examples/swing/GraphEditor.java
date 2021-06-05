@@ -105,15 +105,95 @@ public class GraphEditor extends BasicGraphEditor
 		URL vertical2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.png");
 		URL vertical3URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.png");
 
-		blockTemplates.addTemplate("Assign", new CustomImageIcon(hExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon, "assign", 400, 60, "Assign");
-		blockTemplates.addTemplate("Expression", new CustomImageIcon(hExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon, "expression", 400, 60, "Expression");
-		blockTemplates.addTemplate("Extender", new CustomImageIcon(vExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon, "vextender", 240, 180, "Extender");
-		blockTemplates.addTemplate("Parallel", new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon, "parallel", 240, 320, "Parallel");
-		blockTemplates.addTemplate("Sequential", new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon, "sequential", 240, 320, "Sequential");
-		blockTemplates.addTemplate("If", new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon, "if", 240, 320, "If");
-		blockTemplates.addTemplate("If-Else", new CustomImageIcon(vertical3URL, ColorCode.DEFAULT_COLOR.color).imageIcon, "if-else", 240, 320, "If-Else");
-		blockTemplates.addTemplate("While", new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon, "while", 240, 320, "While");
-		blockTemplates.addTemplate("For", new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon, "for", 240, 320, "For");
+		String name = "Assign";
+		String value = "Assign";
+		int width = 400;
+		int height = 60;
+		String style = "assign";
+		ImageIcon icon = new CustomImageIcon(hExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+		cell.setVertex(true);
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = "Expression";
+		value = "Expression";
+		width = 400;
+		height = 60;
+		style = "expression";
+		icon = new CustomImageIcon(hExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+		cell.setVertex(true);
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = "Extender";
+		value = "Extender";
+		width = 240;
+		height = 180;
+		style = "vextender";
+		icon = new CustomImageIcon(vExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+		cell.setVertex(true);
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = "Parallel";
+		value = "Parallel";
+		width = 240;
+		height = 320;
+		style = "parallel";
+		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+		cell.setVertex(true);
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = "Sequential";
+		value = "Sequential";
+		width = 240;
+		height = 320;
+		style = "sequential";
+		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+		cell.setVertex(true);
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = "If";
+		value = "If";
+		width = 240;
+		height = 320;
+		style = "if";
+		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+		cell.setVertex(true);
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = "If-Else";
+		value = "If-Else";
+		width = 240;
+		height = 320;
+		style = "if-else";
+		icon = new CustomImageIcon(vertical3URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+		cell.setVertex(true);
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = "While";
+		value = "While";
+		width = 240;
+		height = 320;
+		style = "while";
+		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+		cell.setVertex(true);
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = "For";
+		value = "For";
+		width = 240;
+		height = 320;
+		style = "for";
+		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+		cell.setVertex(true);
+		blockTemplates.addTemplate(name, icon, cell);
 
 //		eventTemplates.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
 
@@ -124,13 +204,13 @@ public class GraphEditor extends BasicGraphEditor
 		Object templateParent = graph.getDefaultParent();
 		for (int i = 0; i < templateCount; i++)
 		{
-			mxCell cell = new mxCell();
-			cell.setTemplate(true);
-			cell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
-			cell.setGeometry(new mxGeometry(graphComponent.getPageFormat().getWidth() * 0.7 - 120, 294*(i) + 80, 240, 320));
-			cell.setVertex(true);
-			graph.getModel().add(templateParent, cell, i);
-			mxCellState cellState = graph.getView().getState(cell, true);
+			mxCell templateCell = new mxCell();
+			templateCell.setTemplate(true);
+			templateCell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
+			templateCell.setGeometry(new mxGeometry(graphComponent.getPageFormat().getWidth() * 0.7 - 120, 294*(i) + 80, 240, 320));
+			templateCell.setVertex(true);
+			graph.getModel().add(templateParent, templateCell, i);
+			mxCellState cellState = graph.getView().getState(templateCell, true);
 			graph.getView().updateCellState(cellState);
 		}
 
