@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CrayonScriptOnEventShape extends CrayonScriptBasicShape {
 
     public CrayonScriptOnEventShape() {
-        super();
+        super(ShapeStructureType.VERTICAL2);
     }
 
     @Override

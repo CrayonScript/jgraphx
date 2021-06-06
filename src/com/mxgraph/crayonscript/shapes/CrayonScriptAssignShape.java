@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CrayonScriptAssignShape extends CrayonScriptBasicShape {
 
     public CrayonScriptAssignShape() {
-        super();
+        super(ShapeStructureType.HEXTENDER2);
     }
 
     @Override

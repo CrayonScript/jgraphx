@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
 
     public CrayonScriptExpressionShape() {
-        super();
+        super(ShapeStructureType.HEXTENDER2);
     }
 
     @Override

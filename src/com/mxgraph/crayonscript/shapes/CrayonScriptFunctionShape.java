@@ -4,7 +4,6 @@ import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.view.mxCellState;
 
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
@@ -14,7 +13,7 @@ public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
     private int argCount;
 
     public CrayonScriptFunctionShape(String name, int argCount) {
-        super();
+        super(ShapeStructureType.VERTICAL2);
         this.name = name;
         this.argCount = argCount;
     }

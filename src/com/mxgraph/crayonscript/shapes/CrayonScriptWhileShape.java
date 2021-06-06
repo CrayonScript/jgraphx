@@ -4,13 +4,12 @@ import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.view.mxCellState;
 
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 public class CrayonScriptWhileShape extends CrayonScriptBasicShape {
 
     public CrayonScriptWhileShape() {
-        super();
+        super(ShapeStructureType.VERTICAL2);
     }
 
     @Override

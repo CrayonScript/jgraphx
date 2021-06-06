@@ -4,20 +4,16 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
-import com.mxgraph.canvas.mxGraphicsCanvas2D;
 import com.mxgraph.shape.mxStencilShape;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxRectangle;
 import com.mxgraph.util.mxUtils;
-import com.mxgraph.view.mxCellState;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.*;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,11 +25,24 @@ import java.util.logging.Logger;
 public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 {
 
+	public CrayonScriptBasicShape(ShapeStructureType shapeStructureType)
+	{
+		this.shapeStructureType = shapeStructureType;
+	}
+
+	protected ShapeStructureType shapeStructureType;
+
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
 
 	private static final Logger log = Logger.getLogger(mxStencilShape.class.getName());
 
 	protected static boolean initialized;
+
+	public ArrayList<SvgElement> getSvgElements()
+	{
+		ArrayList<SvgElement> svgElements = svgElementsMap.get(shapeStructureType);
+		return  svgElements;
+	}
 
 	protected static void initialize() {
 		if (initialized) return;

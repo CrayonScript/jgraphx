@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CrayonScriptParallelShape extends CrayonScriptBasicShape {
 
     public CrayonScriptParallelShape() {
-        super();
+        super(ShapeStructureType.VERTICAL2);
     }
 
     @Override

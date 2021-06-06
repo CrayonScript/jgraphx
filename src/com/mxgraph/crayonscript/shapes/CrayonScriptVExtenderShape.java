@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CrayonScriptVExtenderShape extends CrayonScriptBasicShape {
 
     public CrayonScriptVExtenderShape() {
-        super();
+        super(ShapeStructureType.VEXTENDER2);
     }
 
     @Override
