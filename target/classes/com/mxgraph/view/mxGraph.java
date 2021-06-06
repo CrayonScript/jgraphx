@@ -6783,7 +6783,7 @@ public class mxGraph extends mxEventSource
 
 		return model.getChildCount(cell) > 0
 				&& mxUtils.isTrue(style, mxConstants.STYLE_FOLDABLE, true)
-				&& !model.isTemplate(cell);
+				&& !model.isShape(cell);
 	}
 
 	/**

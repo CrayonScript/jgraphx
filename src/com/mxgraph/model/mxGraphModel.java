@@ -1066,6 +1066,12 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel,
 				((mxICell) cell).isTemplate());
 	}
 
+	public boolean isShape(Object cell)
+	{
+		return (cell instanceof mxICell &&
+				((mxICell) cell).isShape());
+	}
+
 	/**
 	 * Sets the visible state of the given mxCell using mxVisibleChange and
 	 * adds the change to the current transaction.

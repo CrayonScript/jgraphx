@@ -69,6 +69,13 @@ public interface mxICell
 	boolean isTemplate();
 
 	/**
+	 * Returns true if the cell is a shape.
+	 *
+	 * @return Returns true if the cell is a shape.
+	 */
+	boolean isShape();
+
+	/**
 	 * Returns true if the cell is a drop target.
 	 *
 	 * @return Returns true if the cell is a drop target.

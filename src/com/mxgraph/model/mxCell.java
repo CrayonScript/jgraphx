@@ -37,6 +37,18 @@ import org.w3c.dom.Node;
 public class mxCell implements mxICell, Cloneable, Serializable
 {
 
+	public enum DropFlag
+	{
+		RECT_OUTER(1),
+		RECT_INNER_1(2),
+		RECT_INNER_2(3),
+		RECT_INNER_3(4);
+
+		protected int bit;
+
+		private DropFlag(int bit) { this.bit = bit; }
+	}
+
 	/**
 	 * 
 	 */
@@ -69,7 +81,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 * true, true and false respectively.
 	 */
 	protected boolean vertex = false, edge = false, connectable = true,
-			visible = true, collapsed = false, template = false;
+			visible = true, collapsed = false, template = false,
+			shape = true, dropSource=false, dropTarget=false;
 
 	/**
 	 * Reference to the parent cell and source and target terminals for edges.
@@ -80,6 +93,10 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 * Holds the child cells, components and connected edges.
 	 */
 	protected List<Object> children, edges;
+
+	protected int dropSourceBitMask = 0;
+
+	protected int dropTargetBitMask = 0;
 
 	protected double boundingBoxWidth = Double.NaN, boundingBoxHeight = Double.NaN;
 
@@ -214,11 +231,33 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	}
 
 	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#isShape()
+	 */
+	public boolean isShape()
+	{
+		return shape;
+	}
+
+	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#isDropTarget()
 	 */
 	public boolean isDropTarget()
 	{
-		return isTemplate();
+		return dropTargetBitMask > 0;
+	}
+
+	public void setDropSources(DropFlag... dropFlags) {
+		dropSourceBitMask = 0;
+		for (DropFlag dropFlag: dropFlags) {
+			dropSourceBitMask |= dropFlag.bit;
+		}
+	}
+
+	public void setDropTargets(DropFlag... dropFlags) {
+		dropTargetBitMask = 0;
+		for (DropFlag dropFlag: dropFlags) {
+			dropTargetBitMask |= dropFlag.bit;
+		}
 	}
 
 	/* (non-Javadoc)

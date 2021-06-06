@@ -318,6 +318,14 @@ public interface mxIGraphModel
 	boolean isTemplate(Object cell);
 
 	/**
+	 * Return true if this cell is a shape cell
+	 *
+	 * @param cell
+	 * @return
+	 */
+	boolean isShape(Object cell);
+
+	/**
 	 * Increments the updateLevel by one. The event notification is queued
 	 * until updateLevel reaches 0 by use of endUpdate.
 	 */
