@@ -469,15 +469,16 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         return this;
     }
 
-    public void updateHotspots(int x, int y,
+    public void updateHotspots(Object[] dragCells, int x, int y,
                                double hotspot, int min, int max) {
-        ((mxCell) this.cell).isHotspot = intersects(x, y, hotspot, min, max);
+        ((mxCell) this.cell).isHotspot = intersects(dragCells, x, y, hotspot, min, max);
     }
 
     /**
      * Returns true if the given coordinate pair intersects the hotspot of the
      * given state.
      *
+     * @param dragCells
      * @param x
      * @param y
      * @param hotspot
@@ -485,7 +486,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      * @param max
      * @return
      */
-    protected boolean intersects(int x, int y,
+    protected boolean intersects(Object[] dragCells, int x, int y,
                                  double hotspot, int min, int max) {
         Rectangle2D rectangle2D = getRectangle();
         if (hotspot > 0) {
@@ -508,7 +509,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
             return rect.contains(x, y);
         }
 
-        return true;
+        return false;
     }
 
     public Path2D getPath() {

@@ -562,7 +562,9 @@ public class mxCellMarker extends JComponent
 	{
 		if (isHotspotEnabled())
 		{
-			state.updateHotspots(e.getX(), e.getY(),
+			Object[] dragCells = graphComponent.getGraphHandler().dragCells;
+
+			state.updateHotspots(dragCells, e.getX(), e.getY(),
 					hotspot, mxConstants.MIN_HOTSPOT_SIZE,
 					mxConstants.MAX_HOTSPOT_SIZE);
 			return ((mxCell) state.getCell()).isHotspot;
