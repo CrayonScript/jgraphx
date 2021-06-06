@@ -246,6 +246,14 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return dropTargetBitMask > 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#isDropTarget()
+	 */
+	public boolean isDropSource()
+	{
+		return dropSourceBitMask > 0;
+	}
+
 	public void setDropSources(DropFlag... dropFlags) {
 		dropSourceBitMask = 0;
 		for (DropFlag dropFlag: dropFlags) {

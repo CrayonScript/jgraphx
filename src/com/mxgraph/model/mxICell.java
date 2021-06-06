@@ -83,6 +83,13 @@ public interface mxICell
 	boolean isDropTarget();
 
 	/**
+	 * Returns true if the cell is a drop source.
+	 *
+	 * @return Returns true if the cell is a drop source.
+	 */
+	boolean isDropSource();
+
+	/**
 	 * Returns true if the cell is a vertex.
 	 * 
 	 * @return Returns true if the cell is a vertex.
