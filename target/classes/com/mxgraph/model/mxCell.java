@@ -3,6 +3,7 @@
  */
 package com.mxgraph.model;
 
+import java.awt.geom.RoundRectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,18 +37,6 @@ import org.w3c.dom.Node;
  */
 public class mxCell implements mxICell, Cloneable, Serializable
 {
-
-	public enum DropFlag
-	{
-		RECT_OUTER(1),
-		RECT_INNER_1(2),
-		RECT_INNER_2(3),
-		RECT_INNER_3(4);
-
-		protected int bit;
-
-		private DropFlag(int bit) { this.bit = bit; }
-	}
 
 	/**
 	 * 
@@ -104,6 +93,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 * Reference to the last marked hotspot
 	 */
 	public transient boolean isHotspot;
+
+	public transient RoundRectangle2D hotspotRect;
 
 	/**
 	 * Constructs a new cell with an empty user object.
@@ -244,6 +235,50 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public boolean isDropTarget()
 	{
 		return dropTargetBitMask > 0;
+	}
+
+	@Override
+	public DropFlag[] getDropTargetFlags() {
+		if (dropTargetBitMask <= 0)
+			return new DropFlag[0];
+		DropFlag[] dropFlags = new DropFlag[DropFlag.values().length];
+		int count = 0;
+		for (DropFlag flag : DropFlag.values())
+		{
+			if ((dropTargetBitMask & flag.bit) > 0)
+			{
+				dropFlags[count++] = flag;
+			}
+		}
+		DropFlag[] flags = new DropFlag[count];
+		System.arraycopy(dropFlags, 0, flags, 0, count);
+		return flags;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxICell#isDropTarget()
+	 */
+	public boolean isDropSource()
+	{
+		return dropSourceBitMask > 0;
+	}
+
+	@Override
+	public DropFlag[] getDropSourceFlags() {
+		if (dropSourceBitMask <= 0)
+			return new DropFlag[0];
+		DropFlag[] dropFlags = new DropFlag[DropFlag.values().length];
+		int count = 0;
+		for (DropFlag flag : DropFlag.values())
+		{
+			if ((dropSourceBitMask & flag.bit) > 0)
+			{
+				dropFlags[count++] = flag;
+			}
+		}
+		DropFlag[] flags = new DropFlag[count];
+		System.arraycopy(dropFlags, 0, flags, 0, count);
+		return flags;
 	}
 
 	public void setDropSources(DropFlag... dropFlags) {
@@ -656,10 +691,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			element.setAttribute(name, value);
 		}
 	}
-
-	public double getBoundingBoxWidth() { return boundingBoxWidth; }
-
-	public double getBoundingBoxHeight() { return boundingBoxHeight; }
 
 	/**
 	 * Returns a clone of the cell.

@@ -8,7 +8,6 @@ package com.mxgraph.model;
  */
 public interface mxICell
 {
-
 	/**
 	 * Returns the Id of the cell as a string.
 	 * 
@@ -81,6 +80,17 @@ public interface mxICell
 	 * @return Returns true if the cell is a drop target.
 	 */
 	boolean isDropTarget();
+
+	DropFlag[] getDropTargetFlags();
+
+	/**
+	 * Returns true if the cell is a drop source.
+	 *
+	 * @return Returns true if the cell is a drop source.
+	 */
+	boolean isDropSource();
+
+	DropFlag[] getDropSourceFlags();
 
 	/**
 	 * Returns true if the cell is a vertex.
@@ -290,8 +300,4 @@ public interface mxICell
 	 * @return Returns a clone of this cell.
 	 */
 	Object clone() throws CloneNotSupportedException;
-
-	double getBoundingBoxWidth();
-
-	double getBoundingBoxHeight();
 }

@@ -9,7 +9,6 @@ import com.mxgraph.examples.swing.editor.EditorMenuBar;
 import com.mxgraph.examples.swing.editor.EditorPalette;
 import com.mxgraph.io.mxCodec;
 import com.mxgraph.model.*;
-import com.mxgraph.shape.mxIShape;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.util.mxGraphTransferable;
 import com.mxgraph.swing.util.mxSwingConstants;
@@ -25,9 +24,7 @@ import com.mxgraph.view.mxStylesheet;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -111,8 +108,8 @@ public class GraphEditor extends BasicGraphEditor
 		ImageIcon icon = new CustomImageIcon(hExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
 		cell.setVertex(true);
-		cell.setDropTargets(mxCell.DropFlag.RECT_INNER_2);
-		cell.setDropSources(mxCell.DropFlag.RECT_INNER_1);
+		cell.setDropTargets(DropFlag.INNER_2);
+		cell.setDropSources(DropFlag.INNER_1);
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = "Expression";
@@ -123,8 +120,8 @@ public class GraphEditor extends BasicGraphEditor
 		icon = new CustomImageIcon(hExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
 		cell.setVertex(true);
-		cell.setDropTargets(mxCell.DropFlag.RECT_INNER_2);
-		cell.setDropSources(mxCell.DropFlag.RECT_INNER_1);
+		cell.setDropTargets(DropFlag.INNER_2);
+		cell.setDropSources(DropFlag.INNER_1);
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = "Extender";
@@ -135,8 +132,8 @@ public class GraphEditor extends BasicGraphEditor
 		icon = new CustomImageIcon(vExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
 		cell.setVertex(true);
-		cell.setDropTargets(mxCell.DropFlag.RECT_INNER_2);
-		cell.setDropSources(mxCell.DropFlag.RECT_INNER_1);
+		cell.setDropTargets(DropFlag.INNER_2);
+		cell.setDropSources(DropFlag.INNER_1);
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = "Parallel";
@@ -147,8 +144,8 @@ public class GraphEditor extends BasicGraphEditor
 		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
 		cell.setVertex(true);
-		cell.setDropTargets(mxCell.DropFlag.RECT_INNER_2);
-		cell.setDropSources(mxCell.DropFlag.RECT_OUTER);
+		cell.setDropTargets(DropFlag.INNER_2);
+		cell.setDropSources(DropFlag.OUTER);
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = "Sequential";
@@ -159,8 +156,8 @@ public class GraphEditor extends BasicGraphEditor
 		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
 		cell.setVertex(true);
-		cell.setDropTargets(mxCell.DropFlag.RECT_INNER_2);
-		cell.setDropSources(mxCell.DropFlag.RECT_OUTER);
+		cell.setDropTargets(DropFlag.INNER_2);
+		cell.setDropSources(DropFlag.OUTER);
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = "If";
@@ -172,10 +169,10 @@ public class GraphEditor extends BasicGraphEditor
 		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
 		cell.setVertex(true);
 		cell.setDropTargets(
-				mxCell.DropFlag.RECT_INNER_1,
-				mxCell.DropFlag.RECT_INNER_2
+				DropFlag.INNER_1,
+				DropFlag.INNER_2
 		);
-		cell.setDropSources(mxCell.DropFlag.RECT_OUTER);
+		cell.setDropSources(DropFlag.OUTER);
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = "If-Else";
@@ -187,11 +184,11 @@ public class GraphEditor extends BasicGraphEditor
 		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
 		cell.setVertex(true);
 		cell.setDropTargets(
-				mxCell.DropFlag.RECT_INNER_1,
-				mxCell.DropFlag.RECT_INNER_2,
-				mxCell.DropFlag.RECT_INNER_3
+				DropFlag.INNER_1,
+				DropFlag.INNER_2,
+				DropFlag.INNER_3
 		);
-		cell.setDropSources(mxCell.DropFlag.RECT_OUTER);
+		cell.setDropSources(DropFlag.OUTER);
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = "While";
@@ -203,10 +200,10 @@ public class GraphEditor extends BasicGraphEditor
 		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
 		cell.setVertex(true);
 		cell.setDropTargets(
-				mxCell.DropFlag.RECT_INNER_1,
-				mxCell.DropFlag.RECT_INNER_2
+				DropFlag.INNER_1,
+				DropFlag.INNER_2
 		);
-		cell.setDropSources(mxCell.DropFlag.RECT_OUTER);
+		cell.setDropSources(DropFlag.OUTER);
 		blockTemplates.addTemplate(name, icon, cell);
 
 
@@ -219,10 +216,10 @@ public class GraphEditor extends BasicGraphEditor
 		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
 		cell.setVertex(true);
 		cell.setDropTargets(
-				mxCell.DropFlag.RECT_INNER_1,
-				mxCell.DropFlag.RECT_INNER_2
+				DropFlag.INNER_1,
+				DropFlag.INNER_2
 		);
-		cell.setDropSources(mxCell.DropFlag.RECT_OUTER);
+		cell.setDropSources(DropFlag.OUTER);
 		blockTemplates.addTemplate(name, icon, cell);
 
 //		eventTemplates.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
@@ -239,7 +236,7 @@ public class GraphEditor extends BasicGraphEditor
 			templateCell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
 			templateCell.setGeometry(new mxGeometry(graphComponent.getPageFormat().getWidth() * 0.7 - 120, 294*(i) + 80, 240, 320));
 			templateCell.setVertex(true);
-			templateCell.setDropTargets(mxCell.DropFlag.RECT_OUTER);
+			templateCell.setDropTargets(DropFlag.OUTER);
 			templateCell.setDropSources();
 			graph.getModel().add(templateParent, templateCell, i);
 			mxCellState cellState = graph.getView().getState(templateCell, true);

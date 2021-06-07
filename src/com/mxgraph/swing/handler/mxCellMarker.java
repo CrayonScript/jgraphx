@@ -12,11 +12,13 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
+import java.awt.geom.RoundRectangle2D;
 import java.util.Date;
 import java.util.Timer;
 
 import javax.swing.JComponent;
 
+import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.util.mxSwingConstants;
@@ -466,7 +468,7 @@ public class mxCellMarker extends JComponent
 	{
 		if (markedState != null)
 		{
-			Rectangle bounds = markedState.getHighlightSource().getRectangle();
+			Rectangle bounds = markedState.getHighlightSource().getHighlightBounds();
 			setBounds(bounds);
 
 			if (getParent() == null)
@@ -607,7 +609,10 @@ public class mxCellMarker extends JComponent
 			g.setColor(currentColor);
 
 			mxIHighlightSource highlightSource = markedState.getHighlightSource();
-			Path2D path = highlightSource.getPath();
+
+			RoundRectangle2D roundRectangle2D = highlightSource.getHighlightRect();
+
+			Path2D path = CrayonScriptBasicShape.getFramePath(roundRectangle2D);
 
 			((Graphics2D) g).fill(path);
 			((Graphics2D) g).draw(path);

@@ -3,16 +3,17 @@
  */
 package com.mxgraph.view;
 
+import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
+import com.mxgraph.crayonscript.shapes.CrayonScriptIShape;
+import com.mxgraph.model.DropFlag;
 import com.mxgraph.model.mxCell;
-import com.mxgraph.util.mxConstants;
+import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxRectangle;
-import com.mxgraph.util.mxUtils;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -471,6 +472,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
 
     public void updateHotspots(Object[] dragCells, int x, int y,
                                double hotspot, int min, int max) {
+        ((mxCell) this.cell).hotspotRect = null;
         ((mxCell) this.cell).isHotspot = intersects(dragCells, x, y, hotspot, min, max);
     }
 
@@ -478,7 +480,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      * Returns true if the given coordinate pair intersects the hotspot of the
      * given state.
      *
-     * @param dragCells
+     * @param sourceCells
      * @param x
      * @param y
      * @param hotspot
@@ -486,9 +488,71 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      * @param max
      * @return
      */
-    protected boolean intersects(Object[] dragCells, int x, int y,
+    protected boolean intersects(Object[] sourceCells, int x, int y,
                                  double hotspot, int min, int max) {
-        Rectangle2D rectangle2D = getRectangle();
+        if (hotspot <= 0) {
+            return false;
+        }
+
+        if (sourceCells == null || sourceCells.length == 0) {
+            return false;
+        }
+        Object sourceCell = sourceCells[0];
+        if (sourceCell == null || !(sourceCell instanceof mxICell)
+                || !((mxICell) sourceCell).isShape() || !((mxICell) sourceCell).isDropSource()) {
+            return false;
+        }
+        if (cell == null || !(cell instanceof mxICell)
+                || !((mxICell) cell).isShape() || !((mxICell) cell).isDropTarget()) {
+            return false;
+        }
+
+        DropFlag[] dropSourceFlags = ((mxICell) sourceCell).getDropSourceFlags();
+        DropFlag[] dropTargetFlags = ((mxICell) cell).getDropTargetFlags();
+
+        if ((dropTargetFlags == null || dropSourceFlags.length == 0) ||
+                (dropTargetFlags == null || dropTargetFlags.length == 0)) return false;
+
+        // get the source shape and target shape
+        CrayonScriptIShape sourceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(((mxICell) sourceCell).getStyle());
+        CrayonScriptIShape targetShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(((mxICell) cell).getStyle());
+
+        Rectangle stateRect = getRectangle();
+
+        for (int sourceFlagIndex = 0; sourceFlagIndex < dropSourceFlags.length; sourceFlagIndex++)
+        {
+            for (int targetFlagIndex = 0; targetFlagIndex < dropTargetFlags.length; targetFlagIndex++)
+            {
+                DropFlag dropSourceFlag = dropSourceFlags[sourceFlagIndex];
+                DropFlag dropTargetFlag = dropTargetFlags[targetFlagIndex];
+
+                RoundRectangle2D sourceRect = CrayonScriptBasicShape.scaleRectangle(
+                        stateRect,
+                        sourceShape.getSvgElements().get(0),
+                        sourceShape.getSvgElements().get(dropSourceFlag.bitIndex));
+                RoundRectangle2D targetRect = CrayonScriptBasicShape.scaleRectangle(
+                        stateRect,
+                        targetShape.getSvgElements().get(0),
+                        targetShape.getSvgElements().get(dropTargetFlag.bitIndex));
+
+                if (intersects(sourceRect, targetRect, hotspot, min, max))
+                {
+                    ((mxCell) cell).hotspotRect = targetRect;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    protected boolean intersects(RoundRectangle2D sourceRect, RoundRectangle2D targetRect, double hotspot, int min, int max)
+    {
+        double x = sourceRect.getCenterX();
+        double y = sourceRect.getCenterY();
+
+        RoundRectangle2D rectangle2D = targetRect;
+
         if (hotspot > 0) {
             int cx = (int) Math.round(rectangle2D.getCenterX());
             int cy = (int) Math.round(rectangle2D.getCenterY());
@@ -512,26 +576,22 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         return false;
     }
 
+    public Rectangle getHighlightBounds() {
+        RoundRectangle2D roundedRect = ((mxCell) cell).hotspotRect;
+        return roundedRect.getBounds();
+    }
+
+    public RoundRectangle2D getHighlightRect() {
+        RoundRectangle2D roundedRect = ((mxCell) cell).hotspotRect;
+        roundedRect = (RoundRectangle2D) roundedRect.clone();
+        roundedRect.setFrame(0, 0, roundedRect.getWidth(), roundedRect.getHeight());
+        return roundedRect;
+    }
+
     public Path2D getPath() {
-        if (((mxCell) cell).isTemplate())
-        {
-            CrayonScriptBasicShape.SvgElement templateElement = CrayonScriptBasicShape.getTemplate();
-            RoundRectangle2D roundedRect = CrayonScriptBasicShape.scaleRectangle(getRectangle(),
-                    templateElement, templateElement);
-            roundedRect.setFrame(0, 0, roundedRect.getWidth(), roundedRect.getHeight());
-            Path2D path = CrayonScriptBasicShape.getFramePath(roundedRect);
-            return path;
-        }
-
-        Rectangle rect = getRectangle();
-        Path2D path = new Path2D.Double();
-        path.moveTo(rect.getX(), rect.getY());
-        path.lineTo(rect.getX(), rect.getY() + rect.getHeight());
-        path.lineTo(rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
-        path.lineTo(rect.getX() + rect.getWidth(), rect.getY());
-        path.lineTo(rect.getX(), rect.getY());
-        path.closePath();
-
+        RoundRectangle2D roundedRect = ((mxCell) cell).hotspotRect;
+        if (roundedRect == null) { return null; }
+        Path2D path = CrayonScriptBasicShape.getFramePath(roundedRect);
         return path;
     }
 
