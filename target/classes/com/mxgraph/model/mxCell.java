@@ -96,6 +96,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	public transient RoundRectangle2D hotspotRect;
 
+	public transient DropFlag hotSpotDropFlag;
+
 	/**
 	 * Constructs a new cell with an empty user object.
 	 */

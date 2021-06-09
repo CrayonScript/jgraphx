@@ -19,6 +19,7 @@ import java.util.Timer;
 import javax.swing.JComponent;
 
 import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
+import com.mxgraph.model.DropFlag;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.util.mxSwingConstants;
@@ -612,10 +613,24 @@ public class mxCellMarker extends JComponent
 
 			RoundRectangle2D roundRectangle2D = highlightSource.getHighlightRect();
 
-			Path2D path = CrayonScriptBasicShape.getFramePath(roundRectangle2D);
+			DropFlag highlightDropFlag = highlightSource.getHighlightDropFlag();
+			if (highlightDropFlag == DropFlag.OUTER)
+			{
+				Path2D path = CrayonScriptBasicShape.getFramePath(roundRectangle2D);
 
-			((Graphics2D) g).fill(path);
-			((Graphics2D) g).draw(path);
+				((Graphics2D) g).fill(path);
+				((Graphics2D) g).draw(path);
+			}
+			else
+			{
+				g.fillRoundRect(
+					(int) roundRectangle2D.getX(),
+					(int) roundRectangle2D.getY(),
+					(int) roundRectangle2D.getWidth(),
+					(int) roundRectangle2D.getHeight(),
+					(int) roundRectangle2D.getArcWidth(),
+					(int) roundRectangle2D.getArcHeight());
+			}
 		}
 	}
 

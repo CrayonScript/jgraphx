@@ -470,6 +470,10 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         return this;
     }
 
+    public DropFlag getHighlightDropFlag() {
+        return ((mxCell) this.cell).hotSpotDropFlag;
+    }
+
     public void updateHotspots(Object[] dragCells, int x, int y,
                                double hotspot, int min, int max) {
         ((mxCell) this.cell).hotspotRect = null;
@@ -513,6 +517,15 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         if ((dropTargetFlags == null || dropSourceFlags.length == 0) ||
                 (dropTargetFlags == null || dropTargetFlags.length == 0)) return false;
 
+
+        mxCellState sourceState = new mxCellState(getView(), sourceCell, getView().getGraph().getCellStyle(cell));
+        getView().updateCellState(sourceState);
+
+        sourceState.setX(x - sourceState.getWidth()/2);
+        sourceState.setY(y - sourceState.getHeight()/2);
+
+        Rectangle sourceStateRect = sourceState.getRectangle();
+
         // get the source shape and target shape
         CrayonScriptIShape sourceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(((mxICell) sourceCell).getStyle());
         CrayonScriptIShape targetShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(((mxICell) cell).getStyle());
@@ -527,7 +540,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
                 DropFlag dropTargetFlag = dropTargetFlags[targetFlagIndex];
 
                 RoundRectangle2D sourceRect = CrayonScriptBasicShape.scaleRectangle(
-                        stateRect,
+                        sourceStateRect,
                         sourceShape.getSvgElements().get(0),
                         sourceShape.getSvgElements().get(dropSourceFlag.bitIndex));
                 RoundRectangle2D targetRect = CrayonScriptBasicShape.scaleRectangle(
@@ -538,6 +551,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
                 if (intersects(sourceRect, targetRect, hotspot, min, max))
                 {
                     ((mxCell) cell).hotspotRect = targetRect;
+                    ((mxCell) cell).hotSpotDropFlag = dropTargetFlag;
                     return true;
                 }
             }
@@ -586,13 +600,6 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         roundedRect = (RoundRectangle2D) roundedRect.clone();
         roundedRect.setFrame(0, 0, roundedRect.getWidth(), roundedRect.getHeight());
         return roundedRect;
-    }
-
-    public Path2D getPath() {
-        RoundRectangle2D roundedRect = ((mxCell) cell).hotspotRect;
-        if (roundedRect == null) { return null; }
-        Path2D path = CrayonScriptBasicShape.getFramePath(roundedRect);
-        return path;
     }
 
     /**
