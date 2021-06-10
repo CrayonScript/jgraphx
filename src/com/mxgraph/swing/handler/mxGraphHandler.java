@@ -178,7 +178,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 	/**
 	 * 
 	 */
-	protected transient mxCellMarker dropTargetMarker;
+	protected transient mxCellMarker marker;
 
 	/**
 	 * 
@@ -233,7 +233,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 	public mxGraphHandler(final mxGraphComponent graphComponent)
 	{
 		this.graphComponent = graphComponent;
-		dropTargetMarker = createMarker();
+		marker = createMarker();
 		movePreview = createMovePreview();
 
 		// Installs the paint handler
@@ -573,17 +573,17 @@ public class mxGraphHandler extends mxMouseAdapter implements
 	/**
 	 * 
 	 */
-	public mxCellMarker getDropTargetMarker()
+	public mxCellMarker getMarker()
 	{
-		return dropTargetMarker;
+		return marker;
 	}
 
 	/**
 	 * 
 	 */
-	public void setDropTargetMarker(mxCellMarker value)
+	public void setMarker(mxCellMarker value)
 	{
-		dropTargetMarker = value;
+		marker = value;
 	}
 
 	/**
@@ -1041,7 +1041,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 
 			if (isVisible() && isMarkerEnabled())
 			{
-				dropTargetMarker.process(e);
+				marker.process(e);
 			}
 
 			if (first != null)
@@ -1149,7 +1149,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 
 		dragCells = null;
 		setVisible(false);
-		dropTargetMarker.reset();
+		marker.reset();
 		reset();
 	}
 
@@ -1285,7 +1285,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 					}
 				}
 
-				mxCellState markedState = dropTargetMarker.getMarkedState();
+				mxCellState markedState = marker.getMarkedState();
 				Object target = (markedState != null) ? markedState.getCell()
 						: null;
 
@@ -1326,7 +1326,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 					}
 				}
 
-				mxCellState targetState = dropTargetMarker.getValidState();
+				mxCellState targetState = marker.getValidState();
 				Object target = (targetState != null) ? targetState.getCell()
 						: null;
 
@@ -1368,7 +1368,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 		}
 
 		setVisible(false);
-		dropTargetMarker.reset();
+		marker.reset();
 		initialCell = null;
 		dragCells = null;
 		dragImage = null;
