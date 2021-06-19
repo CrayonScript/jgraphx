@@ -1093,6 +1093,26 @@ public class mxGraphHandler extends mxMouseAdapter implements
 	}
 
 	/**
+	 * Processes the given event and marks the state returned by getStateAt
+	 * with the color returned by getMarkerColor. If the markerColor is not
+	 * null, then the state is stored in markedState. If isValidState returns
+	 * true, then the state is stored in validState regardless of the marker
+	 * color. The state is returned regardless of the marker color and
+	 * valid state.
+	 */
+	public void process(MouseEvent e)
+	{
+		if (isEnabled())
+		{
+			mxCellState state = marker.getState(e);
+			boolean valid = (state != null) ? marker.isValidState(state) : false;
+			Color color = marker.getMarkerColor(e, state, valid);
+
+			marker.highlight(state, color, valid);
+		}
+	}
+
+	/**
 	 * 
 	 */
 	protected Point getPreviewLocation(MouseEvent e, boolean gridEnabled)
