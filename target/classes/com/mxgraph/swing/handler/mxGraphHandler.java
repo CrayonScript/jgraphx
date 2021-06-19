@@ -178,7 +178,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 	/**
 	 * 
 	 */
-	protected transient mxCellMarker marker;
+	protected transient mxCellMarker dropMarker;
 
 	/**
 	 * 
@@ -233,7 +233,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 	public mxGraphHandler(final mxGraphComponent graphComponent)
 	{
 		this.graphComponent = graphComponent;
-		marker = createMarker();
+		dropMarker = createMarker();
 		movePreview = createMovePreview();
 
 		// Installs the paint handler
@@ -573,17 +573,17 @@ public class mxGraphHandler extends mxMouseAdapter implements
 	/**
 	 * 
 	 */
-	public mxCellMarker getMarker()
+	public mxCellMarker getDropMarker()
 	{
-		return marker;
+		return dropMarker;
 	}
 
 	/**
 	 * 
 	 */
-	public void setMarker(mxCellMarker value)
+	public void setDropMarker(mxCellMarker value)
 	{
-		marker = value;
+		dropMarker = value;
 	}
 
 	/**
@@ -1041,7 +1041,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 
 			if (isVisible() && isMarkerEnabled())
 			{
-				marker.process(e);
+				process(e);
 			}
 
 			if (first != null)
@@ -1104,11 +1104,11 @@ public class mxGraphHandler extends mxMouseAdapter implements
 	{
 		if (isEnabled())
 		{
-			mxCellState state = marker.getState(e);
-			boolean valid = (state != null) ? marker.isValidState(state) : false;
-			Color color = marker.getMarkerColor(e, state, valid);
+			mxCellState state = dropMarker.getState(e);
+			boolean valid = (state != null) ? dropMarker.isValidState(state) : false;
+			Color color = dropMarker.getMarkerColor(e, state, valid);
 
-			marker.highlight(state, color, valid);
+			dropMarker.highlight(state, color, valid);
 		}
 	}
 
@@ -1169,7 +1169,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 
 		dragCells = null;
 		setVisible(false);
-		marker.reset();
+		dropMarker.reset();
 		reset();
 	}
 
@@ -1305,7 +1305,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 					}
 				}
 
-				mxCellState markedState = marker.getMarkedState();
+				mxCellState markedState = dropMarker.getMarkedState();
 				Object target = (markedState != null) ? markedState.getCell()
 						: null;
 
@@ -1346,7 +1346,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 					}
 				}
 
-				mxCellState targetState = marker.getValidState();
+				mxCellState targetState = dropMarker.getValidState();
 				Object target = (targetState != null) ? targetState.getCell()
 						: null;
 
@@ -1388,7 +1388,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 		}
 
 		setVisible(false);
-		marker.reset();
+		dropMarker.reset();
 		initialCell = null;
 		dragCells = null;
 		dragImage = null;
