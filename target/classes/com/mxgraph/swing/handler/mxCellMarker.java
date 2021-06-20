@@ -7,14 +7,11 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
-import java.util.Date;
-import java.util.Timer;
 
 import javax.swing.JComponent;
 
@@ -134,7 +131,7 @@ public class mxCellMarker extends JComponent
 	 * Specifies if the highlights should appear on top of everything
 	 * else in the overlay pane. Default is false.
 	 */
-	public static boolean KEEP_ON_TOP = false;
+	public boolean keepOnTop = false;
 
 	/**
 	 * Specifies the default stroke for the marker.
@@ -150,6 +147,10 @@ public class mxCellMarker extends JComponent
 	 * Holds the enclosing graph component.
 	 */
 	protected mxGraphComponent graphComponent;
+
+	protected mxCellMarker otherCellMarker;
+
+	protected boolean isOther = false;
 
 	/**
 	 * Specifies if the marker is enabled. Default is true.
@@ -195,6 +196,8 @@ public class mxCellMarker extends JComponent
 	 */
 	protected transient mxCellState markedState;
 
+	public mxCellMarker() {};
+
 	/**
 	 * Constructs a new marker for the given graph component.
 	 * 
@@ -233,6 +236,13 @@ public class mxCellMarker extends JComponent
 		this.validColor = validColor;
 		this.invalidColor = invalidColor;
 		this.hotspot = hotspot;
+
+		this.otherCellMarker = new mxCellMarker();
+		this.otherCellMarker.graphComponent = graphComponent;
+		this.otherCellMarker.validColor = validColor;
+		this.otherCellMarker.invalidColor = invalidColor;
+		this.otherCellMarker.isOther = true;
+		this.otherCellMarker.keepOnTop = true;
 	}
 
 	/**
@@ -250,22 +260,6 @@ public class mxCellMarker extends JComponent
 	public boolean isEnabled()
 	{
 		return enabled;
-	}
-
-	/**
-	 * Sets the hotspot.
-	 */
-	public void setHotspot(double hotspot)
-	{
-		this.hotspot = hotspot;
-	}
-
-	/**
-	 * Returns the hotspot.
-	 */
-	public double getHotspot()
-	{
-		return hotspot;
 	}
 
 	/**
@@ -294,47 +288,6 @@ public class mxCellMarker extends JComponent
 	}
 
 	/**
-	 * Returns true if the content area of swimlanes is non-transparent to
-	 * events.
-	 */
-	public boolean isSwimlaneContentEnabled()
-	{
-		return swimlaneContentEnabled;
-	}
-
-	/**
-	 * Sets the color used for valid highlights.
-	 */
-	public void setValidColor(Color value)
-	{
-		validColor = value;
-	}
-
-	/**
-	 * Returns the color used for valid highlights.
-	 */
-	public Color getValidColor()
-	{
-		return validColor;
-	}
-
-	/**
-	 * Sets the color used for invalid highlights.
-	 */
-	public void setInvalidColor(Color value)
-	{
-		invalidColor = value;
-	}
-
-	/**
-	 * Returns the color used for invalid highlights.
-	 */
-	public Color getInvalidColor()
-	{
-		return invalidColor;
-	}
-
-	/**
 	 * Returns true if validState is not null.
 	 */
 	public boolean hasValidState()
@@ -348,30 +301,6 @@ public class mxCellMarker extends JComponent
 	public mxCellState getValidState()
 	{
 		return validState;
-	}
-
-	/**
-	 * Sets the current color. 
-	 */
-	public void setCurrentColor(Color value)
-	{
-		currentColor = value;
-	}
-
-	/**
-	 * Returns the current color.
-	 */
-	public Color getCurrentColor()
-	{
-		return currentColor;
-	}
-
-	/**
-	 * Sets the marked state. 
-	 */
-	public void setMarkedState(mxCellState value)
-	{
-		markedState = value;
 	}
 
 	/**
@@ -449,15 +378,18 @@ public class mxCellMarker extends JComponent
 		}
 
 		currentColor = color;
+		this.otherCellMarker.currentColor = color;
 
 		if (highlight != null && currentColor != null)
 		{
 			markedState = state;
+			this.otherCellMarker.markedState = state;
 			mark();
 		}
 		else if (markedState != null)
 		{
 			markedState = null;
+			this.otherCellMarker.markedState = null;
 			unmark();
 		}
 	}
@@ -476,7 +408,7 @@ public class mxCellMarker extends JComponent
 			{
 				setVisible(true);
 
-				if (KEEP_ON_TOP)
+				if (keepOnTop)
 				{
 					graphComponent.getGraphControl().add(this, 0);
 				}
@@ -486,7 +418,28 @@ public class mxCellMarker extends JComponent
 				}
 			}
 
+			Rectangle otherBounds = markedState.getHighlightSource().getOtherHighlightBounds();
+			if (otherBounds != null)
+			{
+				this.otherCellMarker.setBounds(otherBounds);
+				if (this.otherCellMarker.getParent() == null)
+				{
+					this.otherCellMarker.setVisible(true);
+
+					if (this.otherCellMarker.keepOnTop)
+					{
+						graphComponent.getGraphControl().add(this.otherCellMarker, 0);
+					}
+					else
+					{
+						graphComponent.getGraphControl().add(this.otherCellMarker);
+					}
+				}
+			}
+
 			repaint();
+			this.otherCellMarker.repaint();
+
 			eventSource.fireEvent(new mxEventObject(mxEvent.MARK, "state",
 					markedState));
 		}
@@ -502,6 +455,12 @@ public class mxCellMarker extends JComponent
 			setVisible(false);
 			getParent().remove(this);
 			eventSource.fireEvent(new mxEventObject(mxEvent.MARK));
+		}
+
+		if (this.otherCellMarker.getParent() != null)
+		{
+			this.otherCellMarker.setVisible(false);
+			this.otherCellMarker.getParent().remove(this.otherCellMarker);
 		}
 	}
 
@@ -607,23 +566,22 @@ public class mxCellMarker extends JComponent
 		if (markedState != null && currentColor != null)
 		{
 			((Graphics2D) g).setStroke(DEFAULT_STROKE);
-			g.setColor(currentColor);
+			((Graphics2D) g).setPaint(currentColor);
 
 			mxIHighlightSource highlightSource = markedState.getHighlightSource();
 
-			RoundRectangle2D roundRectangle2D = highlightSource.getHighlightRect();
+			RoundRectangle2D roundRectangle2D = isOther ? highlightSource.getOtherHighlightRect() : highlightSource.getHighlightRect();
 
-			DropFlag highlightDropFlag = highlightSource.getHighlightDropFlag();
+			DropFlag highlightDropFlag = isOther ? highlightSource.getOtherHighlightDropFlag() : highlightSource.getHighlightDropFlag();
 			if (highlightDropFlag == DropFlag.OUTER)
 			{
 				Path2D path = CrayonScriptBasicShape.getFramePath(roundRectangle2D);
 
-				((Graphics2D) g).fill(path);
 				((Graphics2D) g).draw(path);
 			}
 			else
 			{
-				g.fillRoundRect(
+				g.drawRoundRect(
 					(int) roundRectangle2D.getX(),
 					(int) roundRectangle2D.getY(),
 					(int) roundRectangle2D.getWidth(),

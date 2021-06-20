@@ -39,6 +39,11 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
     protected Object cell;
 
     /**
+     * Reference to the cell that is being added to this cell.
+     */
+    protected Object otherCell;
+
+    /**
      * Holds the current label value, including newlines which result from
      * word wrapping.
      */
@@ -470,21 +475,62 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         return this;
     }
 
+    public RoundRectangle2D getHighlightRect() {
+        RoundRectangle2D roundedRect = ((mxCell) cell).hotspotRect;
+        roundedRect = (RoundRectangle2D) roundedRect.clone();
+        roundedRect.setFrame(0, 0, roundedRect.getWidth(), roundedRect.getHeight());
+        return roundedRect;
+    }
+
+    public Rectangle getHighlightBounds() {
+        RoundRectangle2D roundedRect = ((mxCell) cell).hotspotRect;
+        return roundedRect.getBounds();
+    }
+
     public DropFlag getHighlightDropFlag() {
         return ((mxCell) this.cell).hotSpotDropFlag;
     }
 
+    @Override
+    public RoundRectangle2D getOtherHighlightRect() {
+        if (otherCell != null) {
+            RoundRectangle2D roundedRect = ((mxCell) otherCell).hotspotRect;
+            if (roundedRect != null) {
+                roundedRect = (RoundRectangle2D) roundedRect.clone();
+                roundedRect.setFrame(0, 0, roundedRect.getWidth(), roundedRect.getHeight());
+                return roundedRect;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Rectangle getOtherHighlightBounds() {
+        RoundRectangle2D roundedRect = ((mxCell) otherCell).hotspotRect;
+        return roundedRect.getBounds();
+    }
+
+    @Override
+    public DropFlag getOtherHighlightDropFlag() {
+        return ((mxCell) this.otherCell).hotSpotDropFlag;
+    }
+
     public void updateHotspots(Object[] dragCells, int x, int y,
                                double hotspot, int min, int max) {
+        this.otherCell = null;
+
+        if (dragCells != null && dragCells.length > 0) {
+            this.otherCell = dragCells[0];
+            ((mxCell) this.otherCell).hotspotRect = null;
+        }
         ((mxCell) this.cell).hotspotRect = null;
-        ((mxCell) this.cell).isHotspot = intersects(dragCells, x, y, hotspot, min, max);
+        ((mxCell) this.cell).isHotspot = intersects(x, y, hotspot, min, max);
     }
 
     /**
      * Returns true if the given coordinate pair intersects the hotspot of the
      * given state.
      *
-     * @param sourceCells
      * @param x
      * @param y
      * @param hotspot
@@ -492,18 +538,17 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      * @param max
      * @return
      */
-    protected boolean intersects(Object[] sourceCells, int x, int y,
+    protected boolean intersects(int x, int y,
                                  double hotspot, int min, int max) {
         if (hotspot <= 0) {
             return false;
         }
 
-        if (sourceCells == null || sourceCells.length == 0) {
+        if (this.otherCell == null) {
             return false;
         }
-        Object sourceCell = sourceCells[0];
-        if (sourceCell == null || !(sourceCell instanceof mxICell)
-                || !((mxICell) sourceCell).isShape() || !((mxICell) sourceCell).isDropSource()) {
+        if (!(this.otherCell instanceof mxICell)
+                || !((mxICell) otherCell).isShape() || !((mxICell) otherCell).isDropSource()) {
             return false;
         }
         if (cell == null || !(cell instanceof mxICell)
@@ -511,14 +556,14 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
             return false;
         }
 
-        DropFlag[] dropSourceFlags = ((mxICell) sourceCell).getDropSourceFlags();
+        DropFlag[] dropSourceFlags = ((mxICell) otherCell).getDropSourceFlags();
         DropFlag[] dropTargetFlags = ((mxICell) cell).getDropTargetFlags();
 
         if ((dropTargetFlags == null || dropSourceFlags.length == 0) ||
                 (dropTargetFlags == null || dropTargetFlags.length == 0)) return false;
 
 
-        mxCellState sourceState = new mxCellState(getView(), sourceCell, getView().getGraph().getCellStyle(cell));
+        mxCellState sourceState = new mxCellState(getView(), otherCell, getView().getGraph().getCellStyle(cell));
         getView().updateCellState(sourceState);
 
         sourceState.setX(x - sourceState.getWidth()/2);
@@ -527,7 +572,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         Rectangle sourceStateRect = sourceState.getRectangle();
 
         // get the source shape and target shape
-        CrayonScriptIShape sourceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(((mxICell) sourceCell).getStyle());
+        CrayonScriptIShape sourceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(((mxICell) otherCell).getStyle());
         CrayonScriptIShape targetShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(((mxICell) cell).getStyle());
 
         Rectangle stateRect = getRectangle();
@@ -552,6 +597,10 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
                 {
                     ((mxCell) cell).hotspotRect = targetRect;
                     ((mxCell) cell).hotSpotDropFlag = dropTargetFlag;
+
+                    ((mxCell) otherCell).hotspotRect = sourceRect;
+                    ((mxCell) otherCell).hotSpotDropFlag = dropSourceFlag;
+
                     return true;
                 }
             }
@@ -588,18 +637,6 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         }
 
         return false;
-    }
-
-    public Rectangle getHighlightBounds() {
-        RoundRectangle2D roundedRect = ((mxCell) cell).hotspotRect;
-        return roundedRect.getBounds();
-    }
-
-    public RoundRectangle2D getHighlightRect() {
-        RoundRectangle2D roundedRect = ((mxCell) cell).hotspotRect;
-        roundedRect = (RoundRectangle2D) roundedRect.clone();
-        roundedRect.setFrame(0, 0, roundedRect.getWidth(), roundedRect.getHeight());
-        return roundedRect;
     }
 
     /**

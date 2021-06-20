@@ -573,22 +573,6 @@ public class mxGraphHandler extends mxMouseAdapter implements
 	/**
 	 * 
 	 */
-	public mxCellMarker getDropMarker()
-	{
-		return dropMarker;
-	}
-
-	/**
-	 * 
-	 */
-	public void setDropMarker(mxCellMarker value)
-	{
-		dropMarker = value;
-	}
-
-	/**
-	 * 
-	 */
 	public boolean isSelectEnabled()
 	{
 		return selectEnabled;

@@ -12,4 +12,10 @@ public interface mxIHighlightSource {
     Rectangle getHighlightBounds();
 
     DropFlag getHighlightDropFlag();
+
+    RoundRectangle2D getOtherHighlightRect();
+
+    Rectangle getOtherHighlightBounds();
+
+    DropFlag getOtherHighlightDropFlag();
 }
