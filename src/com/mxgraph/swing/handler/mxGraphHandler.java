@@ -960,7 +960,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 					pt.translate(-dx, -dy);
 				}
 
-				if (!handler.isLocalDrag() && previewBounds != null)
+				if (previewBounds != null)
 				{
 					setPreviewBounds(new Rectangle(pt, previewBounds.getSize()));
 				}
