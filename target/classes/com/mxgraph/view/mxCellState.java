@@ -567,9 +567,6 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         mxCellState sourceState = new mxCellState(getView(), otherCell, getView().getGraph().getCellStyle(cell));
         getView().updateCellState(sourceState);
 
-//        sourceState.setX(x - sourceState.getWidth()/2);
-//        sourceState.setY(y - sourceState.getHeight()/2);
-
         sourceState.setX(previewBounds.getX());
         sourceState.setY(previewBounds.getY());
 
