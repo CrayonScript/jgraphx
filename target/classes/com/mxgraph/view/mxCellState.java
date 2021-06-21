@@ -515,7 +515,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         return ((mxCell) this.otherCell).hotSpotDropFlag;
     }
 
-    public void updateHotspots(Object[] dragCells, int x, int y,
+    public void updateHotspots(Object[] dragCells, Rectangle previewBounds, int x, int y,
                                double hotspot, int min, int max) {
         this.otherCell = null;
 
@@ -524,13 +524,14 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
             ((mxCell) this.otherCell).hotspotRect = null;
         }
         ((mxCell) this.cell).hotspotRect = null;
-        ((mxCell) this.cell).isHotspot = intersects(x, y, hotspot, min, max);
+        ((mxCell) this.cell).isHotspot = intersects(previewBounds, x, y, hotspot, min, max);
     }
 
     /**
      * Returns true if the given coordinate pair intersects the hotspot of the
      * given state.
      *
+     * @param previewBounds
      * @param x
      * @param y
      * @param hotspot
@@ -538,7 +539,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      * @param max
      * @return
      */
-    protected boolean intersects(int x, int y,
+    protected boolean intersects(Rectangle previewBounds, int x, int y,
                                  double hotspot, int min, int max) {
         if (hotspot <= 0) {
             return false;
@@ -566,8 +567,11 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         mxCellState sourceState = new mxCellState(getView(), otherCell, getView().getGraph().getCellStyle(cell));
         getView().updateCellState(sourceState);
 
-        sourceState.setX(x - sourceState.getWidth()/2);
-        sourceState.setY(y - sourceState.getHeight()/2);
+//        sourceState.setX(x - sourceState.getWidth()/2);
+//        sourceState.setY(y - sourceState.getHeight()/2);
+
+        sourceState.setX(previewBounds.getX());
+        sourceState.setY(previewBounds.getY());
 
         Rectangle sourceStateRect = sourceState.getRectangle();
 
