@@ -99,6 +99,11 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public transient DropFlag hotSpotDropFlag;
 
 	/**
+	 * Reference to the cell that is being added to this cell.
+	 */
+	public transient Object otherCell;
+
+	/**
 	 * Constructs a new cell with an empty user object.
 	 */
 	public mxCell()

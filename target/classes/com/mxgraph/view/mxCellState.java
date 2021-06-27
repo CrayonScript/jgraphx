@@ -39,11 +39,6 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
     protected Object cell;
 
     /**
-     * Reference to the cell that is being added to this cell.
-     */
-    protected Object otherCell;
-
-    /**
      * Holds the current label value, including newlines which result from
      * word wrapping.
      */
@@ -493,8 +488,9 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
 
     @Override
     public RoundRectangle2D getOtherHighlightRect() {
-        if (otherCell != null) {
-            RoundRectangle2D roundedRect = ((mxCell) otherCell).hotspotRect;
+        mxCell otherCell = (mxCell) ((mxCell) cell).otherCell;
+        if (((mxCell) cell).otherCell != null) {
+            RoundRectangle2D roundedRect = otherCell.hotspotRect;
             if (roundedRect != null) {
                 roundedRect = (RoundRectangle2D) roundedRect.clone();
                 roundedRect.setFrame(0, 0, roundedRect.getWidth(), roundedRect.getHeight());
@@ -506,22 +502,23 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
 
     @Override
     public Rectangle getOtherHighlightBounds() {
-        RoundRectangle2D roundedRect = ((mxCell) otherCell).hotspotRect;
+        RoundRectangle2D roundedRect = ((mxCell) ((mxCell) cell).otherCell).hotspotRect;
         return roundedRect.getBounds();
     }
 
     @Override
     public DropFlag getOtherHighlightDropFlag() {
-        return ((mxCell) this.otherCell).hotSpotDropFlag;
+        mxCell otherCell = (mxCell) ((mxCell) cell).otherCell;
+        return otherCell.hotSpotDropFlag;
     }
 
     public void updateHotspots(Object[] dragCells, Rectangle previewBounds, int x, int y,
                                double hotspot, int min, int max) {
-        this.otherCell = null;
+        ((mxCell) cell).otherCell = null;
 
         if (dragCells != null && dragCells.length > 0) {
-            this.otherCell = dragCells[0];
-            ((mxCell) this.otherCell).hotspotRect = null;
+            ((mxCell) cell).otherCell = dragCells[0];
+            ((mxCell) ((mxCell) cell).otherCell).hotspotRect = null;
         }
         ((mxCell) this.cell).hotspotRect = null;
         ((mxCell) this.cell).isHotspot = intersects(previewBounds, x, y, hotspot, min, max);
@@ -545,10 +542,12 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
             return false;
         }
 
-        if (this.otherCell == null) {
+        mxCell otherCell = (mxCell) ((mxCell) cell).otherCell;
+
+        if (otherCell == null) {
             return false;
         }
-        if (!(this.otherCell instanceof mxICell)
+        if (!(otherCell instanceof mxICell)
                 || !((mxICell) otherCell).isShape() || !((mxICell) otherCell).isDropSource()) {
             return false;
         }
