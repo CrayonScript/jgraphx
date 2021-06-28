@@ -43,6 +43,12 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return  svgElements;
 	}
 
+	public int getSubElements()
+	{
+		ArrayList<SvgElement> svgElements = getSvgElements();
+		return (svgElements == null) ? 0 : (svgElements.size() - 1);
+	}
+
 	protected static void initialize() {
 		if (initialized) return;
 		svgElementsMap = new HashMap<>();

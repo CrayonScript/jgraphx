@@ -3,13 +3,16 @@
  */
 package com.mxgraph.model;
 
+import com.mxgraph.canvas.mxGraphics2DCanvas;
+import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
+import com.mxgraph.crayonscript.shapes.CrayonScriptIShape;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import java.awt.geom.RoundRectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  * Cells are the elements of the graph model. They represent the state
@@ -71,7 +74,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 */
 	protected boolean vertex = false, edge = false, connectable = true,
 			visible = true, collapsed = false, template = false,
-			shape = true, dropSource=false, dropTarget=false;
+			shape = false, dropSource=false, dropTarget=false;
 
 	/**
 	 * Reference to the parent cell and source and target terminals for edges.
@@ -97,6 +100,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public transient RoundRectangle2D hotspotRect;
 
 	public transient DropFlag hotSpotDropFlag;
+
+	public transient CrayonScriptIShape referenceShape;
 
 	/**
 	 * Reference to the cell that is being added to this cell.
@@ -194,6 +199,63 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return geometry;
 	}
 
+	public void snapToParentGeometry()
+	{
+		mxCell parentCell = (mxCell) parent;
+		mxCell thisCell = this;
+
+		// otherCell is the same as thisCell, however it contains the drag and drop info
+		mxCell otherCell = (mxCell) parentCell.otherCell;
+
+		// both are shape based
+		DropFlag parentDropFlag = parentCell.hotSpotDropFlag;
+		DropFlag thisDropFlag = otherCell.hotSpotDropFlag;
+
+		mxGeometry parentSubGeometry = parentCell.getSubGeometry(parentDropFlag.bitIndex);
+		mxGeometry thisSubGeometry = thisCell.getSubGeometry(thisDropFlag.bitIndex);
+
+		mxGeometry parentGeometry = parentCell.getGeometry();
+		mxGeometry thisGeometry = thisCell.getGeometry();
+
+		RoundRectangle2D parentFrame = parentCell.getFrame(0);
+
+		thisGeometry.setX(parentSubGeometry.getX() - parentGeometry.getX() - (thisSubGeometry.getX() - thisGeometry.getX()));
+		thisGeometry.setY(parentSubGeometry.getY() - parentGeometry.getY() - (thisSubGeometry.getY() - thisGeometry.getY()));
+	}
+
+	public RoundRectangle2D getFrame(int index)
+	{
+		if (this.shape)
+		{
+			if (this.referenceShape == null)
+			{
+				this.referenceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(getStyle());
+			}
+			CrayonScriptBasicShape.SvgElement rootSvgElement = this.referenceShape.getSvgElements().get(0);
+			CrayonScriptBasicShape.SvgElement svgElement = this.referenceShape.getSvgElements().get(index);
+			RoundRectangle2D subRect = CrayonScriptBasicShape.scaleRectangle(this.geometry.getRectangle(), rootSvgElement, svgElement);
+			return subRect;
+		}
+		return null;
+	}
+
+	public mxGeometry getSubGeometry(int subIndex)
+	{
+		if (this.shape)
+		{
+			if (this.referenceShape == null)
+			{
+				this.referenceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(getStyle());
+			}
+			CrayonScriptBasicShape.SvgElement rootElement = this.referenceShape.getSvgElements().get(0);
+			CrayonScriptBasicShape.SvgElement subElement = this.referenceShape.getSvgElements().get(subIndex);
+			RoundRectangle2D subRect = CrayonScriptBasicShape.scaleRectangle(this.geometry.getRectangle(), rootElement, subElement);
+			mxGeometry subGeometry = new mxGeometry(subRect.getX(), subRect.getY(), subRect.getWidth(), subRect.getHeight());
+			return subGeometry;
+		}
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#setGeometry(com.mxgraph.model.mxGeometry)
 	 */
@@ -234,6 +296,11 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public boolean isShape()
 	{
 		return shape;
+	}
+
+	public void setShape(boolean value)
+	{
+		shape = value;
 	}
 
 	/* (non-Javadoc)
@@ -712,6 +779,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		clone.setConnectable(isConnectable());
 		clone.setEdge(isEdge());
 		clone.setVertex(isVertex());
+		clone.setShape(isShape());
 		clone.setVisible(isVisible());
 		clone.setParent(null);
 		clone.setSource(null);
@@ -725,6 +793,15 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		{
 			clone.setGeometry((mxGeometry) geometry.clone());
 		}
+
+		clone.dropSourceBitMask = dropSourceBitMask;
+		clone.dropTargetBitMask = dropTargetBitMask;
+		clone.dropSource = dropSource;
+		clone.dropTarget = dropTarget;
+		clone.referenceShape = referenceShape;
+		clone.isHotspot = isHotspot;
+		clone.hotSpotDropFlag = hotSpotDropFlag;
+		clone.hotspotRect = hotspotRect;
 
 		return clone;
 	}

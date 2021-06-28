@@ -3,26 +3,19 @@
  */
 package com.mxgraph.view;
 
+import com.mxgraph.model.mxGeometry;
+import com.mxgraph.model.mxGraphModel;
+import com.mxgraph.model.mxIGraphModel;
+import com.mxgraph.util.*;
+import com.mxgraph.util.mxUndoableEdit.mxUndoableChange;
+import com.mxgraph.view.mxEdgeStyle.mxEdgeStyleFunction;
+import com.mxgraph.view.mxPerimeter.mxPerimeterFunction;
+
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-
-import com.mxgraph.model.mxGeometry;
-import com.mxgraph.model.mxGraphModel;
-import com.mxgraph.model.mxIGraphModel;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxEvent;
-import com.mxgraph.util.mxEventObject;
-import com.mxgraph.util.mxEventSource;
-import com.mxgraph.util.mxPoint;
-import com.mxgraph.util.mxRectangle;
-import com.mxgraph.util.mxUndoableEdit;
-import com.mxgraph.util.mxUndoableEdit.mxUndoableChange;
-import com.mxgraph.util.mxUtils;
-import com.mxgraph.view.mxEdgeStyle.mxEdgeStyleFunction;
-import com.mxgraph.view.mxPerimeter.mxPerimeterFunction;
 
 /**
  * Implements a view for the graph. This class is in charge of computing the

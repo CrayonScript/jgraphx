@@ -14,4 +14,6 @@ public interface CrayonScriptIShape extends mxIShape {
     void paintShape(mxGraphics2DCanvas canvas, mxCellState state);
 
     ArrayList<CrayonScriptBasicShape.SvgElement> getSvgElements();
+
+    int getSubElements();
 }

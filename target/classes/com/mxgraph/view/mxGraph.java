@@ -420,7 +420,7 @@ public class mxGraph extends mxEventSource
 	 * Specifies if parents should be extended according to the <extendParents>
 	 * switch if cells are added. Default is true.
 	 */
-	protected boolean extendParentsOnAdd = true;
+	protected boolean extendParentsOnAdd = false;
 
 	/**
 	 * Specifies if the scale and translate should be reset if
@@ -3632,6 +3632,11 @@ public class mxGraph extends mxEventSource
 		return cells;
 	}
 
+	public boolean canResize()
+	{
+		return false;
+	}
+
 	/**
 	 * Sets the bounds of the given cells and fires a <mxEvent.CELLS_RESIZED>
 	 * event. If extendParents is true, then the parent is extended if a child
@@ -3808,7 +3813,7 @@ public class mxGraph extends mxEventSource
 					setAllowNegativeCoordinates(true);
 				}
 
-				if (!cellsResized(cells, target))
+				if (!canResize() || !cellsResized(cells, target))
 				{
 					cellsMoved(cells, dx, dy, !clone && isDisconnectOnMove()
 							&& isAllowDanglingEdges(), target == null);
@@ -4043,26 +4048,34 @@ public class mxGraph extends mxEventSource
 						|| area.getWidth() < geo.getX() + geo.getWidth()
 						|| area.getHeight() < geo.getY() + geo.getHeight()))
 				{
-					double overlap = getOverlap(cell);
-
-					if (area.getWidth() > 0)
+					if (!((mxCell) model.getParent(cell)).isShape())
 					{
-						geo.setX(Math.min(geo.getX(),
-								area.getX() + area.getWidth()
-										- (1 - overlap) * geo.getWidth()));
+						double overlap = getOverlap(cell);
+
+						if (area.getWidth() > 0)
+						{
+							geo.setX(Math.min(geo.getX(),
+									area.getX() + area.getWidth()
+											- (1 - overlap) * geo.getWidth()));
+						}
+
+						if (area.getHeight() > 0)
+						{
+							geo.setY(Math.min(geo.getY(),
+									area.getY() + area.getHeight()
+											- (1 - overlap) * geo.getHeight()));
+						}
+
+						geo.setX(Math.max(geo.getX(),
+								area.getX() - geo.getWidth() * overlap));
+						geo.setY(Math.max(geo.getY(),
+								area.getY() - geo.getHeight() * overlap));
+					}
+					else
+					{
+						((mxCell) cell).snapToParentGeometry();
 					}
 
-					if (area.getHeight() > 0)
-					{
-						geo.setY(Math.min(geo.getY(),
-								area.getY() + area.getHeight()
-										- (1 - overlap) * geo.getHeight()));
-					}
-
-					geo.setX(Math.max(geo.getX(),
-							area.getX() - geo.getWidth() * overlap));
-					geo.setY(Math.max(geo.getY(),
-							area.getY() - geo.getHeight() * overlap));
 				}
 			}
 		}
@@ -6750,7 +6763,7 @@ public class mxGraph extends mxEventSource
 	 */
 	public boolean isAllowOverlapParent(Object cell)
 	{
-		return false;
+		return true;
 	}
 
 	/**
