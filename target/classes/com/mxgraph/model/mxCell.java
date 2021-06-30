@@ -216,9 +216,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 		mxGeometry parentGeometry = parentCell.getGeometry();
 		mxGeometry thisGeometry = thisCell.getGeometry();
-
-		RoundRectangle2D parentFrame = parentCell.getFrame(0);
-
+		
 		thisGeometry.setX(parentSubGeometry.getX() - parentGeometry.getX() - (thisSubGeometry.getX() - thisGeometry.getX()));
 		thisGeometry.setY(parentSubGeometry.getY() - parentGeometry.getY() - (thisSubGeometry.getY() - thisGeometry.getY()));
 	}
