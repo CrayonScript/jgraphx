@@ -608,7 +608,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                 }
             } else if (previousCells != null && previousCells[0] != null && previousCells[0].isTemplate()) {
                 mxCell previousParent = previousCells[0];
-                if (templateCells.size() > 1 && templateCells.indexOf(previousParent) < templateCells.size()-1)
+                if (templateCells.size() > 1 && templateCells.indexOf(previousParent) == templateCells.size()-2)
                 {
                     removeTemplateCell();
                 }
@@ -2679,11 +2679,22 @@ public class mxGraphComponent extends JScrollPane implements Printable {
     }
 
     public void addTemplateCell() {
+        int size = templateCells.size();
+        double tx = getPageFormat().getWidth() * 0.7 - 120;
+        double ty = 294 * (templateCells.size()) + 80;
+        double width = 240.0d;
+        double height = 320.0d;
+        if (size > 0)
+        {
+            mxCell lastTemplateCell = templateCells.get(size-1);
+            mxGeometry lastExtendedGeometry = lastTemplateCell.getExtendedGeometry();
+            ty = lastExtendedGeometry.getY() + lastExtendedGeometry.getHeight() - 24;
+        }
         Object templateParent = graph.getDefaultParent();
         mxCell templateCell = new mxCell();
         templateCell.setTemplate(true);
         templateCell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
-        templateCell.setGeometry(new mxGeometry(getPageFormat().getWidth() * 0.7 - 120, 294 * (templateCells.size()) + 80, 240, 320));
+        templateCell.setGeometry(new mxGeometry(tx, ty, width, height));
         templateCell.setVertex(true);
         templateCell.setShape(true);
         templateCell.setDropTargets(DropFlag.OUTER);
