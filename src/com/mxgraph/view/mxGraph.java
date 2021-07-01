@@ -2778,20 +2778,6 @@ public class mxGraph extends mxEventSource
 							constrainChild(cells[i]);
 						}
 
-//
-//						if (getModel().isTemplate(parent))
-//						{
-//							mxGeometry parentExtendedGeometry = getModel().getExtendedGeometry(parent);
-//							mxGeometry parentGeometry = getModel().getGeometry(parent);
-//
-//							parentGeometry.setWidth(parentExtendedGeometry.getWidth());
-//							parentGeometry.setHeight(parentExtendedGeometry.getHeight());
-//
-//							parentState.setInvalid(true);
-//
-//							getView().validateCellState(parent);
-//						}
-
 						// Sets the source terminal
 						if (source != null)
 						{
