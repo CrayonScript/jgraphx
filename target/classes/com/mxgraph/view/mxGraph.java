@@ -24,14 +24,12 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.mxgraph.model.*;
 import org.w3c.dom.Element;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.canvas.mxICanvas;
 import com.mxgraph.canvas.mxImageCanvas;
-import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxGeometry;
-import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.model.mxGraphModel.Filter;
 import com.mxgraph.model.mxGraphModel.mxChildChange;
 import com.mxgraph.model.mxGraphModel.mxCollapseChange;
@@ -41,8 +39,6 @@ import com.mxgraph.model.mxGraphModel.mxStyleChange;
 import com.mxgraph.model.mxGraphModel.mxTerminalChange;
 import com.mxgraph.model.mxGraphModel.mxValueChange;
 import com.mxgraph.model.mxGraphModel.mxVisibleChange;
-import com.mxgraph.model.mxICell;
-import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
@@ -2781,6 +2777,20 @@ public class mxGraph extends mxEventSource
 						{
 							constrainChild(cells[i]);
 						}
+
+//
+//						if (getModel().isTemplate(parent))
+//						{
+//							mxGeometry parentExtendedGeometry = getModel().getExtendedGeometry(parent);
+//							mxGeometry parentGeometry = getModel().getGeometry(parent);
+//
+//							parentGeometry.setWidth(parentExtendedGeometry.getWidth());
+//							parentGeometry.setHeight(parentExtendedGeometry.getHeight());
+//
+//							parentState.setInvalid(true);
+//
+//							getView().validateCellState(parent);
+//						}
 
 						// Sets the source terminal
 						if (source != null)

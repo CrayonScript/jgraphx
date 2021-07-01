@@ -235,8 +235,8 @@ public class GraphEditor extends BasicGraphEditor
 
 //		graphTemplates.addTemplate("Main", new ImageIcon(vertical2URL), "graph-main", 120, 160, "Main");
 
-		// create template cells, template cell styles
-		int templateCount = 16;
+		// create initial template cells, template cell styles
+		int templateCount = 1;
 		Object templateParent = graph.getDefaultParent();
 		for (int i = 0; i < templateCount; i++)
 		{

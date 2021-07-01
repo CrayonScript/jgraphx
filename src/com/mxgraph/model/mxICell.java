@@ -49,6 +49,14 @@ public interface mxICell
 	void setGeometry(mxGeometry geometry);
 
 	/**
+	 * Returns the extended geometry
+	 *
+	 * @return Returns the cell extended geometry
+	 */
+	mxGeometry getExtendedGeometry();
+
+
+	/**
 	 * Returns the string that describes the style.
 	 * 
 	 * @return Returns the cell style.

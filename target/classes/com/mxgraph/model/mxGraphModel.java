@@ -948,6 +948,15 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel,
 		return geometry;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mxgraph.model.mxIGraphModel#getExtendedGeometry(Object)
+	 */
+	public mxGeometry getExtendedGeometry(Object cell)
+	{
+		return (cell instanceof mxICell) ? ((mxICell) cell).getExtendedGeometry()
+				: null;
+	}
+
 	/**
 	 * Inner callback to update the mxGeometry of the given mxCell using
 	 * mxCell.setGeometry and return the previous mxGeometry.

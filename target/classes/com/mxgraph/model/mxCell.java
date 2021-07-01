@@ -62,6 +62,11 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	protected mxGeometry geometry;
 
 	/**
+	 * Holds the original geometry. Default is null
+	 */
+	protected mxGeometry originalGeometry;
+
+	/**
 	 * Holds the style as a string of the form
 	 * stylename[;key=value]. Default is null.
 	 */
@@ -197,6 +202,46 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public mxGeometry getGeometry()
 	{
 		return geometry;
+	}
+
+	public mxGeometry getExtendedGeometry()
+	{
+		mxGeometry extendedGeometry = (mxGeometry) geometry.clone();
+
+		double minX, minY;
+		minX = minY = Double.MAX_VALUE;
+
+		double maxX, maxY;
+		maxX = maxY = 0.0d;
+
+		minX = Math.min(minX, extendedGeometry.getX());
+		minY = Math.min(minY, extendedGeometry.getY());
+
+		maxX = Math.max(maxX, extendedGeometry.getX() + extendedGeometry.getWidth());
+		maxY = Math.max(maxY, extendedGeometry.getY() + extendedGeometry.getHeight());
+
+		for(int childIndex = 0; childIndex < getChildCount(); childIndex++)
+		{
+			mxCell childCell = (mxCell) getChildAt(childIndex);
+			mxGeometry childGeometry = childCell.getExtendedGeometry();
+
+			minX = Math.min(minX, extendedGeometry.getX() + childGeometry.getX());
+			minY = Math.min(minY, extendedGeometry.getY() + childGeometry.getY());
+
+			maxX = Math.max(maxX, extendedGeometry.getX() + childGeometry.getX() + childGeometry.getWidth());
+			maxY = Math.max(maxY, extendedGeometry.getY() + childGeometry.getY() + childGeometry.getHeight());
+		}
+
+		extendedGeometry.setX(minX);
+		extendedGeometry.setY(minY);
+
+		double extendedWidth = maxX - minX;
+		double extendedHeight = maxY - minY;
+
+		extendedGeometry.setWidth(extendedWidth);
+		extendedGeometry.setHeight(extendedHeight);
+
+		return extendedGeometry;
 	}
 
 	public void snapToParentGeometry()

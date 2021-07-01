@@ -250,6 +250,14 @@ public interface mxIGraphModel
 	mxGeometry setGeometry(Object cell, mxGeometry geometry);
 
 	/**
+	 * Gets the extended geometry of the given cell
+	 *
+	 * @param cell
+	 * @return
+	 */
+	mxGeometry getExtendedGeometry(Object cell);
+
+	/**
 	 * Returns the style of the given cell.
 	 * 
 	 * @param cell Cell whose style should be returned.
