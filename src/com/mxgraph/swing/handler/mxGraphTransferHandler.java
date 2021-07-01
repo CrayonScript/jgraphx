@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
+import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.util.mxGraphTransferable;
 import com.mxgraph.util.mxCellRenderer;
@@ -167,6 +168,12 @@ public class mxGraphTransferHandler extends TransferHandler
 	 */
 	public boolean canImport(JComponent comp, DataFlavor[] flavors)
 	{
+		if (this.originalCells != null && this.originalCells[0] != null)
+		{
+			mxCell originalCell = (mxCell) this.originalCells[0];
+			if (originalCell.isTemplate()) return false;
+		}
+
 		for (int i = 0; i < flavors.length; i++)
 		{
 			if (flavors[i] != null

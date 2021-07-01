@@ -738,7 +738,7 @@ public class mxGraphHandler extends mxMouseAdapter implements
 
 		if (isLocal)
 		{
-			canImport = true;
+			canImport = !graphComponent.getGraph().getModel().isTemplate(((mxGraphTransferHandler) th).originalCells[0]);
 		}
 		else
 		{
