@@ -236,22 +236,7 @@ public class GraphEditor extends BasicGraphEditor
 //		graphTemplates.addTemplate("Main", new ImageIcon(vertical2URL), "graph-main", 120, 160, "Main");
 
 		// create initial template cells, template cell styles
-		int templateCount = 1;
-		Object templateParent = graph.getDefaultParent();
-		for (int i = 0; i < templateCount; i++)
-		{
-			mxCell templateCell = new mxCell();
-			templateCell.setTemplate(true);
-			templateCell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
-			templateCell.setGeometry(new mxGeometry(graphComponent.getPageFormat().getWidth() * 0.7 - 120, 294*(i) + 80, 240, 320));
-			templateCell.setVertex(true);
-			templateCell.setShape(true);
-			templateCell.setDropTargets(DropFlag.OUTER);
-			templateCell.setDropSources();
-			graph.getModel().add(templateParent, templateCell, i);
-			mxCellState cellState = graph.getView().getState(templateCell, true);
-			graph.getView().updateCellState(cellState);
-		}
+		graphComponent.addTemplateCell();
 
 		graphComponent.setConnectable(false);
 		graphComponent.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_WIDTH);

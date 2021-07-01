@@ -2709,6 +2709,9 @@ public class mxGraph extends mxEventSource
 		if (cells != null && parent != null && index != null)
 		{
 			model.beginUpdate();
+
+			mxCell[] previousCells = new mxCell[cells.length];
+
 			try
 			{
 				mxCellState parentState = (absolute) ? view.getState(parent)
@@ -2726,6 +2729,7 @@ public class mxGraph extends mxEventSource
 					else
 					{
 						Object previous = model.getParent(cells[i]);
+						previousCells[i] = (mxCell) previous;
 
 						// Keeps the cell at its absolute location
 						if (o1 != null && cells[i] != parent
@@ -2794,6 +2798,7 @@ public class mxGraph extends mxEventSource
 
 				fireEvent(new mxEventObject(mxEvent.CELLS_ADDED, "cells", cells,
 						"parent", parent, "index", index, "source", source,
+						"previous", previousCells,
 						"target", target, "absolute", absolute));
 
 			}
