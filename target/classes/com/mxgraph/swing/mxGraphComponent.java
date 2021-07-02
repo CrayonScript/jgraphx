@@ -2291,7 +2291,8 @@ public class mxGraphComponent extends JScrollPane implements Printable {
      *
      */
     public boolean isEditEvent(MouseEvent e) {
-        return (e != null) ? e.getClickCount() == 2 : false;
+        return false;
+        //return (e != null) ? e.getClickCount() == 2 : false;
     }
 
     /**
