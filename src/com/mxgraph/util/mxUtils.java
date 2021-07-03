@@ -1737,7 +1737,7 @@ public class mxUtils
 	/**
 	 * Reads the given filename into a string.
 	 * 
-	 * @param filename
+	 * @param stream
 	 *            Name of the file to be read.
 	 * @return Returns a string representing the file contents.
 	 * @throws IOException

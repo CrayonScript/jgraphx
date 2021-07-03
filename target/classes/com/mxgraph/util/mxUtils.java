@@ -194,7 +194,7 @@ public class mxUtils
 		size.setWidth(size.getWidth() / scale);
 		size.setHeight(size.getHeight() / scale);
 
-		double x = offset.getX();
+		double x = offset.getX() - size.getWidth();
 		double y = offset.getY();
 		double width = 0;
 		double height = 0;
@@ -1737,7 +1737,7 @@ public class mxUtils
 	/**
 	 * Reads the given filename into a string.
 	 * 
-	 * @param filename
+	 * @param stream
 	 *            Name of the file to be read.
 	 * @return Returns a string representing the file contents.
 	 * @throws IOException
