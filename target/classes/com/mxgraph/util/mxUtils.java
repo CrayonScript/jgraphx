@@ -194,7 +194,7 @@ public class mxUtils
 		size.setWidth(size.getWidth() / scale);
 		size.setHeight(size.getHeight() / scale);
 
-		double x = offset.getX() - size.getWidth();
+		double x = offset.getX();
 		double y = offset.getY();
 		double width = 0;
 		double height = 0;
