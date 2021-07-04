@@ -42,7 +42,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 910211337632342672L;
 
@@ -123,7 +123,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	/**
 	 * Constructs a new cell for the given user object.
-	 * 
+	 *
 	 * @param value
 	 *   Object that represents the value of the cell.
 	 */
@@ -147,7 +147,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	/**
 	 * Constructs a new cell for the given parameters.
-	 * 
+	 *
 	 * @param value Object that represents the value of the cell.
 	 * @param geometry Specifies the geometry of the cell.
 	 * @param style Specifies the style as a formatted string.
@@ -194,6 +194,30 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public void setValue(Object value)
 	{
 		this.value = value;
+	}
+
+	public boolean isAncestorTemplate()
+	{
+		if (isTemplate()) return true;
+		mxCell ancestor = (mxCell) parent;
+		while (ancestor != null)
+		{
+			if (ancestor.isTemplate()) return true;
+			ancestor = (mxCell) ancestor.parent;
+		}
+		return false;
+	}
+
+	public mxCell getAncestorTemplate()
+	{
+		if (isTemplate()) return this;
+		mxCell ancestor = (mxCell) parent;
+		while (ancestor != null)
+		{
+			if (ancestor.isTemplate()) return ancestor;
+			ancestor = (mxCell) ancestor.parent;
+		}
+		return null;
 	}
 
 	/* (non-Javadoc)
@@ -584,6 +608,11 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public int getChildCount()
 	{
 		return (children != null) ? children.size() : 0;
+	}
+
+	public boolean isEmpty()
+	{
+		return getChildCount() == 0;
 	}
 
 	/* (non-Javadoc)

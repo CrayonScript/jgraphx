@@ -27,7 +27,6 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,8 +45,6 @@ import javax.swing.TransferHandler;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.canvas.mxICanvas;
-import com.mxgraph.crayonscript.shapes.ColorCode;
-import com.mxgraph.examples.swing.GraphEditor;
 import com.mxgraph.model.*;
 import com.mxgraph.model.mxGraphModel.Filter;
 import com.mxgraph.swing.handler.mxCellHandler;
@@ -602,18 +599,41 @@ public class mxGraphComponent extends JScrollPane implements Printable {
     protected mxIEventListener templateCellReservedHandler = new mxIEventListener() {
         @Override
         public void invoke(Object sender, mxEventObject evt) {
-            mxCell parent = (mxCell) evt.getProperty("parent");
+            Object[] cells = (Object[]) evt.getProperty("cells");
+            mxCell cell = (mxCell) cells[0];
+
             mxCell[] previousCells = (mxCell[]) evt.getProperty("previous");
-            if (parent.isTemplate()) {
-                if (templateCells.get(templateCells.size()-1) == parent)
+            mxCell previousCell = previousCells == null ? null : previousCells[0];
+
+            mxCell templateCell = cell.getAncestorTemplate();
+            mxCell previousTemplateCell = previousCell == null ? null : previousCell.getAncestorTemplate();
+
+            if (templateCell != null)
+            {
+                boolean isLastTemplateCell = templateCells.indexOf(templateCell) == templateCells.size()-1;
+                if (isLastTemplateCell)
                 {
                     addTemplateCell();
                 }
-            } else if (previousCells != null && previousCells[0] != null && previousCells[0].isTemplate()) {
-                mxCell previousParent = previousCells[0];
-                if (templateCells.size() > 1 && templateCells.indexOf(previousParent) == templateCells.size()-2)
+                else
+                {
+                    int templateCellIndex = templateCells.indexOf(templateCell);
+                    repositionTemplateCells(templateCellIndex + 1);
+                }
+            }
+            else if (previousTemplateCell != null)
+            {
+                boolean isSecondLastTemplateCell = templateCells.indexOf(previousTemplateCell) == templateCells.size()-2;
+                boolean isSecondLastTemplateEmpty = previousTemplateCell.isEmpty();
+                boolean isLastTemplateCellEmpty = templateCells.get(templateCells.size()-1).isEmpty();
+                if (isSecondLastTemplateCell && isSecondLastTemplateEmpty && isLastTemplateCellEmpty)
                 {
                     removeTemplateCell();
+                }
+                else
+                {
+                    int previousTemplateCellIndex = templateCells.indexOf(previousTemplateCell);
+                    repositionTemplateCells(previousTemplateCellIndex + 1);
                 }
             }
         }
@@ -2676,6 +2696,24 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         return result;
     }
 
+    public void repositionTemplateCells(int startIndex)
+    {
+        int currentIndex = startIndex;
+        while (currentIndex < templateCells.size())
+        {
+            mxCell previousTemplateCell = templateCells.get(currentIndex - 1);
+            mxCell currentTemplateCell = templateCells.get(currentIndex);
+            mxGeometry lastExtendedGeometry = previousTemplateCell.getExtendedGeometry();
+            double ty = lastExtendedGeometry.getY() + lastExtendedGeometry.getHeight() - 24;
+            currentTemplateCell.getGeometry().setY(ty);
+            mxCellState cellState = graph.getView().getState(currentTemplateCell, true);
+            graph.getView().invalidate(currentTemplateCell);
+            graph.getView().updateCellState(cellState);
+            currentIndex++;
+        }
+        graph.refresh();
+    }
+
     public void removeTemplateCell() {
         mxCell templateCell = templateCells.remove(templateCells.size()-1);
         getGraph().removeCells(new Object[]{templateCell});
@@ -2704,6 +2742,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         templateCell.setDropSources();
         graph.getModel().add(templateParent, templateCell, templateCells.size());
         mxCellState cellState = graph.getView().getState(templateCell, true);
+        graph.getView().invalidate(cellState);
         graph.getView().updateCellState(cellState);
         templateCells.add(templateCell);
     }
