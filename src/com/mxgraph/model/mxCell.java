@@ -247,7 +247,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public void snapToParentGeometry()
 	{
 		mxCell parentCell = (mxCell) parent;
-		if (parent == null) return;
+		if (parentCell == null) return;
 
 		mxCell thisCell = this;
 

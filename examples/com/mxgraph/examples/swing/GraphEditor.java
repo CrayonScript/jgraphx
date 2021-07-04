@@ -204,6 +204,7 @@ public class GraphEditor extends BasicGraphEditor
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_IF_ELSE;
 		cell = graphComponent.createControlShape(name);
+		cell.setDropTargets(DropFlag.INNER_1, DropFlag.INNER_2, DropFlag.INNER_3);
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/IfElse.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
