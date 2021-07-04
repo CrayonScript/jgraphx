@@ -15,7 +15,7 @@ public class CrayonScriptIfElseShape extends CrayonScriptBasicShape {
     @Override
     public void paintShape(mxGraphics2DCanvas canvas, mxCellState state) {
 
-        initialize();
+        initialize(state);
 
         Rectangle stateRect = state.getRectangle();
         ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.VERTICAL3);
@@ -25,9 +25,9 @@ public class CrayonScriptIfElseShape extends CrayonScriptBasicShape {
         SvgElement third = svgElements.get(2);
         SvgElement fourth = svgElements.get(3);
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), first.fillColor, true);
-        paintRectangle(canvas, scaleRectangle(stateRect, first, second), second.fillColor);
-        paintRectangle(canvas, scaleRectangle(stateRect, first, third), third.fillColor);
-        paintRectangle(canvas, scaleRectangle(stateRect, first, fourth), fourth.fillColor);
+        paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(first.fillColor), true);
+        paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(second.fillColor));
+        paintRectangle(canvas, scaleRectangle(stateRect, first, third), getColor(third.fillColor));
+        paintRectangle(canvas, scaleRectangle(stateRect, first, fourth), getColor(fourth.fillColor));
     }
 }

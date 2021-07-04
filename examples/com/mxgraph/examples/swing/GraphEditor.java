@@ -95,11 +95,6 @@ public class GraphEditor extends BasicGraphEditor
 
 		});
 
-		URL vExtender2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/VExtender2.png");
-		URL hExtender2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/HExtender2.png");
-		URL vertical2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.png");
-		URL vertical3URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.png");
-
 		String name = mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN;
 		mxCell cell = graphComponent.createExpressionShape(name);
 		URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Assign.png");
@@ -178,9 +173,15 @@ public class GraphEditor extends BasicGraphEditor
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_EXTENSION;
+		name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION;
 		cell = graphComponent.createExtensionShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Extension.png");
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender2.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION;
+		cell = graphComponent.createExtensionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender2.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 

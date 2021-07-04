@@ -4,8 +4,10 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
+import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxStencilShape;
 import com.mxgraph.util.mxUtils;
+import com.mxgraph.view.mxCellState;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -37,6 +39,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected static boolean initialized;
 
+	protected boolean isTemplate = false;
+
 	public ArrayList<SvgElement> getSvgElements()
 	{
 		ArrayList<SvgElement> svgElements = svgElementsMap.get(shapeStructureType);
@@ -49,6 +53,12 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return (svgElements == null) ? 0 : (svgElements.size() - 1);
 	}
 
+	protected void initialize(mxCellState state)
+	{
+		checkTemplate(state);
+		initialize();
+	}
+
 	protected static void initialize() {
 		if (initialized) return;
 		svgElementsMap = new HashMap<>();
@@ -56,8 +66,14 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.svg")));
 		svgElementsMap.put(ShapeStructureType.VERTICAL3,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.svg")));
-		svgElementsMap.put(ShapeStructureType.VEXTENDER2,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/VExtender2.svg")));
+		svgElementsMap.put(ShapeStructureType.PARALLEL2,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Parallel2.svg")));
+		svgElementsMap.put(ShapeStructureType.SEQUENTIAL2,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Sequential2.svg")));
+		svgElementsMap.put(ShapeStructureType.PARALLEL_VEXTENDER2,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender2.svg")));
+		svgElementsMap.put(ShapeStructureType.SEQUENTIAL_VEXTENDER2,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender2.svg")));
 		svgElementsMap.put(ShapeStructureType.HEXTENDER2,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/HExtender2.svg")));
 		svgElementsMap.put(ShapeStructureType.TEMPLATE,
@@ -69,6 +85,11 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	{
 		ArrayList<SvgElement> templates = svgElementsMap.get(ShapeStructureType.TEMPLATE);
 		return templates.get(0);
+	}
+
+	protected void checkTemplate(mxCellState state)
+	{
+		isTemplate = ((mxCell) state.getCell()).isAncestorTemplate();
 	}
 
 	protected static ArrayList<SvgElement> readSvgElements(URL url) {
@@ -131,6 +152,14 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		}
 	}
 
+	protected Color getColor(Color color)
+	{
+		if (color == null) return null;
+		int opacity = isTemplate ? 255 : 85;
+		Color adjustedColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity);
+		return adjustedColor;
+	}
+
 	public static RoundRectangle2D scaleRectangle(
 			Rectangle stateRect,
 			SvgElement root,
@@ -185,12 +214,15 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	}
 
 	protected enum ShapeStructureType {
+		PARALLEL2,
+		SEQUENTIAL2,
 		HEXTENDER2,
 		VERTICAL0,
 		VERTICAL1,
 		VERTICAL2,
 		VERTICAL3,
-		VEXTENDER2,
+		PARALLEL_VEXTENDER2,
+		SEQUENTIAL_VEXTENDER2,
 		TEMPLATE,
 	}
 

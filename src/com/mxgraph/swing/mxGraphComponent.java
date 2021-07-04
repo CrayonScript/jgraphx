@@ -2764,7 +2764,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
     public mxCell createExtensionShape(String name)
     {
         String style = name;
-        String value = "";
+        String value = name;
         int width = 240;
         int height = 180;
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);

@@ -1010,7 +1010,9 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_FOR = "For Loop";
 
-	public static final String CRAYONSCRIPT_SHAPE_EXTENSION = "Shape Extension";
+	public static final String CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION = "Par";
+
+	public static final String CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION = "Ser";
 
 	public static final String CRAYONSCRIPT_SHAPE_ASSIGN = "Assignment";
 

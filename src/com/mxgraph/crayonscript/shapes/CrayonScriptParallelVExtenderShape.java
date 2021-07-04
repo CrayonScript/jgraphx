@@ -6,16 +6,10 @@ import com.mxgraph.view.mxCellState;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
+public class CrayonScriptParallelVExtenderShape extends CrayonScriptBasicShape {
 
-    private String name;
-
-    private int argCount;
-
-    public CrayonScriptFunctionShape(String name, int argCount) {
-        super(ShapeStructureType.VERTICAL2);
-        this.name = name;
-        this.argCount = argCount;
+    public CrayonScriptParallelVExtenderShape() {
+        super(ShapeStructureType.PARALLEL_VEXTENDER2);
     }
 
     @Override
@@ -24,7 +18,7 @@ public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
         initialize(state);
 
         Rectangle stateRect = state.getRectangle();
-        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.VERTICAL2);
+        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.PARALLEL_VEXTENDER2);
 
         SvgElement first = svgElements.get(0);
         SvgElement second = svgElements.get(1);
