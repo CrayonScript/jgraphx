@@ -101,7 +101,7 @@ public class GraphEditor extends BasicGraphEditor
 		URL vertical3URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.png");
 
 		String name = "Assign";
-		String value = "Assign";
+		String value = "";
 		int width = 400;
 		int height = 60;
 		String style = "assign";
@@ -114,7 +114,7 @@ public class GraphEditor extends BasicGraphEditor
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = "Expression";
-		value = "Expression";
+		value = "";
 		width = 400;
 		height = 60;
 		style = "expression";
@@ -127,7 +127,7 @@ public class GraphEditor extends BasicGraphEditor
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = "Extender";
-		value = "Extender";
+		value = "";
 		width = 240;
 		height = 180;
 		style = "vextender";
