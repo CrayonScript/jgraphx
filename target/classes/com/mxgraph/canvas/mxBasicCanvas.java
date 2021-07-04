@@ -41,7 +41,7 @@ public abstract class mxBasicCanvas implements mxICanvas
 	/**
 	 * Specifies whether labels should be painted. Default is false.
 	 */
-	protected boolean drawLabels = false;
+	protected boolean drawLabels = true;
 
 	/**
 	 * Cache for images.

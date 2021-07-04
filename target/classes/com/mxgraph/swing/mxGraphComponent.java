@@ -3762,7 +3762,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                 // Sets the graphics in the canvas
                 try {
                     mxUtils.setAntiAlias(g2, antiAlias, textAntiAlias);
-                    drawGraph(g2, false);
+                    drawGraph(g2, true);
                 } finally {
                     // Restores the graphics state
                     g2.setRenderingHints(tmp);

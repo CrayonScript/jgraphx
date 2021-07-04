@@ -70,11 +70,13 @@ public class mxStylesheet
 
 		style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_RECTANGLE);
 		style.put(mxConstants.STYLE_PERIMETER, mxPerimeter.RectanglePerimeter);
-		style.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+		style.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_LEFT);
 		style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
 		style.put(mxConstants.STYLE_FILLCOLOR, "#C3D9FF");
 		style.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
 		style.put(mxConstants.STYLE_FONTCOLOR, "#774400");
+		style.put(mxConstants.STYLE_FONTSIZE, 24);
+		style.put(mxConstants.STYLE_HORIZONTAL, false);
 
 		return style;
 	}
