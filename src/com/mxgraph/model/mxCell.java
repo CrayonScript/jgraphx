@@ -247,21 +247,30 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public void snapToParentGeometry()
 	{
 		mxCell parentCell = (mxCell) parent;
+		if (parent == null) return;
+
 		mxCell thisCell = this;
 
 		// otherCell is the same as thisCell, however it contains the drag and drop info
 		mxCell otherCell = (mxCell) parentCell.otherCell;
+		if (otherCell == null) return;
 
 		// both are shape based
 		DropFlag parentDropFlag = parentCell.hotSpotDropFlag;
 		DropFlag thisDropFlag = otherCell.hotSpotDropFlag;
 
 		mxGeometry parentSubGeometry = parentCell.getSubGeometry(parentDropFlag.bitIndex);
+		if (parentSubGeometry == null) return;
+
 		mxGeometry thisSubGeometry = thisCell.getSubGeometry(thisDropFlag.bitIndex);
+		if (thisSubGeometry == null) return;
 
 		mxGeometry parentGeometry = parentCell.getGeometry();
+		if (parentGeometry == null) return;
+
 		mxGeometry thisGeometry = thisCell.getGeometry();
-		
+		if (thisGeometry == null) return;
+
 		thisGeometry.setX(parentSubGeometry.getX() - parentGeometry.getX() - (thisSubGeometry.getX() - thisGeometry.getX()));
 		thisGeometry.setY(parentSubGeometry.getY() - parentGeometry.getY() - (thisSubGeometry.getY() - thisGeometry.getY()));
 	}

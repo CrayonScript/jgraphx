@@ -100,135 +100,124 @@ public class GraphEditor extends BasicGraphEditor
 		URL vertical2URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.png");
 		URL vertical3URL = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.png");
 
-		String name = "Assign";
-		String value = "";
-		int width = 400;
-		int height = 60;
-		String style = "assign";
-		ImageIcon icon = new CustomImageIcon(hExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
-		cell.setVertex(true);
-		cell.setShape(true);
-		cell.setDropTargets(DropFlag.INNER_2);
-		cell.setDropSources(DropFlag.INNER_1);
+		String name = mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN;
+		mxCell cell = graphComponent.createExpressionShape(name);
+		URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Assign.png");
+		ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
-		name = "Expression";
-		value = "";
-		width = 400;
-		height = 60;
-		style = "expression";
-		icon = new CustomImageIcon(hExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
-		cell.setVertex(true);
-		cell.setShape(true);
-		cell.setDropTargets(DropFlag.INNER_2);
-		cell.setDropSources(DropFlag.INNER_1);
+		name = mxConstants.CRAYONSCRIPT_SHAPE_EQUALS;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Equals.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
-		name = "Extender";
-		value = "";
-		width = 240;
-		height = 180;
-		style = "vextender";
-		icon = new CustomImageIcon(vExtender2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
-		cell.setVertex(true);
-		cell.setShape(true);
-		cell.setDropTargets(DropFlag.INNER_2);
-		cell.setDropSources(DropFlag.INNER_1);
+		name = mxConstants.CRAYONSCRIPT_SHAPE_NOTEQUALS;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/NotEquals.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
-		name = "Parallel";
-		value = "Parallel";
-		width = 240;
-		height = 320;
-		style = "parallel";
-		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
-		cell.setVertex(true);
-		cell.setShape(true);
-		cell.setDropTargets(DropFlag.INNER_2);
-		cell.setDropSources(DropFlag.OUTER);
+		name = mxConstants.CRAYONSCRIPT_SHAPE_GT;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThan.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
-		name = "Sequential";
-		value = "Sequential";
-		width = 240;
-		height = 320;
-		style = "sequential";
-		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
-		cell.setVertex(true);
-		cell.setShape(true);
-		cell.setDropTargets(DropFlag.INNER_2);
-		cell.setDropSources(DropFlag.OUTER);
+		name = mxConstants.CRAYONSCRIPT_SHAPE_GT_OR_EQUALS;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThanOrEquals.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
-		name = "If";
-		value = "If";
-		width = 240;
-		height = 320;
-		style = "if";
-		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
-		cell.setVertex(true);
-		cell.setShape(true);
-		cell.setDropTargets(
-				DropFlag.INNER_1,
-				DropFlag.INNER_2
-		);
-		cell.setDropSources(DropFlag.OUTER);
+		name = mxConstants.CRAYONSCRIPT_SHAPE_LT;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThan.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
-		name = "If-Else";
-		value = "If-Else";
-		width = 240;
-		height = 320;
-		style = "if-else";
-		icon = new CustomImageIcon(vertical3URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
-		cell.setVertex(true);
-		cell.setShape(true);
-		cell.setDropTargets(
-				DropFlag.INNER_1,
-				DropFlag.INNER_2,
-				DropFlag.INNER_3
-		);
-		cell.setDropSources(DropFlag.OUTER);
+		name = mxConstants.CRAYONSCRIPT_SHAPE_LT_OR_EQUALS;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThanOrEquals.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
-		name = "While";
-		value = "While";
-		width = 240;
-		height = 320;
-		style = "while";
-		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
-		cell.setVertex(true);
-		cell.setShape(true);
-		cell.setDropTargets(
-				DropFlag.INNER_1,
-				DropFlag.INNER_2
-		);
-		cell.setDropSources(DropFlag.OUTER);
+		name = mxConstants.CRAYONSCRIPT_SHAPE_AND;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/And.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
+		name = mxConstants.CRAYONSCRIPT_SHAPE_OR;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Or.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
 
-		name = "For";
-		value = "For";
-		width = 240;
-		height = 320;
-		style = "for";
-		icon = new CustomImageIcon(vertical2URL, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
-		cell.setVertex(true);
-		cell.setShape(true);
-		cell.setDropTargets(
-				DropFlag.INNER_1,
-				DropFlag.INNER_2
-		);
-		cell.setDropSources(DropFlag.OUTER);
+		name = mxConstants.CRAYONSCRIPT_SHAPE_NOT;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Not.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_MOD;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Mod.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_MIN;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Min.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_MAX;
+		cell = graphComponent.createExpressionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Max.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_EXTENSION;
+		cell = graphComponent.createExtensionShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Extension.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL;
+		cell = graphComponent.createStackShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Parallel.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL;
+		cell = graphComponent.createStackShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Sequential.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_IF;
+		cell = graphComponent.createControlShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/If.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_IF_ELSE;
+		cell = graphComponent.createControlShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/IfElse.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_WHILE;
+		cell = graphComponent.createControlShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/While.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_SHAPE_FOR;
+		cell = graphComponent.createControlShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/For.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 //		eventTemplates.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");

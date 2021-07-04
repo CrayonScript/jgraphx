@@ -27,6 +27,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +46,8 @@ import javax.swing.TransferHandler;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.canvas.mxICanvas;
+import com.mxgraph.crayonscript.shapes.ColorCode;
+import com.mxgraph.examples.swing.GraphEditor;
 import com.mxgraph.model.*;
 import com.mxgraph.model.mxGraphModel.Filter;
 import com.mxgraph.swing.handler.mxCellHandler;
@@ -2703,6 +2706,62 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         mxCellState cellState = graph.getView().getState(templateCell, true);
         graph.getView().updateCellState(cellState);
         templateCells.add(templateCell);
+    }
+
+    public mxCell createExpressionShape(String name)
+    {
+        String style = name;
+        String value = "";
+        int width = 400;
+        int height = 70;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
+        cell.setDropTargets(DropFlag.INNER_2);
+        cell.setDropSources(DropFlag.INNER_1);
+        return cell;
+    }
+
+    public mxCell createExtensionShape(String name)
+    {
+        String style = name;
+        String value = "";
+        int width = 240;
+        int height = 180;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
+        cell.setDropTargets(DropFlag.INNER_2);
+        cell.setDropSources(DropFlag.INNER_1);
+        return cell;
+    }
+
+    public mxCell createStackShape(String name)
+    {
+        String style = name;
+        String value = name;
+        int width = 240;
+        int height = 320;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
+        cell.setDropTargets(DropFlag.INNER_2);
+        cell.setDropSources(DropFlag.OUTER);
+        return cell;
+    }
+
+    public mxCell createControlShape(String name)
+    {
+        String style = name;
+        String value = name;
+        int width = 240;
+        int height = 320;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
+        cell.setDropTargets(DropFlag.INNER_1, DropFlag.INNER_2);
+        cell.setDropSources(DropFlag.OUTER);
+        return cell;
     }
 
     //

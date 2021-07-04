@@ -258,13 +258,12 @@ public class EditorPalette extends JPanel
 				new Object[] { cell }, bounds);
 
 		// Scales the image if it's too large for the library
-		int width = 100;
-		double aspectRatio = cell.getGeometry().getHeight() / cell.getGeometry().getWidth();
-		int height = (int) (width * aspectRatio);
-		icon = new ImageIcon(icon.getImage().getScaledInstance(width, height, 0));
+
+		double width = icon.getIconWidth();
+		double height = icon.getIconHeight();
 
 		final JLabel entry = new JLabel(icon);
-		entry.setPreferredSize(new Dimension(width + 30, height + 30));
+		entry.setPreferredSize(new Dimension((int) width + 30, (int) height + 30));
 
 		entry.setBackground(EditorPalette.this.getBackground().brighter());
 		entry.setFont(new Font(entry.getFont().getFamily(), 0, 10));

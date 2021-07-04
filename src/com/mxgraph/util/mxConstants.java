@@ -998,24 +998,45 @@ public class mxConstants
 	 */
 	public static final int FONT_STRIKETHROUGH= 8;
 
+	public static final String CRAYONSCRIPT_SHAPE_PARALLEL = "Parallel";
 
-	public static final String CRAYONSCRIPT_SHAPE_PARALLEL = "parallel";
+	public static final String CRAYONSCRIPT_SHAPE_SEQUENTIAL = "Series";
 
-	public static final String CRAYONSCRIPT_SHAPE_SEQUENTIAL = "sequential";
+	public static final String CRAYONSCRIPT_SHAPE_IF = "If Condition";
 
-	public static final String CRAYONSCRIPT_SHAPE_IF = "if";
+	public static final String CRAYONSCRIPT_SHAPE_IF_ELSE = "If Else Condition";
 
-	public static final String CRAYONSCRIPT_SHAPE_IF_ELSE = "if-else";
+	public static final String CRAYONSCRIPT_SHAPE_WHILE = "While Loop";
 
-	public static final String CRAYONSCRIPT_SHAPE_WHILE = "while";
+	public static final String CRAYONSCRIPT_SHAPE_FOR = "For Loop";
 
-	public static final String CRAYONSCRIPT_SHAPE_FOR = "for";
+	public static final String CRAYONSCRIPT_SHAPE_EXTENSION = "Shape Extension";
 
-	public static final String CRAYONSCRIPT_SHAPE_VEXTENDER = "vextender";
+	public static final String CRAYONSCRIPT_SHAPE_ASSIGN = "Assignment";
 
-	public static final String CRAYONSCRIPT_SHAPE_ASSIGN = "assign";
+	public static final String CRAYONSCRIPT_SHAPE_EQUALS = "Equals";
 
-	public static final String CRAYONSCRIPT_SHAPE_EXPRESSION = "expression";
+	public static final String CRAYONSCRIPT_SHAPE_NOTEQUALS = "Not Equals";
+
+	public static final String CRAYONSCRIPT_SHAPE_GT = "Greater Than";
+
+	public static final String CRAYONSCRIPT_SHAPE_GT_OR_EQUALS = "Greater Than Or Equals";
+
+	public static final String CRAYONSCRIPT_SHAPE_LT = "Less Than";
+
+	public static final String CRAYONSCRIPT_SHAPE_LT_OR_EQUALS = "Less Than Or Equals";
+
+	public static final String CRAYONSCRIPT_SHAPE_AND = "And";
+
+	public static final String CRAYONSCRIPT_SHAPE_OR = "Or";
+
+	public static final String CRAYONSCRIPT_SHAPE_NOT = "Not";
+
+	public static final String CRAYONSCRIPT_SHAPE_MOD = "Mod";
+
+	public static final String CRAYONSCRIPT_SHAPE_MIN = "Min";
+
+	public static final String CRAYONSCRIPT_SHAPE_MAX = "Max";
 
 	public static final String CRAYONSCRIPT_SHAPE_EVENT_ON_LOAD = "event-onload";
 

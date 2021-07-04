@@ -24,8 +24,6 @@ import java.util.logging.Logger;
 import javax.swing.CellRendererPane;
 
 import com.mxgraph.crayonscript.shapes.*;
-import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxGeometry;
 import com.mxgraph.shape.*;
 import com.mxgraph.swing.util.mxSwingConstants;
 import com.mxgraph.util.mxConstants;
@@ -73,9 +71,20 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 	 */
 	static
 	{
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_VEXTENDER, new CrayonScriptVExtenderShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_EXTENSION, new CrayonScriptVExtenderShape());
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN, new CrayonScriptAssignShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_EXPRESSION, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_EQUALS, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_NOTEQUALS, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_GT, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_GT_OR_EQUALS, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_LT, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_LT_OR_EQUALS, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_AND, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_OR, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_NOT, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_MOD, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_MIN, new CrayonScriptExpressionShape());
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_MAX, new CrayonScriptExpressionShape());
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL, new CrayonScriptParallelShape());
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL, new CrayonScriptSequentialShape());
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_IF, new CrayonScriptIfShape());
