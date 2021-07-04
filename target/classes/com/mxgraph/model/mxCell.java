@@ -281,7 +281,10 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 		// both are shape based
 		DropFlag parentDropFlag = parentCell.hotSpotDropFlag;
+		if (parentDropFlag == null) return;
+
 		DropFlag thisDropFlag = otherCell.hotSpotDropFlag;
+		if (thisDropFlag == null) return;
 
 		mxGeometry parentSubGeometry = parentCell.getSubGeometry(parentDropFlag.bitIndex);
 		if (parentSubGeometry == null) return;
