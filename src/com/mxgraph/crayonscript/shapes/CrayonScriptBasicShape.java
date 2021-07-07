@@ -6,7 +6,11 @@ package com.mxgraph.crayonscript.shapes;
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.DropFlag;
 import com.mxgraph.model.mxCell;
+import com.mxgraph.shape.mxDefaultTextShape;
+import com.mxgraph.shape.mxITextShape;
 import com.mxgraph.shape.mxStencilShape;
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxRectangle;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxCellState;
 import org.w3c.dom.Document;
@@ -33,13 +37,25 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected ShapeStructureType shapeStructureType;
 
+	protected mxITextShape textShape = new mxDefaultTextShape();
+
+	protected boolean isTemplate = false;
+
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
 
 	private static final Logger log = Logger.getLogger(mxStencilShape.class.getName());
 
 	protected static boolean initialized;
 
-	protected boolean isTemplate = false;
+	protected static HashMap<String, Object> textStyle = new HashMap<String, Object>();
+
+	static {
+		textStyle.put(mxConstants.STYLE_FONTFAMILY, mxConstants.DEFAULT_FONTFAMILY);
+		textStyle.put(mxConstants.STYLE_FONTSIZE, 36);
+		textStyle.put(mxConstants.STYLE_FONTSTYLE, 0);
+		textStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_TOP);
+		textStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+	};
 
 	public ArrayList<SvgElement> getSvgElements()
 	{
@@ -191,6 +207,18 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 					(int) roundedRect.getArcWidth(),
 					(int) roundedRect.getArcHeight());
 		}
+	}
+
+	protected void drawText(mxGraphics2DCanvas canvas, String text, mxCellState state)
+	{
+		Rectangle stateRect = state.getRectangle();
+		mxRectangle rect = new mxRectangle(
+				stateRect.getX(),
+				stateRect.getY(),
+				stateRect.getWidth(),
+				stateRect.getHeight());
+		state.setLabelBounds(rect);
+		textShape.paintShape(canvas, text, state, textStyle);
 	}
 
 	protected Color getColor(Color color)
