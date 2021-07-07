@@ -75,8 +75,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.svg")));
 		svgElementsMap.put(ShapeStructureType.IF,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/If.svg")));
-		svgElementsMap.put(ShapeStructureType.IF_ELSE,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/IfElse.svg")));
+		svgElementsMap.put(ShapeStructureType.ELSE_IF,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/ElseIf.svg")));
 		svgElementsMap.put(ShapeStructureType.WHILE,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/While.svg")));
 		svgElementsMap.put(ShapeStructureType.FOR,
@@ -267,7 +267,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		HEXTENDER2,
 		VERTICAL2,
 		IF,
-		IF_ELSE,
+		ELSE_IF,
 		FOR,
 		WHILE,
 		PARALLEL_VEXTENDER2,

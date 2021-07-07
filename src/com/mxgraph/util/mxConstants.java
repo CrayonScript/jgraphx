@@ -1004,7 +1004,7 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_IF = "If Condition";
 
-	public static final String CRAYONSCRIPT_SHAPE_IF_ELSE = "If Else Condition";
+	public static final String CRAYONSCRIPT_SHAPE_ELSE_IF = "Else If Condition";
 
 	public static final String CRAYONSCRIPT_SHAPE_WHILE = "While Loop";
 

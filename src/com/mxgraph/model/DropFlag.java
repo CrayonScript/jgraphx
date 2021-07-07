@@ -4,8 +4,7 @@ public enum DropFlag
 {
     OUTER(1),
     INNER_1(2),
-    INNER_2(4),
-    INNER_3(8);
+    INNER_2(4);
 
     public int bit;
     public int bitIndex;

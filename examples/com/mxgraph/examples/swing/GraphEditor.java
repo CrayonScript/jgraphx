@@ -203,10 +203,10 @@ public class GraphEditor extends BasicGraphEditor
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_IF_ELSE;
+		name = mxConstants.CRAYONSCRIPT_SHAPE_ELSE_IF;
 		cell = graphComponent.createControlShape(name);
-		cell.setDropTargets(DropFlag.INNER_1, DropFlag.INNER_2, DropFlag.INNER_3);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/IfElse.png");
+		cell.setDropTargets(DropFlag.INNER_1, DropFlag.INNER_2);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ElseIf.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
