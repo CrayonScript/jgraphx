@@ -1044,6 +1044,8 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_GRAPH_MAIN = "graph-main";
 
+	public static final String CRAYONSCRIPT_SHAPE_MARKER = "Marker";
+
 	public static final String CRAYONSCRIPT_SHAPE_TEMPLATE = "template";
 
 	/**

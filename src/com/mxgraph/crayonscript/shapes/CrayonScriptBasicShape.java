@@ -53,6 +53,15 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return (svgElements == null) ? 0 : (svgElements.size() - 1);
 	}
 
+	public Color getFrameColor()
+	{
+		ArrayList<SvgElement> svgElements = getSvgElements();
+		SvgElement svgElement = svgElements.get(0);
+		return svgElement.fillColor;
+	}
+
+	public boolean isExtender() { return false; }
+
 	protected void initialize(mxCellState state)
 	{
 		checkTemplate(state);
@@ -64,8 +73,14 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		svgElementsMap = new HashMap<>();
 		svgElementsMap.put(ShapeStructureType.VERTICAL2,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.svg")));
-		svgElementsMap.put(ShapeStructureType.VERTICAL3,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Vertical3.svg")));
+		svgElementsMap.put(ShapeStructureType.IF,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/If.svg")));
+		svgElementsMap.put(ShapeStructureType.IF_ELSE,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/IfElse.svg")));
+		svgElementsMap.put(ShapeStructureType.WHILE,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/While.svg")));
+		svgElementsMap.put(ShapeStructureType.FOR,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/For.svg")));
 		svgElementsMap.put(ShapeStructureType.PARALLEL2,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Parallel2.svg")));
 		svgElementsMap.put(ShapeStructureType.SEQUENTIAL2,
@@ -76,6 +91,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender2.svg")));
 		svgElementsMap.put(ShapeStructureType.HEXTENDER2,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/HExtender2.svg")));
+		svgElementsMap.put(ShapeStructureType.MARKER,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Marker.svg")));
 		svgElementsMap.put(ShapeStructureType.TEMPLATE,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Template.svg")));
 		initialized = true;
@@ -128,6 +145,11 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor, boolean isFrame)
 	{
+		paintRectangle(canvas, roundedRect, fillColor, isFrame, false);
+	}
+
+	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor, boolean isFrame, boolean isExtender)
+	{
 		Color color = fillColor;
 		if (color != null)
 		{
@@ -136,7 +158,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 		if (isFrame)
 		{
-			Path2D path = getFramePath(roundedRect);
+			Path2D path = isExtender ? getFrameExtenderPath(roundedRect) : getFramePath(roundedRect);
 			canvas.getGraphics().fill(path);
 			canvas.getGraphics().draw(path);
 		}
@@ -188,8 +210,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		double rx = roundedRect.getArcWidth();
 		double ry = roundedRect.getArcHeight();
 
-		double normalizedRxSize = 18;
-		double normalizedArcSize = 18;
+		double normalizedRxSize = 36;
+		double normalizedArcSize = 36;
 		double arcSize = normalizedArcSize * rx / normalizedRxSize;
 
 		Path2D path = new Path2D.Double();
@@ -207,6 +229,32 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return path;
 	}
 
+	public static Path2D getFrameExtenderPath(RoundRectangle2D roundedRect)
+	{
+		double x = roundedRect.getX();
+		double y = roundedRect.getY();
+		double w = roundedRect.getWidth();
+		double h = roundedRect.getHeight();
+		double rx = roundedRect.getArcWidth();
+		double ry = roundedRect.getArcHeight();
+
+		double normalizedRxSize = 36;
+		double normalizedArcSize = 36;
+		double arcSize = normalizedArcSize * rx / normalizedRxSize;
+
+		Path2D path = new Path2D.Double();
+		path.moveTo(x, y + arcSize);
+		path.lineTo(x, y + h);
+		path.lineTo(x + w / 2 - arcSize / 2 - 3, y + h);
+		path.curveTo(x + w / 2 - arcSize / 2, y + h - arcSize, x + w / 2 + arcSize / 2, y + h - arcSize, x + w / 2 + arcSize / 2 + 3, y + h);
+		path.lineTo(x + w, y + h);
+		path.lineTo(x + w, y + arcSize);
+		path.lineTo(x, y + arcSize);
+		path.closePath();
+
+		return path;
+	}
+
 	protected enum SvgElementType {
 		OTHER,
 		RECTANGLE,
@@ -217,12 +265,14 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		PARALLEL2,
 		SEQUENTIAL2,
 		HEXTENDER2,
-		VERTICAL0,
-		VERTICAL1,
 		VERTICAL2,
-		VERTICAL3,
+		IF,
+		IF_ELSE,
+		FOR,
+		WHILE,
 		PARALLEL_VEXTENDER2,
 		SEQUENTIAL_VEXTENDER2,
+		MARKER,
 		TEMPLATE,
 	}
 

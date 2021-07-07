@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CrayonScriptSequentialShape extends CrayonScriptBasicShape {
 
     public CrayonScriptSequentialShape() {
-        super(ShapeStructureType.VERTICAL2);
+        super(ShapeStructureType.SEQUENTIAL2);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class CrayonScriptSequentialShape extends CrayonScriptBasicShape {
         initialize(state);
 
         Rectangle stateRect = state.getRectangle();
-        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.SEQUENTIAL2);
+        ArrayList<SvgElement> svgElements = getSvgElements();
 
         SvgElement first = svgElements.get(0);
         SvgElement second = svgElements.get(1);

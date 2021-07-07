@@ -174,13 +174,13 @@ public class GraphEditor extends BasicGraphEditor
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION;
-		cell = graphComponent.createExtensionShape(name);
+		cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL);
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender2.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION;
-		cell = graphComponent.createExtensionShape(name);
+		cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL);
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender2.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);

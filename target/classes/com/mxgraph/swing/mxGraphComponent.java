@@ -22,6 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -45,6 +46,7 @@ import javax.swing.TransferHandler;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.canvas.mxICanvas;
+import com.mxgraph.crayonscript.shapes.CrayonScriptIShape;
 import com.mxgraph.model.*;
 import com.mxgraph.model.mxGraphModel.Filter;
 import com.mxgraph.swing.handler.mxCellHandler;
@@ -485,6 +487,8 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
     protected ArrayList<mxCell> templateCells = new ArrayList<>();
 
+    protected HashMap<mxCell, mxMarkerCellMap> templateMarkerCellMaps = new HashMap<>();
+
     /**
      * Updates the heavyweight component structure after any changes.
      */
@@ -620,12 +624,14 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                     int templateCellIndex = templateCells.indexOf(templateCell);
                     repositionTemplateCells(templateCellIndex + 1);
                 }
+                updateMarkerCell(cell, templateCell);
             }
             else if (previousTemplateCell != null)
             {
                 boolean isSecondLastTemplateCell = templateCells.indexOf(previousTemplateCell) == templateCells.size()-2;
                 boolean isSecondLastTemplateEmpty = previousTemplateCell.isEmpty();
                 boolean isLastTemplateCellEmpty = templateCells.get(templateCells.size()-1).isEmpty();
+                removeMarkerCell(cell, previousTemplateCell);
                 if (isSecondLastTemplateCell && isSecondLastTemplateEmpty && isLastTemplateCellEmpty)
                 {
                     removeTemplateCell();
@@ -2696,6 +2702,113 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         return result;
     }
 
+    public void updateMarkerCell(mxCell cell, mxCell templateCell)
+    {
+        mxMarkerCellMap markerCellMap = templateMarkerCellMaps.get(templateCell);
+        if (markerCellMap == null)
+        {
+            markerCellMap = new mxMarkerCellMap();
+            markerCellMap.markers = new HashMap<>();
+            templateMarkerCellMaps.put(templateCell, markerCellMap);
+        }
+        mxCell markerCell = markerCellMap.markers.get(cell);
+        if (markerCell == null)
+        {
+            markerCell = createMarkerShape();
+            markerCell.setValue(cell.getValue());
+            Color referenceShapeFrameColor = cell.referenceShape.getFrameColor();
+            markerCell.markerColor = referenceShapeFrameColor;
+            cell.setValue("");
+            graph.getModel().setVisible(markerCell, false);
+            mxCell markerCellParent = (mxCell) templateCell.getParent();
+            graph.getModel().add(markerCellParent, markerCell, markerCellParent.getChildCount());
+            markerCellMap.markers.put(cell, markerCell);
+        }
+        mxCell parentCell = (mxCell) cell.getParent();
+        if (parentCell.isTemplate())
+        {
+            markerCell.templateLevel = 1;
+        }
+        else
+        {
+            mxCell parentMarkerCell = markerCellMap.markers.get(parentCell);
+            markerCell.templateLevel = parentMarkerCell.templateLevel + 1;
+        }
+        int maxTemplateLevel = 0;
+        for (mxCell key: markerCellMap.markers.keySet()) {
+            mxCell value = markerCellMap.markers.get(key);
+            maxTemplateLevel = Math.max(maxTemplateLevel, value.templateLevel);
+        }
+        mxGeometry templateGeometry = templateCell.getGeometry();
+        for (mxCell mappedCell: markerCellMap.markers.keySet()) {
+            mxCell mappedMarkerCell = markerCellMap.markers.get(mappedCell);
+            int offset = (maxTemplateLevel - mappedMarkerCell.templateLevel);
+            boolean isExtender = mappedCell.referenceShape.isExtender();
+            RoundRectangle2D frameRectangle = mappedCell.getFrame(0);
+            mxGeometry extendedGeometry = mappedCell.getExtendedGeometry();
+            double extendedY = 0;
+            mxCell extendedCell = mappedCell;
+            while (extendedCell != templateCell)
+            {
+                extendedY += extendedCell.getGeometry().getY();
+                extendedCell = (mxCell) extendedCell.getParent();
+            }
+            double markerX = templateCell.getGeometry().getX();
+            double markerY = templateCell.getGeometry().getY() + (isExtender ? 0 : frameRectangle.getArcHeight()) + extendedY;
+            mappedMarkerCell.getGeometry().setWidth(30);
+            mappedMarkerCell.getGeometry().setHeight(extendedGeometry.getHeight() + (isExtender ? 0 : - frameRectangle.getArcHeight()));
+            mappedMarkerCell.getGeometry().setX(markerX - 40*(offset+1));
+            mappedMarkerCell.getGeometry().setY(markerY);
+            graph.getModel().setVisible(mappedMarkerCell, true);
+            mxCellState mappedMarkerCellState = graph.getView().getState(mappedMarkerCell, true);
+            graph.getView().invalidate(mappedMarkerCell);
+            graph.getView().updateCellState(mappedMarkerCellState);
+        }
+        graph.refresh();
+    }
+
+    public void updateMarkerCells()
+    {
+        for (mxCell templateCell: templateCells) {
+            mxMarkerCellMap markerCellMap = templateMarkerCellMaps.get(templateCell);
+            if (markerCellMap != null) {
+                for (mxCell key: markerCellMap.markers.keySet()) {
+                    updateMarkerCell(key, templateCell);
+                }
+            }
+        }
+    }
+
+    public void removeMarkerCell(mxCell cell, mxCell templateCell)
+    {
+        mxMarkerCellMap markerCellMap = templateMarkerCellMaps.get(templateCell);
+        if (markerCellMap == null)
+        {
+            markerCellMap = new mxMarkerCellMap();
+            markerCellMap.markers = new HashMap<>();
+            templateMarkerCellMaps.put(templateCell, markerCellMap);
+        }
+        mxCell markerCell = markerCellMap.markers.get(cell);
+        cell.setValue(markerCell.getValue());
+        markerCellMap.markers.remove(cell);
+        if (markerCell != null)
+        {
+            getGraph().getModel().remove(markerCell);
+        }
+    }
+
+    private void removeMarkerCells(mxCell cell, mxMarkerCellMap markerCellMap)
+    {
+        mxCell markerCell = markerCellMap.markers.get(cell);
+        graph.getView().removeState(markerCell);
+        graph.getModel().remove(markerCell);
+        for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++)
+        {
+            mxCell childCell = (mxCell) cell.getChildAt(childIndex);
+            removeMarkerCells(childCell, markerCellMap);
+        }
+    }
+
     public void repositionTemplateCells(int startIndex)
     {
         int currentIndex = startIndex;
@@ -2703,14 +2816,16 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         {
             mxCell previousTemplateCell = templateCells.get(currentIndex - 1);
             mxCell currentTemplateCell = templateCells.get(currentIndex);
-            mxGeometry lastExtendedGeometry = previousTemplateCell.getExtendedGeometry();
-            double ty = lastExtendedGeometry.getY() + lastExtendedGeometry.getHeight() - 24;
+            mxGeometry previousTemplateCellExtendedGeometry = previousTemplateCell.getExtendedGeometry();
+            double currentY = currentTemplateCell.getGeometry().getY();
+            double ty = previousTemplateCellExtendedGeometry.getY() + previousTemplateCellExtendedGeometry.getHeight() - 24;
             currentTemplateCell.getGeometry().setY(ty);
             mxCellState cellState = graph.getView().getState(currentTemplateCell, true);
             graph.getView().invalidate(currentTemplateCell);
             graph.getView().updateCellState(cellState);
             currentIndex++;
         }
+        updateMarkerCells();
         graph.refresh();
     }
 
@@ -2761,10 +2876,9 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         return cell;
     }
 
-    public mxCell createExtensionShape(String name)
+    public mxCell createExtensionShape(String name, String value)
     {
         String style = name;
-        String value = name;
         int width = 240;
         int height = 180;
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
@@ -2800,6 +2914,19 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setShape(true);
         cell.setDropTargets(DropFlag.INNER_1, DropFlag.INNER_2);
         cell.setDropSources(DropFlag.OUTER);
+        return cell;
+    }
+
+    public mxCell createMarkerShape()
+    {
+        String name = mxConstants.CRAYONSCRIPT_SHAPE_MARKER;
+        String style = name;
+        String value = name;
+        int width = 240;
+        int height = 320;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
         return cell;
     }
 
@@ -4134,6 +4261,11 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             mouseClicked(e);
         }
 
+    }
+
+    public static class mxMarkerCellMap
+    {
+        public HashMap<mxCell, mxCell> markers = new HashMap<>();
     }
 
 }

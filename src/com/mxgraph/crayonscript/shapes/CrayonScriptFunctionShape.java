@@ -24,7 +24,7 @@ public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
         initialize(state);
 
         Rectangle stateRect = state.getRectangle();
-        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.VERTICAL2);
+        ArrayList<SvgElement> svgElements = getSvgElements();
 
         SvgElement first = svgElements.get(0);
         SvgElement second = svgElements.get(1);

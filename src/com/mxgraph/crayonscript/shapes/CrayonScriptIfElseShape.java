@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CrayonScriptIfElseShape extends CrayonScriptBasicShape {
 
     public CrayonScriptIfElseShape() {
-        super(ShapeStructureType.VERTICAL3);
+        super(ShapeStructureType.IF_ELSE);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class CrayonScriptIfElseShape extends CrayonScriptBasicShape {
         initialize(state);
 
         Rectangle stateRect = state.getRectangle();
-        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.VERTICAL3);
+        ArrayList<SvgElement> svgElements = getSvgElements();
 
         SvgElement first = svgElements.get(0);
         SvgElement second = svgElements.get(1);

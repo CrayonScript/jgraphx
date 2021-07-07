@@ -9,6 +9,7 @@ import com.mxgraph.crayonscript.shapes.CrayonScriptIShape;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -108,10 +109,17 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	public transient CrayonScriptIShape referenceShape;
 
+	public transient Color markerColor;
+
 	/**
 	 * Reference to the cell that is being added to this cell.
 	 */
 	public transient Object otherCell;
+
+	/**
+	 * template level
+	 */
+	public transient int templateLevel;
 
 	/**
 	 * Constructs a new cell with an empty user object.
@@ -886,6 +894,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		clone.isHotspot = isHotspot;
 		clone.hotSpotDropFlag = hotSpotDropFlag;
 		clone.hotspotRect = hotspotRect;
+
+		clone.markerColor = markerColor;
 
 		return clone;
 	}
