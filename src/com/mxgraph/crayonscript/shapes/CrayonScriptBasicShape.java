@@ -4,6 +4,7 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
+import com.mxgraph.model.DropFlag;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxStencilShape;
 import com.mxgraph.util.mxUtils;
@@ -25,7 +26,6 @@ import java.util.logging.Logger;
 
 public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 {
-
 	public CrayonScriptBasicShape(ShapeStructureType shapeStructureType)
 	{
 		this.shapeStructureType = shapeStructureType;
@@ -60,6 +60,23 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return svgElement.fillColor;
 	}
 
+	public Color getDropFlagColor(DropFlag dropFlag)
+	{
+		ArrayList<SvgElement> svgElements = getSvgElements();
+		SvgElement svgElement = svgElements.get(dropFlag.bitIndex);
+		return svgElement.fillColor;
+	}
+
+	public Color getParentFrameColor(mxCell cell)
+	{
+		mxCell parentCell = (mxCell) cell.getParent();
+		if (parentCell == null) return null;
+		CrayonScriptIShape referenceShape = parentCell.referenceShape;
+		if (parentCell.referenceShape == null) return null;
+		Color parentFrameColor = referenceShape.getFrameColor();
+		return parentFrameColor;
+	}
+
 	public boolean isExtender() { return false; }
 
 	protected void initialize(mxCellState state)
@@ -71,6 +88,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	protected static void initialize() {
 		if (initialized) return;
 		svgElementsMap = new HashMap<>();
+		svgElementsMap.put(ShapeStructureType.ASSIGN,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Assign.svg")));
 		svgElementsMap.put(ShapeStructureType.VERTICAL2,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.svg")));
 		svgElementsMap.put(ShapeStructureType.IF,
@@ -262,6 +281,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	}
 
 	protected enum ShapeStructureType {
+		ASSIGN,
 		PARALLEL2,
 		SEQUENTIAL2,
 		HEXTENDER2,

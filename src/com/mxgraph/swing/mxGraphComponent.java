@@ -2704,6 +2704,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
     public void updateMarkerCell(mxCell cell, mxCell templateCell)
     {
+        if (!cell.isMarked()) return;
         mxMarkerCellMap markerCellMap = templateMarkerCellMaps.get(templateCell);
         if (markerCellMap == null)
         {
@@ -2781,6 +2782,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
     public void removeMarkerCell(mxCell cell, mxCell templateCell)
     {
+        if (!cell.isMarked()) return;
         mxMarkerCellMap markerCellMap = templateMarkerCellMaps.get(templateCell);
         if (markerCellMap == null)
         {
@@ -2871,6 +2873,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
         cell.setShape(true);
+        cell.setMarked(false);
         cell.setDropTargets(DropFlag.INNER_2);
         cell.setDropSources(DropFlag.INNER_1);
         return cell;

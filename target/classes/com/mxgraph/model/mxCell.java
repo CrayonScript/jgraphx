@@ -80,7 +80,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 */
 	protected boolean vertex = false, edge = false, connectable = true,
 			visible = true, collapsed = false, template = false,
-			shape = false, dropSource=false, dropTarget=false;
+			shape = false, dropSource=false, dropTarget=false, marked = true;
 
 	/**
 	 * Reference to the parent cell and source and target terminals for edges.
@@ -110,6 +110,10 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public transient CrayonScriptIShape referenceShape;
 
 	public transient Color markerColor;
+
+	public transient DropFlag snapToParentDropFlag;
+
+	public transient DropFlag[] snapToChildrenDropFlags;
 
 	/**
 	 * Reference to the cell that is being added to this cell.
@@ -308,6 +312,16 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 		thisGeometry.setX(parentSubGeometry.getX() - parentGeometry.getX() - (thisSubGeometry.getX() - thisGeometry.getX()));
 		thisGeometry.setY(parentSubGeometry.getY() - parentGeometry.getY() - (thisSubGeometry.getY() - thisGeometry.getY()));
+
+		// snap to parent drop flag
+		thisCell.snapToParentDropFlag = parentCell.hotSpotDropFlag;
+
+		if (parentCell.snapToChildrenDropFlags == null)
+		{
+			parentCell.snapToChildrenDropFlags = new DropFlag[3];
+		}
+
+		parentCell.snapToChildrenDropFlags[parentCell.hotSpotDropFlag.bitIndex] = thisCell.hotSpotDropFlag;
 	}
 
 	public RoundRectangle2D getFrame(int index)
@@ -388,6 +402,16 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public void setShape(boolean value)
 	{
 		shape = value;
+	}
+
+	public boolean isMarked()
+	{
+		return marked;
+	}
+
+	public void setMarked(boolean value)
+	{
+		marked = value;
 	}
 
 	/* (non-Javadoc)
@@ -896,6 +920,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		clone.hotspotRect = hotspotRect;
 
 		clone.markerColor = markerColor;
+		clone.marked = marked;
 
 		return clone;
 	}
