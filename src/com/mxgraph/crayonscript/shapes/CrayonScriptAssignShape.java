@@ -26,11 +26,13 @@ public class CrayonScriptAssignShape extends CrayonScriptBasicShape {
         SvgElement second = svgElements.get(1);
         SvgElement third = svgElements.get(2);
 
-        Color frameColor = getParentFrameColor((mxCell) state.getCell());
-        if (frameColor == null)
-        {
-            frameColor = getFrameColor();
-        }
+//        Color frameColor = getParentFrameColor((mxCell) state.getCell());
+//        if (frameColor == null)
+//        {
+//            frameColor = getFrameColor();
+//        }
+
+        Color frameColor = getFrameColor();
 
         Color secondColor = second.fillColor;
         Color thirdColor = third.fillColor;
