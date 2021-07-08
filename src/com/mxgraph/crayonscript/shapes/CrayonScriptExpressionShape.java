@@ -32,7 +32,7 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
 //            frameColor = getFrameColor();
 //        }
 
-        Color frameColor = getFrameColor();
+        Color frameColor = getParentFrameColor(state);
 
         Color secondColor = second.fillColor;
         Color thirdColor = third.fillColor;
@@ -46,5 +46,7 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
         paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(frameColor));
         paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(secondColor));
         paintRectangle(canvas, scaleRectangle(stateRect, first, third), getColor(thirdColor));
+
+        drawText(canvas, "==", state);
     }
 }

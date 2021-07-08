@@ -51,7 +51,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	static {
 		textStyle.put(mxConstants.STYLE_FONTFAMILY, mxConstants.DEFAULT_FONTFAMILY);
-		textStyle.put(mxConstants.STYLE_FONTSIZE, 36);
+		textStyle.put(mxConstants.STYLE_FONTSIZE, 48);
 		textStyle.put(mxConstants.STYLE_FONTSTYLE, 0);
 		textStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
 		textStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
@@ -67,6 +67,16 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	{
 		ArrayList<SvgElement> svgElements = getSvgElements();
 		return (svgElements == null) ? 0 : (svgElements.size() - 1);
+	}
+
+	public Color getParentFrameColor(mxCellState state)
+	{
+		Color frameColor = getParentFrameColor((mxCell) state.getCell());
+        if (frameColor == null)
+        {
+            frameColor = getFrameColor();
+        }
+        return frameColor;
 	}
 
 	public Color getFrameColor()
