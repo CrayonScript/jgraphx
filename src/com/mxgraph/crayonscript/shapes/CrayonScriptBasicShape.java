@@ -51,7 +51,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	static {
 		textStyle.put(mxConstants.STYLE_FONTFAMILY, mxConstants.DEFAULT_FONTFAMILY);
-		textStyle.put(mxConstants.STYLE_FONTSIZE, 48);
+		textStyle.put(mxConstants.STYLE_FONTSIZE, 30);
 		textStyle.put(mxConstants.STYLE_FONTSTYLE, 0);
 		textStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
 		textStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);

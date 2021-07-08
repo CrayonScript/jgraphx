@@ -2868,7 +2868,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
     {
         String style = name;
         String value = "";
-        int width = 400;
+        int width = 420;
         int height = 70;
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
@@ -2884,7 +2884,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
     {
         String style = name;
         String value = "";
-        int width = 400;
+        int width = 420;
         int height = 70;
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
