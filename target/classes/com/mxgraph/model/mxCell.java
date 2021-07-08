@@ -82,6 +82,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			visible = true, collapsed = false, template = false,
 			shape = false, dropSource=false, dropTarget=false, marked = true;
 
+	protected String operatorValue;
+
 	/**
 	 * Reference to the parent cell and source and target terminals for edges.
 	 */
@@ -412,6 +414,16 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public void setMarked(boolean value)
 	{
 		marked = value;
+	}
+
+	public String getOperatorValue()
+	{
+		return operatorValue;
+	}
+
+	public void setOperatorValue(String value)
+	{
+		operatorValue = value;
 	}
 
 	/* (non-Javadoc)

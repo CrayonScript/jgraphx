@@ -2864,7 +2864,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         templateCells.add(templateCell);
     }
 
-    public mxCell createExpressionShape(String name)
+    public mxCell createAssignmentShape(String name)
     {
         String style = name;
         String value = "";
@@ -2874,6 +2874,23 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setVertex(true);
         cell.setShape(true);
         cell.setMarked(false);
+        cell.setOperatorValue("=");
+        cell.setDropTargets(DropFlag.INNER_2);
+        cell.setDropSources(DropFlag.INNER_1);
+        return cell;
+    }
+
+    public mxCell createExpressionShape(String name, String operatorValue)
+    {
+        String style = name;
+        String value = "";
+        int width = 400;
+        int height = 70;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
+        cell.setMarked(false);
+        cell.setOperatorValue(operatorValue);
         cell.setDropTargets(DropFlag.INNER_2);
         cell.setDropSources(DropFlag.INNER_1);
         return cell;

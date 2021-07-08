@@ -26,12 +26,6 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
         SvgElement second = svgElements.get(1);
         SvgElement third = svgElements.get(2);
 
-//        Color frameColor = getParentFrameColor((mxCell) state.getCell());
-//        if (frameColor == null)
-//        {
-//            frameColor = getFrameColor();
-//        }
-
         Color frameColor = getParentFrameColor(state);
 
         Color secondColor = second.fillColor;
@@ -47,6 +41,6 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
         paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(secondColor));
         paintRectangle(canvas, scaleRectangle(stateRect, first, third), getColor(thirdColor));
 
-        drawText(canvas, "==", state);
+        drawText(canvas, ((mxCell) state.getCell()).getOperatorValue(), state);
     }
 }
