@@ -40,7 +40,5 @@ public class CrayonScriptAssignShape extends CrayonScriptBasicShape {
         paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(frameColor));
         paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(secondColor));
         paintRectangle(canvas, scaleRectangle(stateRect, first, third), getColor(thirdColor));
-
-        drawText(canvas, ((mxCell) state.getCell()).getOperatorValue(), state);
     }
 }
