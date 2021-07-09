@@ -79,7 +79,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 * true, true and false respectively.
 	 */
 	protected boolean vertex = false, edge = false, connectable = true,
-			visible = true, collapsed = false, template = false,
+			visible = true, collapsed = false,
 			shape = false, dropSource=false, dropTarget=false, marked = true;
 
 	protected String operatorValue;
@@ -385,14 +385,12 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		this.style = style;
 	}
 
-	public void setTemplate(boolean template) { this.template = template; }
-
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#isTemplate()
 	 */
 	public boolean isTemplate()
 	{
-		return template;
+		return cellType == CellTypeEnum.TEMPLATE;
 	}
 
 	/* (non-Javadoc)

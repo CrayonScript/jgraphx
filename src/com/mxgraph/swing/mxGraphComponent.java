@@ -2849,7 +2849,6 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         }
         Object templateParent = graph.getDefaultParent();
         mxCell templateCell = new mxCell();
-        templateCell.setTemplate(true);
         templateCell.setStyle(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE);
         templateCell.setGeometry(new mxGeometry(tx, ty, width, height));
         templateCell.setVertex(true);
