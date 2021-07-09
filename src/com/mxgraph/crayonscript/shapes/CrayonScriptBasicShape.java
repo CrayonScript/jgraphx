@@ -4,7 +4,7 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
-import com.mxgraph.model.DropFlag;
+import com.mxgraph.model.DropFlagEnum;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxDefaultTextShape;
 import com.mxgraph.shape.mxITextShape;
@@ -86,7 +86,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return svgElement.fillColor;
 	}
 
-	public Color getDropFlagColor(DropFlag dropFlag)
+	public Color getDropFlagColor(DropFlagEnum dropFlag)
 	{
 		ArrayList<SvgElement> svgElements = getSvgElements();
 		SvgElement svgElement = svgElements.get(dropFlag.bitIndex);

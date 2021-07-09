@@ -1,6 +1,6 @@
 package com.mxgraph.view;
 
-import com.mxgraph.model.DropFlag;
+import com.mxgraph.model.DropFlagEnum;
 
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
@@ -11,11 +11,11 @@ public interface mxIHighlightSource {
 
     Rectangle getHighlightBounds();
 
-    DropFlag getHighlightDropFlag();
+    DropFlagEnum getHighlightDropFlag();
 
     RoundRectangle2D getOtherHighlightRect();
 
     Rectangle getOtherHighlightBounds();
 
-    DropFlag getOtherHighlightDropFlag();
+    DropFlagEnum getOtherHighlightDropFlag();
 }

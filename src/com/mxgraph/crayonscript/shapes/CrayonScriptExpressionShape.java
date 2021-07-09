@@ -1,7 +1,7 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
-import com.mxgraph.model.DropFlag;
+import com.mxgraph.model.DropFlagEnum;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxCellState;
 
@@ -29,7 +29,7 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
 
         Color secondColor = second.fillColor;
 
-        DropFlag snapToParentDropFlag = ((mxCell) state.getCell()).snapToParentDropFlag;
+        DropFlagEnum snapToParentDropFlag = ((mxCell) state.getCell()).snapToParentDropFlag;
         if (snapToParentDropFlag != null && ((mxCell) state.getCell()).getParent().isShape())
         {
             secondColor = ((mxCell) ((mxCell) state.getCell()).getParent()).referenceShape.getDropFlagColor(snapToParentDropFlag);
