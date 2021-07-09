@@ -2891,7 +2891,6 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setShape(true);
         cell.setMarked(false);
         cell.setOperatorValue(operatorValue);
-        cell.setDropTargets(DropFlag.INNER_2);
         cell.setDropSources(DropFlag.INNER_1);
         return cell;
     }
@@ -2904,7 +2903,6 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
         cell.setShape(true);
-        cell.setDropTargets(DropFlag.INNER_2);
         cell.setDropSources(DropFlag.INNER_1);
         return cell;
     }
