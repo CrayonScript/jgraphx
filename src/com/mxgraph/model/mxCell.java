@@ -117,6 +117,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	public transient DropFlagEnum[] snapToChildrenDropFlags;
 
+	public transient CellTypeEnum cellType = CellTypeEnum.NATIVE;
+
 	/**
 	 * Reference to the cell that is being added to this cell.
 	 */
@@ -933,6 +935,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 		clone.markerColor = markerColor;
 		clone.marked = marked;
+
+		clone.cellType = cellType;
 
 		return clone;
 	}

@@ -2856,6 +2856,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         templateCell.setShape(true);
         templateCell.setDropTargets(DropFlagEnum.OUTER);
         templateCell.setDropSources();
+        templateCell.cellType = CellTypeEnum.TEMPLATE;
         graph.getModel().add(templateParent, templateCell, templateCells.size());
         mxCellState cellState = graph.getView().getState(templateCell, true);
         graph.getView().invalidate(cellState);
@@ -2876,6 +2877,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setOperatorValue("=");
         cell.setDropTargets(DropFlagEnum.INNER_2);
         cell.setDropSources(DropFlagEnum.INNER_1);
+        cell.cellType = CellTypeEnum.STATEMENT;
         return cell;
     }
 
@@ -2891,6 +2893,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setMarked(false);
         cell.setOperatorValue(operatorValue);
         cell.setDropSources(DropFlagEnum.INNER_1);
+        cell.cellType = CellTypeEnum.EXPRESSION;
         return cell;
     }
 
@@ -2903,6 +2906,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setVertex(true);
         cell.setShape(true);
         cell.setDropSources(DropFlagEnum.INNER_1);
+        cell.cellType = CellTypeEnum.BLOCK_EXTENSION;
         return cell;
     }
 
@@ -2917,6 +2921,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setShape(true);
         cell.setDropTargets(DropFlagEnum.INNER_2);
         cell.setDropSources(DropFlagEnum.OUTER);
+        cell.cellType = CellTypeEnum.BLOCK;
         return cell;
     }
 
@@ -2931,6 +2936,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setShape(true);
         cell.setDropTargets(DropFlagEnum.INNER_1, DropFlagEnum.INNER_2);
         cell.setDropSources(DropFlagEnum.OUTER);
+        cell.cellType = CellTypeEnum.BLOCK;
         return cell;
     }
 
@@ -2944,6 +2950,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
         cell.setShape(true);
+        cell.cellType = CellTypeEnum.MARKER;
         return cell;
     }
 

@@ -107,15 +107,17 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	public transient RoundRectangle2D hotspotRect;
 
-	public transient DropFlag hotSpotDropFlag;
+	public transient DropFlagEnum hotSpotDropFlag;
 
 	public transient CrayonScriptIShape referenceShape;
 
 	public transient Color markerColor;
 
-	public transient DropFlag snapToParentDropFlag;
+	public transient DropFlagEnum snapToParentDropFlag;
 
-	public transient DropFlag[] snapToChildrenDropFlags;
+	public transient DropFlagEnum[] snapToChildrenDropFlags;
+
+	public transient CellTypeEnum cellType = CellTypeEnum.NATIVE;
 
 	/**
 	 * Reference to the cell that is being added to this cell.
@@ -294,10 +296,10 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		if (otherCell == null) return;
 
 		// both are shape based
-		DropFlag parentDropFlag = parentCell.hotSpotDropFlag;
+		DropFlagEnum parentDropFlag = parentCell.hotSpotDropFlag;
 		if (parentDropFlag == null) return;
 
-		DropFlag thisDropFlag = otherCell.hotSpotDropFlag;
+		DropFlagEnum thisDropFlag = otherCell.hotSpotDropFlag;
 		if (thisDropFlag == null) return;
 
 		mxGeometry parentSubGeometry = parentCell.getSubGeometry(parentDropFlag.bitIndex);
@@ -320,7 +322,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 		if (parentCell.snapToChildrenDropFlags == null)
 		{
-			parentCell.snapToChildrenDropFlags = new DropFlag[3];
+			parentCell.snapToChildrenDropFlags = new DropFlagEnum[3];
 		}
 
 		parentCell.snapToChildrenDropFlags[parentCell.hotSpotDropFlag.bitIndex] = thisCell.hotSpotDropFlag;
@@ -435,19 +437,19 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	}
 
 	@Override
-	public DropFlag[] getDropTargetFlags() {
+	public DropFlagEnum[] getDropTargetFlags() {
 		if (dropTargetBitMask <= 0)
-			return new DropFlag[0];
-		DropFlag[] dropFlags = new DropFlag[DropFlag.values().length];
+			return new DropFlagEnum[0];
+		DropFlagEnum[] dropFlags = new DropFlagEnum[DropFlagEnum.values().length];
 		int count = 0;
-		for (DropFlag flag : DropFlag.values())
+		for (DropFlagEnum flag : DropFlagEnum.values())
 		{
 			if ((dropTargetBitMask & flag.bit) > 0)
 			{
 				dropFlags[count++] = flag;
 			}
 		}
-		DropFlag[] flags = new DropFlag[count];
+		DropFlagEnum[] flags = new DropFlagEnum[count];
 		System.arraycopy(dropFlags, 0, flags, 0, count);
 		return flags;
 	}
@@ -461,33 +463,33 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	}
 
 	@Override
-	public DropFlag[] getDropSourceFlags() {
+	public DropFlagEnum[] getDropSourceFlags() {
 		if (dropSourceBitMask <= 0)
-			return new DropFlag[0];
-		DropFlag[] dropFlags = new DropFlag[DropFlag.values().length];
+			return new DropFlagEnum[0];
+		DropFlagEnum[] dropFlags = new DropFlagEnum[DropFlagEnum.values().length];
 		int count = 0;
-		for (DropFlag flag : DropFlag.values())
+		for (DropFlagEnum flag : DropFlagEnum.values())
 		{
 			if ((dropSourceBitMask & flag.bit) > 0)
 			{
 				dropFlags[count++] = flag;
 			}
 		}
-		DropFlag[] flags = new DropFlag[count];
+		DropFlagEnum[] flags = new DropFlagEnum[count];
 		System.arraycopy(dropFlags, 0, flags, 0, count);
 		return flags;
 	}
 
-	public void setDropSources(DropFlag... dropFlags) {
+	public void setDropSources(DropFlagEnum... dropFlags) {
 		dropSourceBitMask = 0;
-		for (DropFlag dropFlag: dropFlags) {
+		for (DropFlagEnum dropFlag: dropFlags) {
 			dropSourceBitMask |= dropFlag.bit;
 		}
 	}
 
-	public void setDropTargets(DropFlag... dropFlags) {
+	public void setDropTargets(DropFlagEnum... dropFlags) {
 		dropTargetBitMask = 0;
-		for (DropFlag dropFlag: dropFlags) {
+		for (DropFlagEnum dropFlag: dropFlags) {
 			dropTargetBitMask |= dropFlag.bit;
 		}
 	}
@@ -933,6 +935,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 		clone.markerColor = markerColor;
 		clone.marked = marked;
+
+		clone.cellType = cellType;
 
 		return clone;
 	}
