@@ -100,6 +100,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	protected double boundingBoxWidth = Double.NaN, boundingBoxHeight = Double.NaN;
 
+	protected CellTypeEnum cellType = CellTypeEnum.NATIVE;
+
 	/**
 	 * Reference to the last marked hotspot
 	 */
@@ -116,8 +118,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public transient CellFrameEnum snapToParentDropFlag;
 
 	public transient CellFrameEnum[] snapToChildrenDropFlags;
-
-	public transient CellTypeEnum cellType = CellTypeEnum.NATIVE;
 
 	/**
 	 * Reference to the cell that is being added to this cell.
@@ -210,6 +210,11 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	public void setValue(Object value)
 	{
 		this.value = value;
+	}
+
+	public void setCellType(CellTypeEnum value)
+	{
+		cellType = value;
 	}
 
 	public boolean isAncestorTemplate()
