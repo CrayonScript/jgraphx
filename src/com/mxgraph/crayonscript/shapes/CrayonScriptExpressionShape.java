@@ -37,5 +37,7 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
 
         paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(frameColor));
         paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(secondColor));
+
+        drawText(canvas, ((mxCell) state.getCell()).getInitialTextValue(), state);
     }
 }

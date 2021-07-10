@@ -2873,7 +2873,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setVertex(true);
         cell.setShape(true);
         cell.setMarked(false);
-        cell.setOperatorValue("=");
+        cell.setInitialTextValue("[ ] = [ ]");
         cell.setDropTargets(DropFlagEnum.INNER_2);
         cell.setDropSources(DropFlagEnum.INNER_1);
         cell.cellType = CellTypeEnum.STATEMENT;
@@ -2890,7 +2890,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setVertex(true);
         cell.setShape(true);
         cell.setMarked(false);
-        cell.setOperatorValue(operatorValue);
+        cell.setInitialTextValue(operatorValue);
         cell.setDropSources(DropFlagEnum.INNER_1);
         cell.cellType = CellTypeEnum.EXPRESSION;
         return cell;
