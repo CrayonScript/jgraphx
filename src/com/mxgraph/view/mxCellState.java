@@ -585,12 +585,12 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
 
                 RoundRectangle2D sourceRect = CrayonScriptBasicShape.scaleRectangle(
                         sourceStateRect,
-                        sourceShape.getSvgElements().get(0),
-                        sourceShape.getSvgElements().get(dropSourceFlag.bitIndex));
+                        sourceShape.getHotspotSvgElements().get(0),
+                        sourceShape.getHotspotSvgElements().get(dropSourceFlag.bitIndex));
                 RoundRectangle2D targetRect = CrayonScriptBasicShape.scaleRectangle(
                         stateRect,
-                        targetShape.getSvgElements().get(0),
-                        targetShape.getSvgElements().get(dropTargetFlag.bitIndex));
+                        targetShape.getHotspotSvgElements().get(0),
+                        targetShape.getHotspotSvgElements().get(dropTargetFlag.bitIndex));
 
                 if (intersects(sourceRect, targetRect, hotspot, min, max))
                 {

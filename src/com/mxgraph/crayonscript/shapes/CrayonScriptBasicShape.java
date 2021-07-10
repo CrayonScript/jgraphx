@@ -43,6 +43,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
 
+	protected static Map<ShapeStructureType, ArrayList<SvgElement>> hotspotSvgElementsMap;
+
 	private static final Logger log = Logger.getLogger(mxStencilShape.class.getName());
 
 	protected static boolean initialized;
@@ -60,6 +62,12 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	public ArrayList<SvgElement> getSvgElements()
 	{
 		ArrayList<SvgElement> svgElements = svgElementsMap.get(shapeStructureType);
+		return  svgElements;
+	}
+
+	public ArrayList<SvgElement> getHotspotSvgElements()
+	{
+		ArrayList<SvgElement> svgElements = hotspotSvgElementsMap.get(shapeStructureType);
 		return  svgElements;
 	}
 
@@ -140,6 +148,31 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Marker.svg")));
 		svgElementsMap.put(ShapeStructureType.TEMPLATE,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Template.svg")));
+
+		hotspotSvgElementsMap = new HashMap<>();
+		for (Map.Entry<ShapeStructureType, ArrayList<SvgElement>> entry: svgElementsMap.entrySet()) {
+			hotspotSvgElementsMap.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+		}
+
+		// special purpose hotspot map for assign (statement) and expressions
+		SvgElement assignInner1 = hotspotSvgElementsMap.get(ShapeStructureType.ASSIGN).get(DropFlagEnum.INNER_1.bitIndex);
+		assignInner1 = assignInner1.copy();
+		assignInner1.rect.setFrame(
+				assignInner1.rect.getFrame().getX(),
+				assignInner1.rect.getFrame().getY(),
+				170,
+				assignInner1.rect.getFrame().getHeight());
+		hotspotSvgElementsMap.get(ShapeStructureType.ASSIGN).set(DropFlagEnum.INNER_1.bitIndex, assignInner1);
+
+		SvgElement expressionInner1 = hotspotSvgElementsMap.get(ShapeStructureType.HEXTENDER2).get(DropFlagEnum.INNER_1.bitIndex);
+		expressionInner1 = expressionInner1.copy();
+		expressionInner1.rect.setFrame(
+				expressionInner1.rect.getFrame().getX(),
+				expressionInner1.rect.getFrame().getY(),
+				170,
+				expressionInner1.rect.getFrame().getHeight());
+		hotspotSvgElementsMap.get(ShapeStructureType.HEXTENDER2).set(DropFlagEnum.INNER_1.bitIndex, expressionInner1);
+
 		initialized = true;
 	}
 
@@ -334,7 +367,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		TEMPLATE,
 	}
 
-	public static class SvgElement
+	public static class SvgElement implements Cloneable
 	{
 		Color fillColor = null;
 		Color strokeColor = null;
@@ -352,7 +385,34 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 			{
 				svgElementType = SvgElementType.RECTANGLE;
 			}
+		}
 
+		public SvgElement copy()
+		{
+			try
+			{
+				SvgElement copy = (SvgElement) clone();
+				return copy;
+			}
+			catch(CloneNotSupportedException e)
+			{
+				throw new IllegalStateException(e);
+			}
+		}
+
+		@Override
+		protected Object clone() throws CloneNotSupportedException {
+
+			SvgElement clone = (SvgElement) super.clone();
+			clone.fillColor = fillColor == null ? null
+					: new Color(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue(), fillColor.getAlpha());
+			clone.strokeColor = strokeColor == null ? null
+					: new Color(strokeColor.getRed(), strokeColor.getGreen(), strokeColor.getBlue(), strokeColor.getAlpha());
+			clone.rect = rect == null ? null
+					: new RoundRectangle2D.Double(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight(), rect.getArcWidth(), rect.getArcHeight());
+			clone.svgElementType = svgElementType;
+
+			return clone;
 		}
 
 		private boolean isRectangle(String tag)
@@ -394,7 +454,6 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				if (!"none".equals(stroke))  strokeColor = Color.decode("0x" + stroke.replace("#", ""));
 			}
 		}
-
 	}
 
 }

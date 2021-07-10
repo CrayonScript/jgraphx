@@ -393,6 +393,16 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return cellType == CellTypeEnum.TEMPLATE;
 	}
 
+	public boolean isExpression()
+	{
+		return cellType == CellTypeEnum.EXPRESSION;
+	}
+
+	public boolean isStatement()
+	{
+		return cellType == CellTypeEnum.STATEMENT;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#isShape()
 	 */

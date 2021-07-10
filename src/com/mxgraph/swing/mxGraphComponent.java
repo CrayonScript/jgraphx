@@ -599,7 +599,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         }
     };
 
-    protected mxIEventListener templateCellReservedHandler = new mxIEventListener() {
+    protected mxIEventListener cellsAddedHandler = new mxIEventListener() {
         @Override
         public void invoke(Object sender, mxEventObject evt) {
             Object[] cells = (Object[]) evt.getProperty("cells");
@@ -663,7 +663,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         createHandlers();
         installDoubleClickHandler();
 
-        getGraph().addListener(mxEvent.CELLS_ADDED, templateCellReservedHandler);
+        getGraph().addListener(mxEvent.CELLS_ADDED, cellsAddedHandler);
     }
 
     /**

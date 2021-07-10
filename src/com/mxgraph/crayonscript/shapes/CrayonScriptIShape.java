@@ -16,6 +16,8 @@ public interface CrayonScriptIShape extends mxIShape {
 
     ArrayList<CrayonScriptBasicShape.SvgElement> getSvgElements();
 
+    ArrayList<CrayonScriptBasicShape.SvgElement> getHotspotSvgElements();
+
     int getSubElements();
 
     Color getFrameColor();
