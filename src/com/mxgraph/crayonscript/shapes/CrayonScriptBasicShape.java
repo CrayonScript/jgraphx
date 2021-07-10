@@ -7,7 +7,6 @@ import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.DropFlagEnum;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxDefaultTextShape;
-import com.mxgraph.shape.mxITextShape;
 import com.mxgraph.shape.mxStencilShape;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxRectangle;
@@ -37,7 +36,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected ShapeStructureType shapeStructureType;
 
-	protected mxITextShape textShape = new mxDefaultTextShape();
+	protected mxDefaultTextShape textShape = new mxDefaultTextShape();
 
 	protected boolean isTemplate = false;
 
@@ -53,7 +52,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	static {
 		textStyle.put(mxConstants.STYLE_FONTFAMILY, mxConstants.DEFAULT_FONTFAMILY);
-		textStyle.put(mxConstants.STYLE_FONTSIZE, 30);
+		textStyle.put(mxConstants.STYLE_FONTSIZE, 24);
 		textStyle.put(mxConstants.STYLE_FONTSTYLE, 0);
 		textStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
 		textStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
@@ -261,7 +260,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				stateRect.getWidth(),
 				stateRect.getHeight());
 		state.setLabelBounds(rect);
-		textShape.paintShape(canvas, text, state, textStyle);
+		textShape.paintTextShape(canvas, text, state, textStyle);
 	}
 
 	protected Color getColor(Color color)
