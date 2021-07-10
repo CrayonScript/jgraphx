@@ -89,7 +89,7 @@ public interface mxICell
 	 */
 	boolean isDropTarget();
 
-	DropFlagEnum[] getDropTargetFlags();
+	CellFrameEnum[] getDropTargetFlags();
 
 	/**
 	 * Returns true if the cell is a drop source.
@@ -98,7 +98,7 @@ public interface mxICell
 	 */
 	boolean isDropSource();
 
-	DropFlagEnum[] getDropSourceFlags();
+	CellFrameEnum[] getDropSourceFlags();
 
 	/**
 	 * Returns true if the cell is a vertex.

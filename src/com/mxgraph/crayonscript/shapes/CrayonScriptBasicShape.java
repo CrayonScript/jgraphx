@@ -4,7 +4,7 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
-import com.mxgraph.model.DropFlagEnum;
+import com.mxgraph.model.CellFrameEnum;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxDefaultTextShape;
 import com.mxgraph.shape.mxStencilShape;
@@ -93,7 +93,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return svgElement.fillColor;
 	}
 
-	public Color getDropFlagColor(DropFlagEnum dropFlag)
+	public Color getDropFlagColor(CellFrameEnum dropFlag)
 	{
 		ArrayList<SvgElement> svgElements = getSvgElements();
 		SvgElement svgElement = svgElements.get(dropFlag.bitIndex);
@@ -154,23 +154,23 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		}
 
 		// special purpose hotspot map for assign (statement) and expressions
-		SvgElement assignInner1 = hotspotSvgElementsMap.get(ShapeStructureType.ASSIGN).get(DropFlagEnum.INNER_1.bitIndex);
+		SvgElement assignInner1 = hotspotSvgElementsMap.get(ShapeStructureType.ASSIGN).get(CellFrameEnum.INNER_1.bitIndex);
 		assignInner1 = assignInner1.copy();
 		assignInner1.rect.setFrame(
 				assignInner1.rect.getFrame().getX(),
 				assignInner1.rect.getFrame().getY(),
 				170,
 				assignInner1.rect.getFrame().getHeight());
-		hotspotSvgElementsMap.get(ShapeStructureType.ASSIGN).set(DropFlagEnum.INNER_1.bitIndex, assignInner1);
+		hotspotSvgElementsMap.get(ShapeStructureType.ASSIGN).set(CellFrameEnum.INNER_1.bitIndex, assignInner1);
 
-		SvgElement expressionInner1 = hotspotSvgElementsMap.get(ShapeStructureType.HEXTENDER2).get(DropFlagEnum.INNER_1.bitIndex);
+		SvgElement expressionInner1 = hotspotSvgElementsMap.get(ShapeStructureType.HEXTENDER2).get(CellFrameEnum.INNER_1.bitIndex);
 		expressionInner1 = expressionInner1.copy();
 		expressionInner1.rect.setFrame(
 				expressionInner1.rect.getFrame().getX(),
 				expressionInner1.rect.getFrame().getY(),
 				170,
 				expressionInner1.rect.getFrame().getHeight());
-		hotspotSvgElementsMap.get(ShapeStructureType.HEXTENDER2).set(DropFlagEnum.INNER_1.bitIndex, expressionInner1);
+		hotspotSvgElementsMap.get(ShapeStructureType.HEXTENDER2).set(CellFrameEnum.INNER_1.bitIndex, expressionInner1);
 
 		initialized = true;
 	}

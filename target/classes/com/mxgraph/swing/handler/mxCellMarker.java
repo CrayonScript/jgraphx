@@ -16,7 +16,7 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
 
 import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
-import com.mxgraph.model.DropFlagEnum;
+import com.mxgraph.model.CellFrameEnum;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.util.mxSwingConstants;
@@ -573,8 +573,8 @@ public class mxCellMarker extends JComponent
 
 			RoundRectangle2D roundRectangle2D = isOther ? highlightSource.getOtherHighlightRect() : highlightSource.getHighlightRect();
 
-			DropFlagEnum highlightDropFlag = isOther ? highlightSource.getOtherHighlightDropFlag() : highlightSource.getHighlightDropFlag();
-			if (highlightDropFlag == DropFlagEnum.OUTER)
+			CellFrameEnum highlightDropFlag = isOther ? highlightSource.getOtherHighlightDropFlag() : highlightSource.getHighlightDropFlag();
+			if (highlightDropFlag == CellFrameEnum.OUTER)
 			{
 				Path2D path = CrayonScriptBasicShape.getFramePath(roundRectangle2D);
 

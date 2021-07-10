@@ -1,7 +1,7 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
-import com.mxgraph.model.DropFlagEnum;
+import com.mxgraph.model.CellFrameEnum;
 import com.mxgraph.shape.mxIShape;
 import com.mxgraph.view.mxCellState;
 
@@ -22,7 +22,7 @@ public interface CrayonScriptIShape extends mxIShape {
 
     Color getFrameColor();
 
-    Color getDropFlagColor(DropFlagEnum dropFlag);
+    Color getDropFlagColor(CellFrameEnum dropFlag);
 
     boolean isExtender();
 }

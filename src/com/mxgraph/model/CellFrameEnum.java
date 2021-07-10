@@ -1,6 +1,6 @@
 package com.mxgraph.model;
 
-public enum DropFlagEnum
+public enum CellFrameEnum
 {
     OUTER(1),
     INNER_1(2),
@@ -9,7 +9,7 @@ public enum DropFlagEnum
     public int bit;
     public int bitIndex;
 
-    DropFlagEnum(int bit)
+    CellFrameEnum(int bit)
     {
         this.bit = bit;
         this.bitIndex = 0;

@@ -6,7 +6,7 @@ package com.mxgraph.view;
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
 import com.mxgraph.crayonscript.shapes.CrayonScriptIShape;
-import com.mxgraph.model.DropFlagEnum;
+import com.mxgraph.model.CellFrameEnum;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
@@ -481,7 +481,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         return roundedRect.getBounds();
     }
 
-    public DropFlagEnum getHighlightDropFlag() {
+    public CellFrameEnum getHighlightDropFlag() {
         return ((mxCell) this.cell).hotSpotDropFlag;
     }
 
@@ -506,7 +506,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
     }
 
     @Override
-    public DropFlagEnum getOtherHighlightDropFlag() {
+    public CellFrameEnum getOtherHighlightDropFlag() {
         mxCell otherCell = (mxCell) ((mxCell) cell).otherCell;
         return otherCell.hotSpotDropFlag;
     }
@@ -555,8 +555,8 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
             return false;
         }
 
-        DropFlagEnum[] dropSourceFlags = ((mxICell) otherCell).getDropSourceFlags();
-        DropFlagEnum[] dropTargetFlags = ((mxICell) cell).getDropTargetFlags();
+        CellFrameEnum[] dropSourceFlags = ((mxICell) otherCell).getDropSourceFlags();
+        CellFrameEnum[] dropTargetFlags = ((mxICell) cell).getDropTargetFlags();
 
         if ((dropTargetFlags == null || dropSourceFlags.length == 0) ||
                 (dropTargetFlags == null || dropTargetFlags.length == 0)) return false;
@@ -580,8 +580,8 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         {
             for (int targetFlagIndex = 0; targetFlagIndex < dropTargetFlags.length; targetFlagIndex++)
             {
-                DropFlagEnum dropSourceFlag = dropSourceFlags[sourceFlagIndex];
-                DropFlagEnum dropTargetFlag = dropTargetFlags[targetFlagIndex];
+                CellFrameEnum dropSourceFlag = dropSourceFlags[sourceFlagIndex];
+                CellFrameEnum dropTargetFlag = dropTargetFlags[targetFlagIndex];
 
                 RoundRectangle2D sourceRect = CrayonScriptBasicShape.scaleRectangle(
                         sourceStateRect,
