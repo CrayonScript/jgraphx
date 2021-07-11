@@ -319,8 +319,13 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		mxGeometry thisGeometry = thisCell.getGeometry();
 		if (thisGeometry == null) return;
 
-		thisGeometry.setX(parentSubGeometry.getX() - parentGeometry.getX() - (thisSubGeometry.getX() - thisGeometry.getX()));
-		thisGeometry.setY(parentSubGeometry.getY() - parentGeometry.getY() - (thisSubGeometry.getY() - thisGeometry.getY()));
+		// thisGeometry.absoluteX + thisSubGeometry.relativeX = parentGeometry.absoluteX + parentSubGeometry.relativeX
+		// => thisGeometry.absoluteX = parentGeometry.absoluteX + parentSubGeometry.relativeX - thisSubGeometry.relativeX
+		// => thisGeometry.relativeX = thisGeometry.absoluteX - parentGeometry.absoluteX
+		// => thisGeometry.relativeX = parentSubGeometry.relativeX - thisSubGeometry.relativeX
+
+		thisGeometry.setX(parentSubGeometry.getX() - thisSubGeometry.getX());
+		thisGeometry.setY(parentSubGeometry.getY() - thisSubGeometry.getY());
 
 		// snap to parent drop flag
 		thisCell.snapToParentDropFlag = parentCell.hotSpotDropFlag;
@@ -359,8 +364,13 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			}
 			CrayonScriptBasicShape.SvgElement rootElement = this.referenceShape.getSvgElements().get(0);
 			CrayonScriptBasicShape.SvgElement subElement = this.referenceShape.getSvgElements().get(subIndex);
+			RoundRectangle2D rootRect = CrayonScriptBasicShape.scaleRectangle(this.geometry.getRectangle(), rootElement, rootElement);
 			RoundRectangle2D subRect = CrayonScriptBasicShape.scaleRectangle(this.geometry.getRectangle(), rootElement, subElement);
-			mxGeometry subGeometry = new mxGeometry(subRect.getX(), subRect.getY(), subRect.getWidth(), subRect.getHeight());
+			mxGeometry subGeometry = new mxGeometry(
+					subRect.getX() - rootRect.getX(),
+					subRect.getY() - rootRect.getY(),
+					   subRect.getWidth(),
+					   subRect.getHeight());
 			return subGeometry;
 		}
 		return null;
