@@ -2,10 +2,12 @@ package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.CellFrameEnum;
+import com.mxgraph.model.mxGeometry;
 import com.mxgraph.shape.mxIShape;
 import com.mxgraph.view.mxCellState;
 
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 public interface CrayonScriptIShape extends mxIShape {
@@ -22,7 +24,9 @@ public interface CrayonScriptIShape extends mxIShape {
 
     Color getFrameColor();
 
-    Color getDropFlagColor(CellFrameEnum dropFlag);
+    Color getFrameColor(CellFrameEnum frameEnum);
+
+    RoundRectangle2D getFrame(CellFrameEnum frameEnum);
 
     boolean isExtender();
 }

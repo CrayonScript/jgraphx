@@ -93,10 +93,10 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return svgElement.fillColor;
 	}
 
-	public Color getDropFlagColor(CellFrameEnum dropFlag)
+	public Color getFrameColor(CellFrameEnum frameEnum)
 	{
 		ArrayList<SvgElement> svgElements = getSvgElements();
-		SvgElement svgElement = svgElements.get(dropFlag.bitIndex);
+		SvgElement svgElement = svgElements.get(frameEnum.bitIndex);
 		return svgElement.fillColor;
 	}
 
@@ -108,6 +108,12 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		if (parentCell.referenceShape == null) return null;
 		Color parentFrameColor = referenceShape.getFrameColor();
 		return parentFrameColor;
+	}
+
+	public RoundRectangle2D getFrame(CellFrameEnum frameEnum)
+	{
+		SvgElement svgElement = getSvgElements().get(frameEnum.bitIndex);
+		return svgElement.rect;
 	}
 
 	public boolean isExtender() { return false; }

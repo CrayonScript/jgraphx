@@ -32,7 +32,7 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
         CellFrameEnum snapToParentDropFlag = ((mxCell) state.getCell()).snapToParentDropFlag;
         if (snapToParentDropFlag != null && ((mxCell) state.getCell()).getParent().isShape())
         {
-            secondColor = ((mxCell) ((mxCell) state.getCell()).getParent()).referenceShape.getDropFlagColor(snapToParentDropFlag);
+            secondColor = ((mxCell) ((mxCell) state.getCell()).getParent()).referenceShape.getFrameColor(snapToParentDropFlag);
         }
 
         paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(frameColor));
