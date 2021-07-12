@@ -5649,7 +5649,8 @@ public class mxGraph extends mxEventSource
 				: getCellStyle(cell);
 
 		return isCellsEditable() && !isCellLocked(cell)
-				&& mxUtils.isTrue(style, mxConstants.STYLE_EDITABLE, true);
+				&& mxUtils.isTrue(style, mxConstants.STYLE_EDITABLE, true)
+				&& ((mxCell) cell).isEditable();
 	}
 
 	/**

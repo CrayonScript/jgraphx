@@ -8,6 +8,7 @@ import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
 import com.mxgraph.crayonscript.shapes.CrayonScriptIShape;
 import com.mxgraph.model.CellFrameEnum;
 import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxRectangle;
@@ -509,6 +510,16 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
     public CellFrameEnum getOtherHighlightDropFlag() {
         mxCell otherCell = (mxCell) ((mxCell) cell).otherCell;
         return otherCell.hotSpotDropFlag;
+    }
+
+    public Rectangle getCellEditorBounds()
+    {
+        Rectangle rect = getRectangle();
+        // get the editor offset
+        Point pt = ((mxCell) cell).getCellEditorOffset();
+        rect.x += pt.x;
+        rect.y += pt.y;
+        return rect;
     }
 
     public void updateHotspots(Object[] dragCells, Rectangle previewBounds, int x, int y,

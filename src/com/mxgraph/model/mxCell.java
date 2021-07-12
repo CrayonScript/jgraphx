@@ -384,6 +384,14 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		this.geometry = geometry;
 	}
 
+	public Point getCellEditorOffset()
+	{
+		if (!isEditable()) return new Point(0, 0);
+		// editable cell is always Inner_1
+		mxGeometry frameGeometry = getSubGeometry(CellFrameEnum.INNER_1.bitIndex);
+		return new Point((int) frameGeometry.getX(), (int) frameGeometry.getY());
+	}
+
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#getStyle()
 	 */
@@ -417,6 +425,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	{
 		return cellType == CellTypeEnum.STATEMENT;
 	}
+
+	public boolean isEditable() { return isStatement() || isExpression(); }
 
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#isShape()

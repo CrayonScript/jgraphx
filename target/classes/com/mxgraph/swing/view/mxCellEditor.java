@@ -3,6 +3,7 @@
  */
 package com.mxgraph.swing.view;
 
+import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
@@ -341,16 +342,19 @@ public class mxCellEditor implements mxICellEditor
 	public Rectangle getEditorBounds(mxCellState state, double scale)
 	{
 		mxIGraphModel model = state.getView().getGraph().getModel();
-		Rectangle bounds = null;
+		Rectangle bounds = state.getCellEditorBounds();
 
-		if (useLabelBounds(state))
+		if (bounds == null)
 		{
-			bounds = state.getLabelBounds().getRectangle();
-			bounds.height += 10;
-		}
-		else
-		{
-			bounds = state.getRectangle();
+			if (useLabelBounds(state))
+			{
+				bounds = state.getLabelBounds().getRectangle();
+				bounds.height += 10;
+			}
+			else
+			{
+				bounds = state.getRectangle();
+			}
 		}
 
 		// Applies the horizontal and vertical label positions
