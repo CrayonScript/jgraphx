@@ -3,7 +3,6 @@
  */
 package com.mxgraph.swing.view;
 
-import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
