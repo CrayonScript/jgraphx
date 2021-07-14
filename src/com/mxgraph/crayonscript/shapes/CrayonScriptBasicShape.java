@@ -48,14 +48,14 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected static boolean initialized;
 
-	protected static HashMap<String, Object> textStyle = new HashMap<String, Object>();
+	public static HashMap<String, Object> TEXT_STYLE = new HashMap<String, Object>();
 
 	static {
-		textStyle.put(mxConstants.STYLE_FONTFAMILY, mxConstants.DEFAULT_FONTFAMILY);
-		textStyle.put(mxConstants.STYLE_FONTSIZE, 24);
-		textStyle.put(mxConstants.STYLE_FONTSTYLE, 0);
-		textStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
-		textStyle.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+		TEXT_STYLE.put(mxConstants.STYLE_FONTFAMILY, mxConstants.DEFAULT_FONTFAMILY);
+		TEXT_STYLE.put(mxConstants.STYLE_FONTSIZE, 24);
+		TEXT_STYLE.put(mxConstants.STYLE_FONTSTYLE, 0);
+		TEXT_STYLE.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+		TEXT_STYLE.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
 	};
 
 	public ArrayList<SvgElement> getSvgElements()
@@ -266,7 +266,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				stateRect.getWidth(),
 				stateRect.getHeight());
 		state.setLabelBounds(rect);
-		textShape.paintTextShape(canvas, text, state, textStyle);
+		textShape.paintTextShape(canvas, text, state, TEXT_STYLE);
 	}
 
 	protected Color getColor(Color color)

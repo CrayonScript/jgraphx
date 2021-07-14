@@ -3,6 +3,7 @@
  */
 package com.mxgraph.swing.view;
 
+import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
@@ -11,16 +12,14 @@ import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxCellState;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.StyledDocument;
+import javax.swing.text.*;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.HTMLWriter;
 import javax.swing.text.html.MinimalHTMLWriter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.EventObject;
@@ -60,7 +59,7 @@ public class mxCellEditor implements mxICellEditor
 	/**
 	 * 
 	 */
-	public static double DEFAULT_MINIMUM_EDITOR_SCALE = 1;
+	public static double DEFAULT_MINIMUM_EDITOR_SCALE = 0.3;
 
 	/**
 	 * 
@@ -101,7 +100,7 @@ public class mxCellEditor implements mxICellEditor
 	/**
 	 * Holds the editor for plain text editing.
 	 */
-	protected transient JTextArea textArea;
+	protected transient JTextField editorField;
 
 	/**
 	 * Holds the editor for HTML editing.
@@ -183,9 +182,9 @@ public class mxCellEditor implements mxICellEditor
 		this.graphComponent = graphComponent;
 
 		// Creates the plain text editor
-		textArea = new JTextArea();
-		textArea.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-		textArea.setOpaque(false);
+		editorField = new JTextField();
+		editorField.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		editorField.setOpaque(false);
 
 		// Creates the HTML editor
 		editorPane = new JEditorPane();
@@ -207,13 +206,15 @@ public class mxCellEditor implements mxICellEditor
 
 		// Installs custom actions
 		editorPane.getActionMap().put(CANCEL_EDITING, cancelEditingAction);
-		textArea.getActionMap().put(CANCEL_EDITING, cancelEditingAction);
+		editorField.getActionMap().put(CANCEL_EDITING, cancelEditingAction);
 		editorPane.getActionMap().put(SUBMIT_TEXT, textSubmitAction);
-		textArea.getActionMap().put(SUBMIT_TEXT, textSubmitAction);
+		editorField.getActionMap().put(SUBMIT_TEXT, textSubmitAction);
 
 		// Remembers the action map key for the enter keystroke
 		editorEnterActionMapKey = editorPane.getInputMap().get(enterKeystroke);
 		textEnterActionMapKey = editorPane.getInputMap().get(enterKeystroke);
+
+		editorField.setCaret(new mxCellEditorCaret());
 	}
 
 	/**
@@ -271,7 +272,7 @@ public class mxCellEditor implements mxICellEditor
 	protected void configureActionMaps()
 	{
 		InputMap editorInputMap = editorPane.getInputMap();
-		InputMap textInputMap = textArea.getInputMap();
+		InputMap textInputMap = editorField.getInputMap();
 
 		// Adds handling for the escape key to cancel editing
 		editorInputMap.put(escapeKeystroke, cancelEditingAction);
@@ -309,9 +310,9 @@ public class mxCellEditor implements mxICellEditor
 	 */
 	public Component getEditor()
 	{
-		if (textArea.getParent() != null)
+		if (editorField.getParent() != null)
 		{
-			return textArea;
+			return editorField;
 		}
 		else if (editingCell != null)
 		{
@@ -444,14 +445,13 @@ public class mxCellEditor implements mxICellEditor
 			}
 			else
 			{
-				textArea.setFont(mxUtils.getFont(state.getStyle(), scale));
-				Color fontColor = mxUtils.getColor(state.getStyle(),
-						mxConstants.STYLE_FONTCOLOR, Color.black);
-				textArea.setForeground(fontColor);
-				textArea.setText(value);
+				editorField.setFont(mxUtils.getFont(CrayonScriptBasicShape.TEXT_STYLE, scale));
+				Color fontColor = Color.black;
+				editorField.setForeground(fontColor);
+				editorField.setText(value);
 
-				scrollPane.setViewportView(textArea);
-				currentEditor = textArea;
+				scrollPane.setViewportView(editorField);
+				currentEditor = editorField;
 			}
 
 			graphComponent.getGraphControl().add(scrollPane, 0);
@@ -527,9 +527,9 @@ public class mxCellEditor implements mxICellEditor
 	{
 		String result;
 
-		if (textArea.getParent() != null)
+		if (editorField.getParent() != null)
 		{
-			result = textArea.getText();
+			result = editorField.getText();
 		}
 		else
 		{
@@ -652,5 +652,73 @@ public class mxCellEditor implements mxICellEditor
 			super.setLineLength(l);
 		}
 	}
+
+	public class mxCellEditorCaret extends DefaultCaret
+    {
+        private String mark = "|";
+
+        public mxCellEditorCaret()
+        {
+            setBlinkRate(500);
+        }
+
+        @Override
+        protected synchronized void damage(Rectangle r) {
+            updatePosition(r);
+            updateDimensions();
+            repaint();
+        }
+
+        @Override
+        public void paint(Graphics g) {
+            Rectangle r = getRepaintRect();
+            if (r != null)
+            {
+                repaint();
+                damage(r);
+            }
+            if (isVisible())
+            {
+                FontMetrics fm = getFontMetrics();
+                updateDimensions();
+                g.setColor(getComponent().getCaretColor());
+                g.drawString(mark, getBounds().x, getBounds().y + fm.getAscent());
+            }
+        }
+
+        private Rectangle getRepaintRect()
+        {
+            try {
+                Rectangle2D r2d = getComponent().modelToView2D(getDot());
+                Rectangle r = r2d.getBounds();
+                if (x != r.x || y != r.y)
+                {
+                    return r;
+                }
+            }
+            catch(BadLocationException e) {
+            }
+            return null;
+        }
+
+        private FontMetrics getFontMetrics()
+        {
+            FontMetrics fm = getComponent().getFontMetrics(getComponent().getFont());
+            return fm;
+        }
+
+        private void updateDimensions()
+        {
+            FontMetrics fm = getFontMetrics();
+            width = fm.stringWidth(mark);
+            height = fm.getHeight();
+        }
+
+        private void updatePosition(Rectangle r)
+        {
+            x = r.x;
+            y = r.y;
+        }
+    }
 
 }

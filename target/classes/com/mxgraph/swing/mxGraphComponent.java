@@ -2867,13 +2867,13 @@ public class mxGraphComponent extends JScrollPane implements Printable {
     {
         String style = name;
         String value = "";
-        int width = 420;
+        int width = 421;
         int height = 70;
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
         cell.setShape(true);
         cell.setMarked(false);
-        cell.setInitialTextValue("[ ] = [ ]");
+        cell.setInitialTextValue("[  ] = [  ]");
         cell.setDropSources(CellFrameEnum.INNER_1);
         cell.setCellType(CellTypeEnum.STATEMENT);
         return cell;
