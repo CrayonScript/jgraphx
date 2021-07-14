@@ -82,7 +82,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			visible = true, collapsed = false,
 			shape = false, dropSource=false, dropTarget=false, marked = true;
 
-	protected String textValue;
+	protected String text;
 
 	/**
 	 * Reference to the parent cell and source and target terminals for edges.
@@ -384,12 +384,12 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		this.geometry = geometry;
 	}
 
-	public Point getCellEditorOffset()
+	public Rectangle getCellEditorBounds()
 	{
-		if (!isEditable()) return new Point(0, 0);
+		if (!isEditable()) return null;
 		// editable cell is always Inner_1
 		mxGeometry frameGeometry = getSubGeometry(CellFrameEnum.INNER_1.bitIndex);
-		return new Point((int) frameGeometry.getX(), (int) frameGeometry.getY());
+		return frameGeometry.getRectangle();
 	}
 
 	/* (non-Javadoc)
@@ -451,14 +451,14 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		marked = value;
 	}
 
-	public String getTextValue()
+	public String getText()
 	{
-		return textValue;
+		return text;
 	}
 
-	public void setTextValue(String value)
+	public void setText(String value)
 	{
-		textValue = value;
+		text = value;
 	}
 
 	/* (non-Javadoc)

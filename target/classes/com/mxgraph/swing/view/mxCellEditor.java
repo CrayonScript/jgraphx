@@ -183,6 +183,7 @@ public class mxCellEditor implements mxICellEditor
 
 		// Creates the plain text editor
 		editorField = new JTextField();
+		editorField.setHorizontalAlignment(JTextField.CENTER);
 		editorField.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		editorField.setOpaque(false);
 
@@ -342,7 +343,7 @@ public class mxCellEditor implements mxICellEditor
 	public Rectangle getEditorBounds(mxCellState state, double scale)
 	{
 		mxIGraphModel model = state.getView().getGraph().getModel();
-		Rectangle bounds = state.getCellEditorBounds();
+		Rectangle bounds = state.getEditorBounds();
 		if (bounds != null)
 		{
 			return bounds;
@@ -416,10 +417,14 @@ public class mxCellEditor implements mxICellEditor
 
 			double scale = Math.max(minimumEditorScale, graphComponent
 					.getGraph().getView().getScale());
-			scrollPane.setBounds(getEditorBounds(state, scale));
+			Rectangle editorBounds = getEditorBounds(state, scale);
+			editorBounds.y += editorBounds.height;
+			scrollPane.setBounds(editorBounds);
 			scrollPane.setVisible(true);
+			scrollPane.setOpaque(true);
+			scrollPane.getViewport().setOpaque(true);
 
-			String value = getInitialValue(state, evt);
+			String value = state.getCellText();
 			JTextComponent currentEditor = null;
 
 			// Configures the style of the in-place editor
@@ -717,8 +722,11 @@ public class mxCellEditor implements mxICellEditor
 
         private void updatePosition(Rectangle r)
         {
-            x = r.x;
-            y = r.y;
+            if (r != null)
+			{
+				x = r.x;
+				y = r.y;
+			}
         }
     }
 
