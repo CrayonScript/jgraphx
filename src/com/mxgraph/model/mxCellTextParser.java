@@ -32,6 +32,11 @@ public class mxCellTextParser implements Serializable
         text = value;
     }
 
+    public boolean canDeleteCharAt(int location)
+    {
+        return false;
+    }
+
     protected void parseTokenTree()
     {
         // tokenize the text

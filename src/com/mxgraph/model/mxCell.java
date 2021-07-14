@@ -462,6 +462,11 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		cellTextParser.setText(value);
 	}
 
+	public mxCellTextParser getCellTextParser()
+	{
+		return cellTextParser;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#isDropTarget()
 	 */

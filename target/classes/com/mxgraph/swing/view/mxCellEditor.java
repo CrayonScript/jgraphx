@@ -4,6 +4,7 @@
 package com.mxgraph.swing.view;
 
 import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
+import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
@@ -19,6 +20,9 @@ import javax.swing.text.html.HTMLWriter;
 import javax.swing.text.html.MinimalHTMLWriter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.Writer;
@@ -151,6 +155,11 @@ public class mxCellEditor implements mxICellEditor
 	 */
 	transient KeyStroke shiftEnterKeystroke = KeyStroke
 			.getKeyStroke("shift ENTER");
+
+	/**
+	 *
+	 */
+	transient mxCellEditorKeyListener currentEditorKeyListener = null;
 
 	/**
 	 * 
@@ -473,6 +482,8 @@ public class mxCellEditor implements mxICellEditor
 			currentEditor.select(0, 2);
 			currentEditor.getCaret().setVisible(false);
 
+			currentEditor.addKeyListener(new mxCellEditorKeyListener(editingCell));
+
 			configureActionMaps();
 		}
 	}
@@ -493,6 +504,13 @@ public class mxCellEditor implements mxICellEditor
 	{
 		if (editingCell != null)
 		{
+			JTextComponent currentEditor = getCurrentEditor(editingCell);
+			if (currentEditor != null && currentEditorKeyListener != null)
+			{
+				currentEditorKeyListener.reset();
+				currentEditor.removeKeyListener(currentEditorKeyListener);
+			}
+
 			scrollPane.transferFocusUpCycle();
 			Object cell = editingCell;
 			editingCell = null;
@@ -518,6 +536,13 @@ public class mxCellEditor implements mxICellEditor
 
 			graphComponent.requestFocusInWindow();
 		}
+	}
+
+	public JTextComponent getCurrentEditor(Object cell)
+	{
+		JTextComponent currentEditor = graphComponent.getGraph().isHtmlLabel(cell) ?
+				editorPane : editorField;
+		return currentEditor;
 	}
 
 	/**
@@ -661,7 +686,7 @@ public class mxCellEditor implements mxICellEditor
 		}
 	}
 
-	public class mxCellEditorCaret extends DefaultCaret
+	static class mxCellEditorCaret extends DefaultCaret
     {
         private String mark = "|";
 
@@ -739,4 +764,29 @@ public class mxCellEditor implements mxICellEditor
         }
     }
 
+    static class mxCellEditorKeyListener extends KeyAdapter
+	{
+		private mxCell editingCell;
+
+		mxCellEditorKeyListener(Object value)
+		{
+			editingCell = (mxCell) value;
+		}
+
+		void reset()
+		{
+			editingCell = null;
+		}
+
+		public void keyPressed(KeyEvent e)
+		{
+			if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
+			{
+				int keyLocation = e.getKeyLocation();
+				if (!editingCell.getCellTextParser().canDeleteCharAt(keyLocation))
+				{
+				}
+			}
+		}
+	}
 }
