@@ -82,7 +82,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			visible = true, collapsed = false,
 			shape = false, dropSource=false, dropTarget=false, marked = true;
 
-	protected String initialTextValue;
+	protected String textValue;
 
 	/**
 	 * Reference to the parent cell and source and target terminals for edges.
@@ -451,14 +451,14 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		marked = value;
 	}
 
-	public String getInitialTextValue()
+	public String getTextValue()
 	{
-		return initialTextValue;
+		return textValue;
 	}
 
-	public void setInitialTextValue(String value)
+	public void setTextValue(String value)
 	{
-		initialTextValue = value;
+		textValue = value;
 	}
 
 	/* (non-Javadoc)
