@@ -343,18 +343,19 @@ public class mxCellEditor implements mxICellEditor
 	{
 		mxIGraphModel model = state.getView().getGraph().getModel();
 		Rectangle bounds = state.getCellEditorBounds();
-
-		if (bounds == null)
+		if (bounds != null)
 		{
-			if (useLabelBounds(state))
-			{
-				bounds = state.getLabelBounds().getRectangle();
-				bounds.height += 10;
-			}
-			else
-			{
-				bounds = state.getRectangle();
-			}
+			return bounds;
+		}
+
+		if (useLabelBounds(state))
+		{
+			bounds = state.getLabelBounds().getRectangle();
+			bounds.height += 10;
+		}
+		else
+		{
+			bounds = state.getRectangle();
 		}
 
 		// Applies the horizontal and vertical label positions
