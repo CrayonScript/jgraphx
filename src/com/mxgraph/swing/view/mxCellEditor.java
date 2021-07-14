@@ -26,6 +26,7 @@ import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.EventObject;
 
 /**
@@ -194,6 +195,8 @@ public class mxCellEditor implements mxICellEditor
 		editorField = new JTextField();
 		editorField.setHorizontalAlignment(JTextField.CENTER);
 		editorField.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		editorField.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		editorField.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		editorField.setOpaque(false);
 
 		// Creates the HTML editor
@@ -780,11 +783,47 @@ public class mxCellEditor implements mxICellEditor
 
 		public void keyPressed(KeyEvent e)
 		{
+			switch (e.getKeyCode())
+			{
+				case KeyEvent.VK_BACK_SPACE:
+					backSpacePressed(e);
+					break;
+				case KeyEvent.VK_TAB:
+					tabPressed(e);
+					break;
+				default:
+					// not supported yet
+					break;
+			}
+		}
+
+		private void backSpacePressed(KeyEvent e)
+		{
 			if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
 			{
 				int keyLocation = e.getKeyLocation();
-				if (!editingCell.getCellTextParser().canDeleteCharAt(keyLocation))
+				if (!editingCell.getCellTextParser().canDeleteCharAtLocation(keyLocation))
 				{
+					e.consume();
+				}
+			}
+		}
+
+		private void tabPressed(KeyEvent e)
+		{
+			if (e.getKeyCode() == KeyEvent.VK_TAB)
+			{
+				int keyLocation = e.getKeyLocation();
+				// this could cycle
+				int nextTabLocation = editingCell.getCellTextParser().getNextTabFromLocation(keyLocation);
+				if (nextTabLocation >= 0)
+				{
+					Point nextSelection = editingCell.getCellTextParser().getSelectionAtLocation(nextTabLocation);
+					if (nextSelection != null)
+					{
+						((JTextComponent) e.getComponent()).select(nextSelection.x, nextSelection.y);
+						e.consume();
+					}
 				}
 			}
 		}

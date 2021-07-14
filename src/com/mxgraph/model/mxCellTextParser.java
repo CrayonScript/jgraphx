@@ -1,5 +1,6 @@
 package com.mxgraph.model;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.StringTokenizer;
 
@@ -32,9 +33,19 @@ public class mxCellTextParser implements Serializable
         text = value;
     }
 
-    public boolean canDeleteCharAt(int location)
+    public boolean canDeleteCharAtLocation(int location)
     {
         return false;
+    }
+
+    public int getNextTabFromLocation(int location)
+    {
+        return 5;
+    }
+
+    public Point getSelectionAtLocation(int location)
+    {
+        return new Point(location, location+2);
     }
 
     protected void parseTokenTree()
