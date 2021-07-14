@@ -469,7 +469,9 @@ public class mxCellEditor implements mxICellEditor
 
 			currentEditor.revalidate();
 			currentEditor.requestFocusInWindow();
-			currentEditor.selectAll();
+
+			currentEditor.select(0, 2);
+			currentEditor.getCaret().setVisible(false);
 
 			configureActionMaps();
 		}
@@ -668,7 +670,14 @@ public class mxCellEditor implements mxICellEditor
             setBlinkRate(500);
         }
 
-        @Override
+		@Override
+		public void setVisible(boolean e) {
+			if (e) { mark = "|"; } else { mark = ""; }
+			updateDimensions();
+			repaint();
+		}
+
+		@Override
         protected synchronized void damage(Rectangle r) {
             updatePosition(r);
             updateDimensions();

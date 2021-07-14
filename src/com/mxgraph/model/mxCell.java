@@ -82,7 +82,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			visible = true, collapsed = false,
 			shape = false, dropSource=false, dropTarget=false, marked = true;
 
-	protected String text;
+	protected mxCellTextParser cellTextParser;
 
 	/**
 	 * Reference to the parent cell and source and target terminals for edges.
@@ -178,6 +178,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 		this.boundingBoxWidth = boundingBoxWidth;
 		this.boundingBoxHeight = boundingBoxHeight;
+		this.cellTextParser = new mxCellTextParser();
 	}
 
 	/* (non-Javadoc)
@@ -453,12 +454,12 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	public String getText()
 	{
-		return text;
+		return cellTextParser.getText();
 	}
 
 	public void setText(String value)
 	{
-		text = value;
+		cellTextParser.setText(value);
 	}
 
 	/* (non-Javadoc)
