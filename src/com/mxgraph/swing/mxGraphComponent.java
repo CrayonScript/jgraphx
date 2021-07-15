@@ -2879,7 +2879,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         return cell;
     }
 
-    public mxCell createExpressionShape(String name, String operatorValue)
+    public mxCell createExpressionShape(String name, String initialText)
     {
         String style = name;
         String value = "";
@@ -2889,7 +2889,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setVertex(true);
         cell.setShape(true);
         cell.setMarked(false);
-        cell.setText(operatorValue);
+        cell.setText(initialText);
         cell.setDropSources(CellFrameEnum.INNER_1);
         cell.setCellType(CellTypeEnum.EXPRESSION);
         return cell;
