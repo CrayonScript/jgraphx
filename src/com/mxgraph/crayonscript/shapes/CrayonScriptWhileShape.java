@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptWhileShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptWhileShape() {
-        super(ShapeStructureType.WHILE);
+    public CrayonScriptWhileShape(String shapeName) {
+        super(ShapeStructureType.WHILE, shapeName);
     }
 
     @Override

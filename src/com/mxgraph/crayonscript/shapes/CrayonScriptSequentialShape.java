@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptSequentialShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptSequentialShape() {
-        super(ShapeStructureType.SEQUENTIAL2);
+    public CrayonScriptSequentialShape(String shapeName) {
+        super(ShapeStructureType.SEQUENTIAL2, shapeName);
     }
 
     @Override

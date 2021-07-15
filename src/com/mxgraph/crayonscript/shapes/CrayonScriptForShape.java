@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptForShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptForShape() {
-        super(ShapeStructureType.FOR);
+    public CrayonScriptForShape(String shapeName) {
+        super(ShapeStructureType.FOR, shapeName);
     }
 
     @Override

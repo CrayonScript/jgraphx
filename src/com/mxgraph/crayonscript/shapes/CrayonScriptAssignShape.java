@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptAssignShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptAssignShape() {
-        super(ShapeStructureType.ASSIGN);
+    public CrayonScriptAssignShape(String shapeName) {
+        super(ShapeStructureType.ASSIGN, shapeName);
     }
 
     @Override

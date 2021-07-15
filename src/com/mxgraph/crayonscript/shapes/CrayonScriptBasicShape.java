@@ -29,10 +29,13 @@ import java.util.logging.Logger;
 
 public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 {
-	public CrayonScriptBasicShape(ShapeStructureType shapeStructureType)
+	public CrayonScriptBasicShape(ShapeStructureType shapeStructureType, String shapeName)
 	{
 		this.shapeStructureType = shapeStructureType;
+		this.shapeName = shapeName;
 	}
+
+	protected String shapeName;
 
 	protected ShapeStructureType shapeStructureType;
 

@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptExpressionShape() {
-        super(ShapeStructureType.HEXTENDER2);
+    public CrayonScriptExpressionShape(String shapeName) {
+        super(ShapeStructureType.HEXTENDER2, shapeName);
     }
 
     @Override

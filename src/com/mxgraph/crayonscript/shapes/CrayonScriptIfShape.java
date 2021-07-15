@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptIfShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptIfShape() {
-        super(ShapeStructureType.IF);
+    public CrayonScriptIfShape(String shapeName) {
+        super(ShapeStructureType.IF, shapeName);
     }
 
     @Override

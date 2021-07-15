@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptElseIfShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptElseIfShape() {
-        super(ShapeStructureType.ELSE_IF);
+    public CrayonScriptElseIfShape(String shapeName) {
+        super(ShapeStructureType.ELSE_IF, shapeName);
     }
 
     @Override

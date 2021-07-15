@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptGraphMainShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptGraphMainShape() {
-        super(ShapeStructureType.VERTICAL2);
+    public CrayonScriptGraphMainShape(String shapeName) {
+        super(ShapeStructureType.VERTICAL2, shapeName);
     }
 
     @Override

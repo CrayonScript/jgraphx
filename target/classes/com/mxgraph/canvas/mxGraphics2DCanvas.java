@@ -71,37 +71,85 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 	 */
 	static
 	{
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION, new CrayonScriptParallelVExtenderShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION, new CrayonScriptSequentialVExtenderShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN, new CrayonScriptAssignShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_EQUALS, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_NOTEQUALS, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_GT, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_GT_OR_EQUALS, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_LT, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_LT_OR_EQUALS, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_AND, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_OR, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_NOT, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_MOD, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_MIN, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_MAX, new CrayonScriptExpressionShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL, new CrayonScriptParallelShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL, new CrayonScriptSequentialShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_IF, new CrayonScriptIfShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_ELSE_IF, new CrayonScriptElseIfShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_WHILE, new CrayonScriptWhileShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_FOR, new CrayonScriptForShape());
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_MARKER, new CrayonScriptMarkerShape());
+		String shapeName = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION;
+		putShape(shapeName, new CrayonScriptParallelVExtenderShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION;
+		putShape(shapeName, new CrayonScriptSequentialVExtenderShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN;
+		putShape(shapeName, new CrayonScriptAssignShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_EQUALS;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_NOTEQUALS;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_GT;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_GT_OR_EQUALS;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_LT;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_LT_OR_EQUALS;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_AND;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_OR;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_NOT;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_MOD;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_MIN;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_MAX;
+		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL;
+		putShape(shapeName, new CrayonScriptParallelShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL;
+		putShape(shapeName, new CrayonScriptSequentialShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_IF;
+		putShape(shapeName, new CrayonScriptIfShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_ELSE_IF;
+		putShape(shapeName, new CrayonScriptElseIfShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_WHILE;
+		putShape(shapeName, new CrayonScriptWhileShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_FOR;
+		putShape(shapeName, new CrayonScriptForShape(shapeName));
+
+		shapeName =mxConstants.CRAYONSCRIPT_SHAPE_MARKER;
+		putShape(shapeName, new CrayonScriptMarkerShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_EVENT_ON_LOAD;
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_EVENT_ON_LOAD, new CrayonScriptOnEventShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_GRAPH_MAIN;
+		putShape(shapeName, new CrayonScriptGraphMainShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE;
+		putShape(shapeName, new CrayonScriptGraphTemplateShape(shapeName));
+
+		shapeName = mxConstants.SHAPE_CONNECTOR;
+		putShape(shapeName, new mxConnectorShape());
 
 		putTextShape(TEXT_SHAPE_DEFAULT, new mxDefaultTextShape());
-
-//		putShape(mxConstants.CRAYONSCRIPT_SHAPE_EVENT_ON_LOAD, new CrayonScriptOnEventShape());
-
-//		putShape(mxConstants.CRAYONSCRIPT_SHAPE_GRAPH_MAIN, new CrayonScriptGraphMainShape());
-
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE, new CrayonScriptGraphTemplateShape());
-		putShape(mxConstants.SHAPE_CONNECTOR, new mxConnectorShape());
 	}
 
 	/**

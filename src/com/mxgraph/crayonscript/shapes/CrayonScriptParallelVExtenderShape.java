@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptParallelVExtenderShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptParallelVExtenderShape() {
-        super(ShapeStructureType.PARALLEL_VEXTENDER2);
+    public CrayonScriptParallelVExtenderShape(String shapeName) {
+        super(ShapeStructureType.PARALLEL_VEXTENDER2, shapeName);
     }
 
     public boolean isExtender() { return true; }

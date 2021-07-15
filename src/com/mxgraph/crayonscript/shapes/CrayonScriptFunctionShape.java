@@ -13,7 +13,7 @@ public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
     private int argCount;
 
     public CrayonScriptFunctionShape(String name, int argCount) {
-        super(ShapeStructureType.VERTICAL2);
+        super(ShapeStructureType.VERTICAL2, null);
         this.name = name;
         this.argCount = argCount;
     }

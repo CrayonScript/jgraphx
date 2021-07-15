@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptMarkerShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptMarkerShape() {
-        super(ShapeStructureType.MARKER);
+    public CrayonScriptMarkerShape(String shapeName) {
+        super(ShapeStructureType.MARKER, shapeName);
     }
 
     @Override

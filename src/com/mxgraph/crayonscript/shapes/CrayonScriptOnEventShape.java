@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptOnEventShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptOnEventShape() {
-        super(ShapeStructureType.VERTICAL2);
+    public CrayonScriptOnEventShape(String shapeName) {
+        super(ShapeStructureType.VERTICAL2, shapeName);
     }
 
     @Override

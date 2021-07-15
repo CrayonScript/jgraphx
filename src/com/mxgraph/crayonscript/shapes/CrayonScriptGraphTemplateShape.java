@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class CrayonScriptGraphTemplateShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptGraphTemplateShape() {
-        super(ShapeStructureType.TEMPLATE);
+    public CrayonScriptGraphTemplateShape(String shapeName) {
+        super(ShapeStructureType.TEMPLATE, shapeName);
     }
 
     @Override
