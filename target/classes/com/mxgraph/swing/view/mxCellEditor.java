@@ -483,7 +483,6 @@ public class mxCellEditor implements mxICellEditor
 			currentEditor.requestFocusInWindow();
 
 			currentEditor.select(0, 2);
-			currentEditor.getCaret().setVisible(false);
 
 			currentEditor.addKeyListener(new mxCellEditorKeyListener(editingCell));
 
@@ -522,7 +521,8 @@ public class mxCellEditor implements mxICellEditor
 			{
 				EventObject trig = trigger;
 				trigger = null;
-				graphComponent.labelChanged(cell, getCurrentValue(), trig);
+				// Editor changes shouldn't trigger label changes
+				// graphComponent.labelChanged(cell, getCurrentValue(), trig);
 			}
 			else
 			{
@@ -804,7 +804,7 @@ public class mxCellEditor implements mxICellEditor
 				int keyLocation = e.getKeyLocation();
 				if (!editingCell.getCellTextParser().canDeleteCharAtLocation(keyLocation))
 				{
-					e.consume();
+					//e.consume();
 				}
 			}
 		}
