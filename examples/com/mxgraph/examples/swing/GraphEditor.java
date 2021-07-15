@@ -27,6 +27,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.List;
@@ -95,80 +96,82 @@ public class GraphEditor extends BasicGraphEditor
 
 		});
 
+		String variableSymbol = "[]";
+
 		String name = mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN;
-		mxCell cell = graphComponent.createAssignmentShape(name);
+		mxCell cell = graphComponent.createAssignmentShape(name, MessageFormat.format("{0} = {1}", variableSymbol, variableSymbol));
 		URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Assign.png");
 		ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_EQUALS;
-		cell = graphComponent.createExpressionShape(name, "( [ ] == [ ] )");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} == {1} )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Equals.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_NOTEQUALS;
-		cell = graphComponent.createExpressionShape(name, "( [ ] != [ ] )");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} != {1} )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/NotEquals.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_GT;
-		cell = graphComponent.createExpressionShape(name, "( [ ] > [ ] )");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} > {1} )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThan.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_GT_OR_EQUALS;
-		cell = graphComponent.createExpressionShape(name, "( [ ] >= [ ] )");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} >= {1} )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThanOrEquals.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_LT;
-		cell = graphComponent.createExpressionShape(name, "( [ ] < [ ] )");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} < {1} )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThan.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_LT_OR_EQUALS;
-		cell = graphComponent.createExpressionShape(name, "( [ ] <= [ ] )");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} <= {1} )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThanOrEquals.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_AND;
-		cell = graphComponent.createExpressionShape(name, "( [ ] and [ ] )");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} and {1} )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/And.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_OR;
-		cell = graphComponent.createExpressionShape(name, "( [ ] or [ ] )");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} or {1} )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Or.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_NOT;
-		cell = graphComponent.createExpressionShape(name, "( not [ ] )");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( not {0} )", variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Not.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_MOD;
-		cell = graphComponent.createExpressionShape(name, "[ ] mod [ ]");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} mod {1} )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Mod.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_MIN;
-		cell = graphComponent.createExpressionShape(name, "min([ ], [ ])");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( min({0}, {1}) )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Min.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
 		name = mxConstants.CRAYONSCRIPT_SHAPE_MAX;
-		cell = graphComponent.createExpressionShape(name, "max([ ], [ ])");
+		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( max({0}, {1}) )", variableSymbol, variableSymbol));
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Max.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
