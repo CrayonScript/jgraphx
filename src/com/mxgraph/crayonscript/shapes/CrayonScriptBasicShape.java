@@ -40,6 +40,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected boolean isTemplate = false;
 
+	protected Color paintedFrameColor;
+
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> hotspotSvgElementsMap;
@@ -272,9 +274,27 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	protected Color getColor(Color color)
 	{
 		if (color == null) return null;
-		int opacity = isTemplate ? 255 : 85;
+		int opacity = getOpacity();
+		Color adjustedColor = getColor(color, opacity);
+		return adjustedColor;
+	}
+
+	protected Color getColor(Color color, int opacity)
+	{
+		if (color == null) return null;
 		Color adjustedColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity);
 		return adjustedColor;
+	}
+
+	public Color getPaintedFrameColor()
+	{
+		return paintedFrameColor;
+	}
+
+	public int getOpacity()
+	{
+		int opacity = isTemplate ? 255 : 85;
+		return opacity;
 	}
 
 	public static RoundRectangle2D scaleRectangle(

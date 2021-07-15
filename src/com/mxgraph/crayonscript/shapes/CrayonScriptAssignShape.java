@@ -35,8 +35,13 @@ public class CrayonScriptAssignShape extends CrayonScriptBasicShape {
             secondColor = ((mxCell) ((mxCell) state.getCell()).getParent()).referenceShape.getFrameColor(snapToParentDropFlag);
         }
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(frameColor));
-        paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(secondColor));
+        Color paintedFirstColor = getColor(frameColor);
+        Color paintedSecondColor = getColor(secondColor);
+
+        paintedFrameColor = paintedFirstColor;
+
+        paintRectangle(canvas, scaleRectangle(stateRect, first, first), paintedFirstColor);
+        paintRectangle(canvas, scaleRectangle(stateRect, first, second), paintedSecondColor);
 
         drawText(canvas, ((mxCell) state.getCell()).getText(), state);
     }
