@@ -481,7 +481,6 @@ public class mxCellEditor implements mxICellEditor
 
 			currentEditor.revalidate();
 			currentEditor.requestFocusInWindow();
-
 			currentEditor.select(0, 2);
 
 			currentEditor.addKeyListener(new mxCellEditorKeyListener(editingCell));
@@ -697,13 +696,6 @@ public class mxCellEditor implements mxICellEditor
         {
             setBlinkRate(500);
         }
-
-		@Override
-		public void setVisible(boolean e) {
-			if (e) { mark = "|"; } else { mark = ""; }
-			updateDimensions();
-			repaint();
-		}
 
 		@Override
         protected synchronized void damage(Rectangle r) {
