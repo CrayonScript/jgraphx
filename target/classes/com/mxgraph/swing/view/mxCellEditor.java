@@ -483,7 +483,7 @@ public class mxCellEditor implements mxICellEditor
 			currentEditor.requestFocusInWindow();
 			currentEditor.select(0, 2);
 
-			currentEditor.addKeyListener(new mxCellEditorKeyListener(editingCell));
+			currentEditor.addKeyListener(new mxCellEditorKeyListener(state));
 
 			configureActionMaps();
 		}
@@ -761,32 +761,29 @@ public class mxCellEditor implements mxICellEditor
 
     static class mxCellEditorKeyListener extends KeyAdapter
 	{
-		private mxCell editingCell;
+		private mxCellState editingCellState;
 
-		mxCellEditorKeyListener(Object value)
+		mxCellEditorKeyListener(mxCellState state)
 		{
-			editingCell = (mxCell) value;
+			editingCellState = state;
 		}
 
 		void reset()
 		{
-			editingCell = null;
+			editingCellState = null;
 		}
 
-		public void keyPressed(KeyEvent e)
-		{
-			switch (e.getKeyCode())
-			{
-				case KeyEvent.VK_BACK_SPACE:
-					backSpacePressed(e);
-					break;
-				case KeyEvent.VK_TAB:
-					tabPressed(e);
-					break;
-				default:
-					// not supported yet
-					break;
-			}
+		/**
+		 * Invoked when a key has been released.
+		 *
+		 * @param e
+		 */
+		@Override
+		public void keyReleased(KeyEvent e) {
+			super.keyReleased(e);
+
+			JTextField textComponent = (JTextField) e.getSource();
+			editingCellState.setCellText(textComponent.getText());
 		}
 
 		private void backSpacePressed(KeyEvent e)
@@ -794,10 +791,10 @@ public class mxCellEditor implements mxICellEditor
 			if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
 			{
 				int keyLocation = e.getKeyLocation();
-				if (!editingCell.getCellTextParser().canDeleteCharAtLocation(keyLocation))
-				{
-					//e.consume();
-				}
+//				if (!editingCell.getCellTextParser().canDeleteCharAtLocation(keyLocation))
+//				{
+//					//e.consume();
+//				}
 			}
 		}
 
@@ -807,16 +804,16 @@ public class mxCellEditor implements mxICellEditor
 			{
 				int keyLocation = e.getKeyLocation();
 				// this could cycle
-				int nextTabLocation = editingCell.getCellTextParser().getNextTabFromLocation(keyLocation);
-				if (nextTabLocation >= 0)
-				{
-					Point nextSelection = editingCell.getCellTextParser().getSelectionAtLocation(nextTabLocation);
-					if (nextSelection != null)
-					{
-						((JTextComponent) e.getComponent()).select(nextSelection.x, nextSelection.y);
-						e.consume();
-					}
-				}
+//				int nextTabLocation = editingCell.getCellTextParser().getNextTabFromLocation(keyLocation);
+//				if (nextTabLocation >= 0)
+//				{
+//					Point nextSelection = editingCell.getCellTextParser().getSelectionAtLocation(nextTabLocation);
+//					if (nextSelection != null)
+//					{
+//						((JTextComponent) e.getComponent()).select(nextSelection.x, nextSelection.y);
+//						e.consume();
+//					}
+//				}
 			}
 		}
 	}

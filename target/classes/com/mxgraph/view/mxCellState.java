@@ -516,6 +516,19 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         return ((mxCell) cell).getText();
     }
 
+    public void setCellText(String text)
+    {
+        ((mxCell) cell).setText(text);
+        refreshGraph();
+    }
+
+    public void refreshGraph()
+    {
+        view.invalidate(cell);
+        view.updateCellState(this);
+        view.getGraph().refresh();
+    }
+
     public Rectangle getEditorBounds()
     {
         Rectangle rect = getRectangle();
