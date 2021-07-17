@@ -2939,6 +2939,21 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         return cell;
     }
 
+    public mxCell createWaitForShape(String name, String initialText)
+    {
+        String style = name;
+        String value = name;
+        int width = 240;
+        int height = 320;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
+        cell.setDropTargets(CellFrameEnum.INNER_1, CellFrameEnum.INNER_2);
+        cell.setDropSources(CellFrameEnum.OUTER);
+        cell.setCellType(CellTypeEnum.BLOCK);
+        return cell;
+    }
+
     public mxCell createMarkerShape()
     {
         String name = mxConstants.CRAYONSCRIPT_SHAPE_MARKER;

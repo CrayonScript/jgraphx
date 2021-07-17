@@ -1040,9 +1040,9 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_MAX = "Max";
 
-	public static final String CRAYONSCRIPT_SHAPE_EVENT_ON_LOAD = "event-onload";
+	public static final String CRAYONSCRIPT_SHAPE_GRAPH_MAIN = "Main Graph";
 
-	public static final String CRAYONSCRIPT_SHAPE_GRAPH_MAIN = "graph-main";
+	public static final String CRAYONSCRIPT_SHAPE_WAIT_FOR = "Wait For";
 
 	public static final String CRAYONSCRIPT_SHAPE_MARKER = "Marker";
 

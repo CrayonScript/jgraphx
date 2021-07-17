@@ -225,9 +225,11 @@ public class GraphEditor extends BasicGraphEditor
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
 
-//		eventTemplates.addTemplate("OnLoad", new ImageIcon(vertical2URL), "event-onload", 120, 160, "OnLoad");
-
-//		graphTemplates.addTemplate("Main", new ImageIcon(vertical2URL), "graph-main", 120, 160, "Main");
+		name = mxConstants.CRAYONSCRIPT_SHAPE_WAIT_FOR;
+		cell = graphComponent.createWaitForShape(name, name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/WaitFor.png");
+		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		blockTemplates.addTemplate(name, icon, cell);
 
 		// create initial template cells, template cell styles
 		graphComponent.addTemplateCell();

@@ -6,10 +6,10 @@ import com.mxgraph.view.mxCellState;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class CrayonScriptOnEventShape extends CrayonScriptBasicShape {
+public class CrayonScriptWaitForShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptOnEventShape(String shapeName) {
-        super(ShapeStructureType.VERTICAL2, shapeName);
+    public CrayonScriptWaitForShape(String shapeName) {
+        super(ShapeStructureType.WAIT_FOR, shapeName);
     }
 
     @Override

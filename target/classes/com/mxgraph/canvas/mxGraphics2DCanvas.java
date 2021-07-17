@@ -137,8 +137,8 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 		shapeName =mxConstants.CRAYONSCRIPT_SHAPE_MARKER;
 		putShape(shapeName, new CrayonScriptMarkerShape(shapeName));
 
-		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_EVENT_ON_LOAD;
-		putShape(mxConstants.CRAYONSCRIPT_SHAPE_EVENT_ON_LOAD, new CrayonScriptOnEventShape(shapeName));
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_WAIT_FOR;
+		putShape(mxConstants.CRAYONSCRIPT_SHAPE_WAIT_FOR, new CrayonScriptWaitForShape(shapeName));
 
 		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_GRAPH_MAIN;
 		putShape(shapeName, new CrayonScriptGraphMainShape(shapeName));

@@ -134,6 +134,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		svgElementsMap = new HashMap<>();
 		svgElementsMap.put(ShapeStructureType.ASSIGN,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Assign.svg")));
+		svgElementsMap.put(ShapeStructureType.WAIT_FOR,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/WaitFor.svg")));
 		svgElementsMap.put(ShapeStructureType.VERTICAL2,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.svg")));
 		svgElementsMap.put(ShapeStructureType.IF,
@@ -380,6 +382,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	}
 
 	protected enum ShapeStructureType {
+		WAIT_FOR,
 		ASSIGN,
 		PARALLEL2,
 		SEQUENTIAL2,
