@@ -714,7 +714,7 @@ public class BasicGraphEditor extends JPanel
 		JFrame frame = new JFrame();
 		frame.getContentPane().add(this);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setJMenuBar(menuBar);
+//		frame.setJMenuBar(menuBar);
 		frame.setSize(870, 640);
 
 		// Updates the frame title

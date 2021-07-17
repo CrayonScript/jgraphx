@@ -267,7 +267,7 @@ public class GraphEditor extends BasicGraphEditor
 		objectTemplates.addTemplate(name, icon, cell);
 
 		// create initial template cells, template cell styles
-		graphComponent.addTemplateCell();
+		// graphComponent.addTemplateCell();
 
 		graphComponent.setConnectable(false);
 		graphComponent.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_WIDTH);
