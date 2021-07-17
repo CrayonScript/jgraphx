@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2006-2012, JGraph Ltd */
+ * Copyright (c) 2006-2012, JGraph Ltd
+ */
 package com.mxgraph.examples.swing;
 
 import com.mxgraph.crayonscript.shapes.ColorCode;
@@ -12,322 +13,328 @@ import com.mxgraph.model.*;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.util.mxGraphTransferable;
 import com.mxgraph.swing.util.mxSwingConstants;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxEvent;
-import com.mxgraph.util.mxEventObject;
+import com.mxgraph.util.*;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
-import com.mxgraph.util.mxPoint;
 import com.mxgraph.view.mxCellState;
+import com.mxgraph.view.mxCrayonScriptNotebook;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
 
-public class GraphEditor extends BasicGraphEditor
-{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4601740824088314699L;
+public class GraphEditor extends BasicGraphEditor {
+    /**
+     *
+     */
+    private static final long serialVersionUID = -4601740824088314699L;
 
-	/**
-	 * Holds the shared number formatter.
-	 * 
-	 * @see NumberFormat#getInstance()
-	 */
-	public static final NumberFormat numberFormat = NumberFormat.getInstance();
+    /**
+     * Holds the shared number formatter.
+     *
+     * @see NumberFormat#getInstance()
+     */
+    public static final NumberFormat numberFormat = NumberFormat.getInstance();
 
-	/**
-	 * Holds the URL for the icon to be used as a handle for creating new
-	 * connections. This is currently unused.
-	 */
-	public static URL url = null;
+    /**
+     * Holds the URL for the icon to be used as a handle for creating new
+     * connections. This is currently unused.
+     */
+    public static URL url = null;
 
-	//GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/connector.gif");
+    //GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/connector.gif");
 
-	public GraphEditor()
-	{
-		this("mxGraph Editor", new CustomGraphComponent(new CustomGraph(new CrayonScriptStylesheet())));
-	}
+    public GraphEditor() {
+        this("mxGraph Editor", new CustomGraphComponent(new CustomGraph(new CrayonScriptStylesheet())));
+    }
 
-	/**
-	 * 
-	 */
-	public GraphEditor(String appTitle, mxGraphComponent component)
-	{
-		super(appTitle, component);
-		final mxGraph graph = graphComponent.getGraph();
+    /**
+     *
+     */
+    public GraphEditor(String appTitle, mxGraphComponent component) {
+        super(appTitle, component);
+        final mxGraph graph = graphComponent.getGraph();
 
-		// Creates the shapes palette
-		EditorPalette graphTemplates = insertPalette("Graphs");
-		EditorPalette blockTemplates = insertPalette("Blocks");
-		EditorPalette eventTemplates = insertPalette("Events");
-		EditorPalette functionTemplates = insertPalette("Functions");
-		EditorPalette objectTemplates = insertPalette("Objects");
+        // Creates the shapes palette
+        EditorPalette graphTemplates = insertPalette("Graphs");
+        EditorPalette blockTemplates = insertPalette("Blocks");
+        EditorPalette eventTemplates = insertPalette("Events");
+        EditorPalette functionTemplates = insertPalette("Functions");
+        EditorPalette objectTemplates = insertPalette("Objects");
 
-		// Sets the edge template to be used for creating new edges if an edge
-		// is clicked in the shape palette
-		blockTemplates.addListener(mxEvent.SELECT, new mxIEventListener()
-		{
-			public void invoke(Object sender, mxEventObject evt)
-			{
-				Object tmp = evt.getProperty("transferable");
+        // Sets the edge template to be used for creating new edges if an edge
+        // is clicked in the shape palette
+        blockTemplates.addListener(mxEvent.SELECT, new mxIEventListener() {
+            public void invoke(Object sender, mxEventObject evt) {
+                Object tmp = evt.getProperty("transferable");
 
-				if (tmp instanceof mxGraphTransferable)
-				{
-					mxGraphTransferable t = (mxGraphTransferable) tmp;
-					Object cell = t.getCells()[0];
+                if (tmp instanceof mxGraphTransferable) {
+                    mxGraphTransferable t = (mxGraphTransferable) tmp;
+                    Object cell = t.getCells()[0];
 
-					if (graph.getModel().isEdge(cell))
-					{
-						((CustomGraph) graph).setEdgeTemplate(cell);
-					}
-				}
-			}
+                    if (graph.getModel().isEdge(cell)) {
+                        ((CustomGraph) graph).setEdgeTemplate(cell);
+                    }
+                }
+            }
 
-		});
+        });
 
-		String variableSymbol = "[]";
+        String variableSymbol = "[]";
 
-		String name = mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN;
-		mxCell cell = graphComponent.createAssignmentShape(name, MessageFormat.format("{0} = {1}", variableSymbol, variableSymbol));
-		URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Assign.png");
-		ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        String name = mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN;
+        mxCell cell = graphComponent.createAssignmentShape(name, MessageFormat.format("{0} = {1}", variableSymbol, variableSymbol));
+        URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Assign.png");
+        ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_EQUALS;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} == {1} )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Equals.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_EQUALS;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} == {1} )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Equals.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_NOTEQUALS;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} != {1} )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/NotEquals.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_NOTEQUALS;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} != {1} )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/NotEquals.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_GT;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} > {1} )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThan.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_GT;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} > {1} )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThan.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_GT_OR_EQUALS;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} >= {1} )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThanOrEquals.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_GT_OR_EQUALS;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} >= {1} )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThanOrEquals.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_LT;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} < {1} )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThan.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_LT;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} < {1} )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThan.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_LT_OR_EQUALS;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} <= {1} )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThanOrEquals.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_LT_OR_EQUALS;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} <= {1} )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThanOrEquals.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_AND;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} and {1} )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/And.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_AND;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} and {1} )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/And.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_OR;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} or {1} )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Or.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_OR;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} or {1} )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Or.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_NOT;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( not {0} )", variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Not.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_NOT;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( not {0} )", variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Not.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_MOD;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} mod {1} )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Mod.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_MOD;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} mod {1} )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Mod.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_MIN;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( min({0}, {1}) )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Min.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_MIN;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( min({0}, {1}) )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Min.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_MAX;
-		cell = graphComponent.createExpressionShape(name, MessageFormat.format("( max({0}, {1}) )", variableSymbol, variableSymbol));
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Max.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_MAX;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( max({0}, {1}) )", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Max.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION;
-		cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender2.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION;
+        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender2.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION;
-		cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender2.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION;
+        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender2.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL;
-		cell = graphComponent.createStackShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Parallel.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL;
+        cell = graphComponent.createStackShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Parallel.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL;
-		cell = graphComponent.createStackShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Sequential.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL;
+        cell = graphComponent.createStackShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Sequential.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_IF;
-		cell = graphComponent.createControlShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/If.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_IF;
+        cell = graphComponent.createControlShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/If.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_ELSE_IF;
-		cell = graphComponent.createControlShape(name);
-		cell.setDropTargets(CellFrameEnum.INNER_1, CellFrameEnum.INNER_2);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ElseIf.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_ELSE_IF;
+        cell = graphComponent.createControlShape(name);
+        cell.setDropTargets(CellFrameEnum.INNER_1, CellFrameEnum.INNER_2);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ElseIf.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_WHILE;
-		cell = graphComponent.createControlShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/While.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_WHILE;
+        cell = graphComponent.createControlShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/While.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_FOR;
-		cell = graphComponent.createControlShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/For.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_FOR;
+        cell = graphComponent.createControlShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/For.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_SHAPE_WAIT_FOR;
-		cell = graphComponent.createWaitForShape(name, name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/WaitFor.png");
-		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		blockTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_SHAPE_WAIT_FOR;
+        cell = graphComponent.createWaitForShape(name, name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/WaitFor.png");
+        icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blockTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_NEW_EVENT;
-		// TODO: fix me to open a new graph editor file
-		cell = graphComponent.createControlShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
-		icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		eventTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_NEW_EVENT;
+        // TODO: fix me to open a new graph editor file
+        cell = graphComponent.createControlShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        eventTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_NEW_GRAPH;
-		// TODO: fix me to open a new graph editor file
-		cell = graphComponent.createControlShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
-		icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		graphTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_NEW_GRAPH;
+        // TODO: fix me to open a new graph editor file
+        cell = graphComponent.createControlShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        graphTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_MAIN_GRAPH;
-		// TODO: fix me to open a new graph editor file
-		cell = graphComponent.createControlShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/MainGraph.png");
-		icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		graphTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_MAIN_GRAPH;
+        // TODO: fix me to open a new graph editor file
+        cell = graphComponent.createControlShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/MainGraph.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        graphTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_NEW_FUNCTION;
-		// TODO: fix me to open a new graph editor file
-		cell = graphComponent.createControlShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
-		icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		functionTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_NEW_FUNCTION;
+        // TODO: fix me to open a new graph editor file
+        cell = graphComponent.createControlShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        functionTemplates.addTemplate(name, icon, cell);
 
-		name = mxConstants.CRAYONSCRIPT_NEW_OBJECT;
-		// TODO: fix me to open a new graph editor file
-		cell = graphComponent.createControlShape(name);
-		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
-		icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-		objectTemplates.addTemplate(name, icon, cell);
+        name = mxConstants.CRAYONSCRIPT_NEW_OBJECT;
+        // TODO: fix me to open a new graph editor file
+        cell = graphComponent.createControlShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        objectTemplates.addTemplate(name, icon, cell);
 
-		// create initial template cells, template cell styles
-		// graphComponent.addTemplateCell();
+        // open the notebook
+        mxCrayonScriptNotebook notebook = new mxCrayonScriptNotebook();
+        URL eventsUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/resources/events");
+        notebook.setEventsUrl(eventsUrl);
 
-		graphComponent.setConnectable(false);
-		graphComponent.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_WIDTH);
-		graphComponent.setPreferPageSize(true);
-		graphComponent.setPageScale(1.4);
-		graphComponent.setVerticalPageCount(5);
-		graphComponent.zoomTo(0.6, true);
-		graphComponent.repaint();
-	}
+        URL functionsUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/resources/functions");
+        notebook.setFunctionsUrl(functionsUrl);
 
-	public static class CustomImageIcon
-	{
-		ImageIcon imageIcon;
+        URL graphsUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/resources/graphs");
+        notebook.setGraphsUrl(graphsUrl);
 
-		public CustomImageIcon(URL resource, Color targetColor)
-		{
-			try
-			{
-				BufferedImage bufferedImage = ImageIO.read(resource);
-				imageIcon = new ImageIcon(bufferedImage);
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
+        URL objectsUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/resources/objects");
+        notebook.setObjectsUrl(objectsUrl);
 
-		Color hex2Color(String hexCode)
-		{
-			return Color.decode(hexCode.replace("#", "0x"));
-		}
-	}
+        URL userPrefsUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/resources/CrayonScript.userprefs");
+        notebook.setUserPrefsUrl(userPrefsUrl);
 
-	/**
-	 * 
-	 */
-	public static class CustomGraphComponent extends mxGraphComponent
-	{
+        // create initial template cells, template cell styles
+        graphComponent.addTemplateCell();
 
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -6833603133512882012L;
+        graphComponent.setConnectable(false);
+        graphComponent.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_WIDTH);
+        graphComponent.setPreferPageSize(true);
+        graphComponent.setPageScale(1.4);
+        graphComponent.setVerticalPageCount(5);
+        graphComponent.zoomTo(0.6, true);
+        graphComponent.repaint();
+    }
 
-		/**
-		 * 
-		 * @param graph
-		 */
-		public CustomGraphComponent(mxGraph graph)
-		{
-			super(graph);
+    public static class CustomImageIcon {
+        ImageIcon imageIcon;
 
-			// Sets switches typically used in an editor
-			setPageVisible(true);
-			setGridVisible(true);
-			setToolTips(true);
-			getConnectionHandler().setCreateTarget(true);
+        public CustomImageIcon(URL resource, Color targetColor) {
+            try {
+                BufferedImage bufferedImage = ImageIO.read(resource);
+                imageIcon = new ImageIcon(bufferedImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-			// Loads the defalt stylesheet from an external file
-			mxCodec codec = new mxCodec();
+        Color hex2Color(String hexCode) {
+            return Color.decode(hexCode.replace("#", "0x"));
+        }
+    }
+
+    /**
+     *
+     */
+    public static class CustomGraphComponent extends mxGraphComponent {
+
+        /**
+         *
+         */
+        private static final long serialVersionUID = -6833603133512882012L;
+
+        /**
+         *
+         * @param graph
+         */
+        public CustomGraphComponent(mxGraph graph) {
+            super(graph);
+
+            // Sets switches typically used in an editor
+            setPageVisible(true);
+            setGridVisible(true);
+            setToolTips(true);
+            getConnectionHandler().setCreateTarget(true);
+
+            // Loads the defalt stylesheet from an external file
+            mxCodec codec = new mxCodec();
 //			Document doc = mxUtils.loadDocument(GraphEditor.class.getResource(
 //					"/com/mxgraph/examples/swing/resources/default-style.xml")
 //					.toString());
@@ -337,208 +344,184 @@ public class GraphEditor extends BasicGraphEditor
 //					.toString());
 //			codec.decode(doc.getDocumentElement(), graph.getStylesheet());
 
-			// Sets the background to white
-			getViewport().setOpaque(true);
-			getViewport().setBackground(Color.WHITE);
-		}
+            // Sets the background to white
+            getViewport().setOpaque(true);
+            getViewport().setBackground(Color.WHITE);
+        }
 
-		/**
-		 * Overrides drop behaviour to set the cell style if the target
-		 * is not a valid drop target and the cells are of the same
-		 * type (eg. both vertices or both edges). 
-		 */
-		public Object[] importCells(Object[] cells, double dx, double dy,
-				Object target, Point location)
-		{
-			if (target == null && cells.length == 1 && location != null)
-			{
-				target = getCellAt(location.x, location.y);
+        /**
+         * Overrides drop behaviour to set the cell style if the target
+         * is not a valid drop target and the cells are of the same
+         * type (eg. both vertices or both edges).
+         */
+        public Object[] importCells(Object[] cells, double dx, double dy,
+                                    Object target, Point location) {
+            if (target == null && cells.length == 1 && location != null) {
+                target = getCellAt(location.x, location.y);
 
-				if (target instanceof mxICell && cells[0] instanceof mxICell)
-				{
-					mxICell targetCell = (mxICell) target;
-					mxICell dropCell = (mxICell) cells[0];
+                if (target instanceof mxICell && cells[0] instanceof mxICell) {
+                    mxICell targetCell = (mxICell) target;
+                    mxICell dropCell = (mxICell) cells[0];
 
-					if (targetCell.isVertex() == dropCell.isVertex()
-							|| targetCell.isEdge() == dropCell.isEdge())
-					{
-						mxIGraphModel model = graph.getModel();
-						model.setStyle(target, model.getStyle(cells[0]));
-						graph.setSelectionCell(target);
+                    if (targetCell.isVertex() == dropCell.isVertex()
+                            || targetCell.isEdge() == dropCell.isEdge()) {
+                        mxIGraphModel model = graph.getModel();
+                        model.setStyle(target, model.getStyle(cells[0]));
+                        graph.setSelectionCell(target);
 
-						return null;
-					}
-				}
-			}
+                        return null;
+                    }
+                }
+            }
 
-			return super.importCells(cells, dx, dy, target, location);
-		}
+            return super.importCells(cells, dx, dy, target, location);
+        }
 
-	}
+    }
 
-	/**
-	 * A graph that creates new edges from a given template edge.
-	 */
-	public static class CustomGraph extends mxGraph
-	{
-		/**
-		 * Holds the edge to be used as a template for inserting new edges.
-		 */
-		protected Object edgeTemplate;
+    /**
+     * A graph that creates new edges from a given template edge.
+     */
+    public static class CustomGraph extends mxGraph {
+        /**
+         * Holds the edge to be used as a template for inserting new edges.
+         */
+        protected Object edgeTemplate;
 
-		/**
-		 * Custom graph that defines the alternate edge style to be used when
-		 * the middle control point of edges is double clicked (flipped).
-		 */
-		public CustomGraph(mxStylesheet stylesheet)
-		{
-			setAlternateEdgeStyle("edgeStyle=mxEdgeStyle.ElbowConnector;elbow=vertical");
-		}
+        /**
+         * Custom graph that defines the alternate edge style to be used when
+         * the middle control point of edges is double clicked (flipped).
+         */
+        public CustomGraph(mxStylesheet stylesheet) {
+            setAlternateEdgeStyle("edgeStyle=mxEdgeStyle.ElbowConnector;elbow=vertical");
+        }
 
-		/**
-		 * Sets the edge template to be used to inserting edges.
-		 */
-		public void setEdgeTemplate(Object template)
-		{
-			edgeTemplate = template;
-		}
+        /**
+         * Sets the edge template to be used to inserting edges.
+         */
+        public void setEdgeTemplate(Object template) {
+            edgeTemplate = template;
+        }
 
-		/**
-		 * Prints out some useful information about the cell in the tooltip.
-		 */
-		public String getToolTipForCell(Object cell)
-		{
-			String tip = "<html>";
-			mxGeometry geo = getModel().getGeometry(cell);
-			mxCellState state = getView().getState(cell);
+        /**
+         * Prints out some useful information about the cell in the tooltip.
+         */
+        public String getToolTipForCell(Object cell) {
+            String tip = "<html>";
+            mxGeometry geo = getModel().getGeometry(cell);
+            mxCellState state = getView().getState(cell);
 
-			if (getModel().isEdge(cell))
-			{
-				tip += "points={";
+            if (getModel().isEdge(cell)) {
+                tip += "points={";
 
-				if (geo != null)
-				{
-					List<mxPoint> points = geo.getPoints();
+                if (geo != null) {
+                    List<mxPoint> points = geo.getPoints();
 
-					if (points != null)
-					{
-						Iterator<mxPoint> it = points.iterator();
+                    if (points != null) {
+                        Iterator<mxPoint> it = points.iterator();
 
-						while (it.hasNext())
-						{
-							mxPoint point = it.next();
-							tip += "[x=" + numberFormat.format(point.getX())
-									+ ",y=" + numberFormat.format(point.getY())
-									+ "],";
-						}
+                        while (it.hasNext()) {
+                            mxPoint point = it.next();
+                            tip += "[x=" + numberFormat.format(point.getX())
+                                    + ",y=" + numberFormat.format(point.getY())
+                                    + "],";
+                        }
 
-						tip = tip.substring(0, tip.length() - 1);
-					}
-				}
+                        tip = tip.substring(0, tip.length() - 1);
+                    }
+                }
 
-				tip += "}<br>";
-				tip += "absPoints={";
+                tip += "}<br>";
+                tip += "absPoints={";
 
-				if (state != null)
-				{
+                if (state != null) {
 
-					for (int i = 0; i < state.getAbsolutePointCount(); i++)
-					{
-						mxPoint point = state.getAbsolutePoint(i);
-						tip += "[x=" + numberFormat.format(point.getX())
-								+ ",y=" + numberFormat.format(point.getY())
-								+ "],";
-					}
+                    for (int i = 0; i < state.getAbsolutePointCount(); i++) {
+                        mxPoint point = state.getAbsolutePoint(i);
+                        tip += "[x=" + numberFormat.format(point.getX())
+                                + ",y=" + numberFormat.format(point.getY())
+                                + "],";
+                    }
 
-					tip = tip.substring(0, tip.length() - 1);
-				}
+                    tip = tip.substring(0, tip.length() - 1);
+                }
 
-				tip += "}";
-			}
-			else
-			{
-				tip += "geo=[";
+                tip += "}";
+            } else {
+                tip += "geo=[";
 
-				if (geo != null)
-				{
-					tip += "x=" + numberFormat.format(geo.getX()) + ",y="
-							+ numberFormat.format(geo.getY()) + ",width="
-							+ numberFormat.format(geo.getWidth()) + ",height="
-							+ numberFormat.format(geo.getHeight());
-				}
+                if (geo != null) {
+                    tip += "x=" + numberFormat.format(geo.getX()) + ",y="
+                            + numberFormat.format(geo.getY()) + ",width="
+                            + numberFormat.format(geo.getWidth()) + ",height="
+                            + numberFormat.format(geo.getHeight());
+                }
 
-				tip += "]<br>";
-				tip += "state=[";
+                tip += "]<br>";
+                tip += "state=[";
 
-				if (state != null)
-				{
-					tip += "x=" + numberFormat.format(state.getX()) + ",y="
-							+ numberFormat.format(state.getY()) + ",width="
-							+ numberFormat.format(state.getWidth())
-							+ ",height="
-							+ numberFormat.format(state.getHeight());
-				}
+                if (state != null) {
+                    tip += "x=" + numberFormat.format(state.getX()) + ",y="
+                            + numberFormat.format(state.getY()) + ",width="
+                            + numberFormat.format(state.getWidth())
+                            + ",height="
+                            + numberFormat.format(state.getHeight());
+                }
 
-				tip += "]";
-			}
+                tip += "]";
+            }
 
-			mxPoint trans = getView().getTranslate();
+            mxPoint trans = getView().getTranslate();
 
-			tip += "<br>scale=" + numberFormat.format(getView().getScale())
-					+ ", translate=[x=" + numberFormat.format(trans.getX())
-					+ ",y=" + numberFormat.format(trans.getY()) + "]";
-			tip += "</html>";
+            tip += "<br>scale=" + numberFormat.format(getView().getScale())
+                    + ", translate=[x=" + numberFormat.format(trans.getX())
+                    + ",y=" + numberFormat.format(trans.getY()) + "]";
+            tip += "</html>";
 
-			return tip;
-		}
+            return tip;
+        }
 
-		/**
-		 * Overrides the method to use the currently selected edge template for
-		 * new edges.
-		 * 
-		 * @param parent
-		 * @param id
-		 * @param value
-		 * @param source
-		 * @param target
-		 * @param style
-		 * @return
-		 */
-		public Object createEdge(Object parent, String id, Object value,
-				Object source, Object target, String style)
-		{
-			if (edgeTemplate != null)
-			{
-				mxCell edge = (mxCell) cloneCells(new Object[] { edgeTemplate })[0];
-				edge.setId(id);
+        /**
+         * Overrides the method to use the currently selected edge template for
+         * new edges.
+         *
+         * @param parent
+         * @param id
+         * @param value
+         * @param source
+         * @param target
+         * @param style
+         * @return
+         */
+        public Object createEdge(Object parent, String id, Object value,
+                                 Object source, Object target, String style) {
+            if (edgeTemplate != null) {
+                mxCell edge = (mxCell) cloneCells(new Object[]{edgeTemplate})[0];
+                edge.setId(id);
 
-				return edge;
-			}
+                return edge;
+            }
 
-			return super.createEdge(parent, id, value, source, target, style);
-		}
+            return super.createEdge(parent, id, value, source, target, style);
+        }
 
-	}
+    }
 
-	/**
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args)
-	{
-		try
-		{
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (Exception e1)
-		{
-			e1.printStackTrace();
-		}
+    /**
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
 
-		mxSwingConstants.SHADOW_COLOR = Color.LIGHT_GRAY;
-		mxConstants.W3C_SHADOWCOLOR = "#D3D3D3";
+        mxSwingConstants.SHADOW_COLOR = Color.LIGHT_GRAY;
+        mxConstants.W3C_SHADOWCOLOR = "#D3D3D3";
 
-		GraphEditor editor = new GraphEditor();
-		editor.createFrame(new EditorMenuBar(editor)).setVisible(true);
-	}
+        GraphEditor editor = new GraphEditor();
+        editor.createFrame(new EditorMenuBar(editor)).setVisible(true);
+    }
 }
