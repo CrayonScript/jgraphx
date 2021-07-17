@@ -68,9 +68,10 @@ public class GraphEditor extends BasicGraphEditor
 		final mxGraph graph = graphComponent.getGraph();
 
 		// Creates the shapes palette
-		EditorPalette graphTemplates = insertPalette("Graphs");
 		EditorPalette blockTemplates = insertPalette("Blocks");
 		EditorPalette eventTemplates = insertPalette("Events");
+		EditorPalette functionTemplates = insertPalette("Functions");
+		EditorPalette graphTemplates = insertPalette("Graphs");
 		EditorPalette objectTemplates = insertPalette("Objects");
 
 		// Sets the edge template to be used for creating new edges if an edge
@@ -229,6 +230,41 @@ public class GraphEditor extends BasicGraphEditor
 		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/WaitFor.png");
 		icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
 		blockTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_NEW_EVENT;
+		// TODO: fix me to open a new graph editor file
+		cell = graphComponent.createControlShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+		icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		eventTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_NEW_GRAPH;
+		// TODO: fix me to open a new graph editor file
+		cell = graphComponent.createControlShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+		icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		graphTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_MAIN_GRAPH;
+		// TODO: fix me to open a new graph editor file
+		cell = graphComponent.createControlShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/MainGraph.png");
+		icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		graphTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_NEW_FUNCTION;
+		// TODO: fix me to open a new graph editor file
+		cell = graphComponent.createControlShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+		icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		functionTemplates.addTemplate(name, icon, cell);
+
+		name = mxConstants.CRAYONSCRIPT_NEW_OBJECT;
+		// TODO: fix me to open a new graph editor file
+		cell = graphComponent.createControlShape(name);
+		iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+		icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+		objectTemplates.addTemplate(name, icon, cell);
 
 		// create initial template cells, template cell styles
 		graphComponent.addTemplateCell();

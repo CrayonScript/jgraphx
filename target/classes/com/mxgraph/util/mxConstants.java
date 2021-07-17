@@ -1048,6 +1048,16 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_TEMPLATE = "template";
 
+	public static final String CRAYONSCRIPT_NEW_EVENT = "New Event";
+
+	public static final String CRAYONSCRIPT_NEW_GRAPH = "New Graph";
+
+	public static final String CRAYONSCRIPT_MAIN_GRAPH = "Main Graph";
+
+	public static final String CRAYONSCRIPT_NEW_FUNCTION = "New Function";
+
+	public static final String CRAYONSCRIPT_NEW_OBJECT = "New Object";
+
 	/**
 	 * SHAPE_RECTANGLE
 	 */
