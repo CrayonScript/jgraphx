@@ -1,9 +1,16 @@
 package com.mxgraph.view;
 
+import com.mxgraph.crayonscript.shapes.ColorCode;
 import com.mxgraph.crayonscript.shapes.CrayonScriptOnEventShape;
+import com.mxgraph.examples.swing.GraphEditor;
+import com.mxgraph.examples.swing.editor.EditorPalette;
+import com.mxgraph.model.mxCell;
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxConstants;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -49,6 +56,63 @@ public class mxCrayonScriptNotebook {
 
     public mxCrayonScriptUserPrefs parseUserPrefs() {
         return null;
+    }
+
+    public void loadObjectsPalette(mxGraphComponent graphComponent, EditorPalette objectsPalette)
+    {
+        String name = mxConstants.CRAYONSCRIPT_NEW_OBJECT;
+        // TODO: fix me to open a new graph editor file
+        mxCell cell = graphComponent.createControlShape(name);
+        URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+        ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        objectsPalette.addTemplate(name, icon, cell);
+    }
+
+    public void loadFunctionsPalette(mxGraphComponent graphComponent, EditorPalette functionsPalette)
+    {
+        String name = mxConstants.CRAYONSCRIPT_NEW_FUNCTION;
+        // TODO: fix me to open a new graph editor file
+        mxCell cell = graphComponent.createControlShape(name);
+        URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+        ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        functionsPalette.addTemplate(name, icon, cell);
+    }
+
+    public void loadEventsPalette(mxGraphComponent graphComponent, EditorPalette eventsPalette)
+    {
+        String name = mxConstants.CRAYONSCRIPT_NEW_EVENT;
+        // TODO: fix me to open a new graph editor file
+        mxCell cell = graphComponent.createControlShape(name);
+        URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+        ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        eventsPalette.addTemplate(name, icon, cell);
+    }
+
+    public void loadGraphPalette(mxGraphComponent graphComponent, EditorPalette graphPalette) {
+        String name = mxConstants.CRAYONSCRIPT_NEW_GRAPH;
+        // TODO: fix me to open a new graph editor file
+        mxCell cell = graphComponent.createControlShape(name);
+        URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+        ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        graphPalette.addTemplate(name, icon, cell);
+
+        name = mxConstants.CRAYONSCRIPT_MAIN_GRAPH;
+        // TODO: fix me to open a new graph editor file
+        cell = graphComponent.createControlShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/MainGraph.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        graphPalette.addTemplate(name, icon, cell);
+    }
+
+    public void loadGraph(mxGraphComponent graphComponent) {
+        graphComponent.addTemplateCell();
+        graphComponent.setConnectable(false);
+        graphComponent.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_WIDTH);
+        graphComponent.setPreferPageSize(true);
+        graphComponent.setPageScale(1.4);
+        graphComponent.setVerticalPageCount(5);
+        graphComponent.zoomTo(0.6, true);
+        graphComponent.repaint();
     }
 
     static class mxCrayonScriptEvent {

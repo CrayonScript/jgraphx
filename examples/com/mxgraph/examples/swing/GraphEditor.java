@@ -229,41 +229,6 @@ public class GraphEditor extends BasicGraphEditor {
         icon = new CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blockTemplates.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_NEW_EVENT;
-        // TODO: fix me to open a new graph editor file
-        cell = graphComponent.createControlShape(name);
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        eventTemplates.addTemplate(name, icon, cell);
-
-        name = mxConstants.CRAYONSCRIPT_NEW_GRAPH;
-        // TODO: fix me to open a new graph editor file
-        cell = graphComponent.createControlShape(name);
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        graphTemplates.addTemplate(name, icon, cell);
-
-        name = mxConstants.CRAYONSCRIPT_MAIN_GRAPH;
-        // TODO: fix me to open a new graph editor file
-        cell = graphComponent.createControlShape(name);
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/MainGraph.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        graphTemplates.addTemplate(name, icon, cell);
-
-        name = mxConstants.CRAYONSCRIPT_NEW_FUNCTION;
-        // TODO: fix me to open a new graph editor file
-        cell = graphComponent.createControlShape(name);
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        functionTemplates.addTemplate(name, icon, cell);
-
-        name = mxConstants.CRAYONSCRIPT_NEW_OBJECT;
-        // TODO: fix me to open a new graph editor file
-        cell = graphComponent.createControlShape(name);
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        objectTemplates.addTemplate(name, icon, cell);
-
         // open the notebook
         mxCrayonScriptNotebook notebook = new mxCrayonScriptNotebook();
         URL eventsUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/resources/events");
@@ -281,20 +246,16 @@ public class GraphEditor extends BasicGraphEditor {
         URL userPrefsUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/resources/CrayonScript.userprefs");
         notebook.setUserPrefsUrl(userPrefsUrl);
 
-        // create initial template cells, template cell styles
-        graphComponent.addTemplateCell();
+        notebook.loadGraphPalette(graphComponent, graphTemplates);
+        notebook.loadEventsPalette(graphComponent, eventTemplates);
+        notebook.loadFunctionsPalette(graphComponent, functionTemplates);
+        notebook.loadObjectsPalette(graphComponent, objectTemplates);
 
-        graphComponent.setConnectable(false);
-        graphComponent.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_WIDTH);
-        graphComponent.setPreferPageSize(true);
-        graphComponent.setPageScale(1.4);
-        graphComponent.setVerticalPageCount(5);
-        graphComponent.zoomTo(0.6, true);
-        graphComponent.repaint();
+        notebook.loadGraph(graphComponent);
     }
 
     public static class CustomImageIcon {
-        ImageIcon imageIcon;
+        public ImageIcon imageIcon;
 
         public CustomImageIcon(URL resource, Color targetColor) {
             try {
