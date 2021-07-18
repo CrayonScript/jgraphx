@@ -1052,8 +1052,6 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_EVENT = "Event";
 
-	public static final String CRAYONSCRIPT_NEW_GRAPH = "New Graph";
-
 	public static final String CRAYONSCRIPT_MAIN_GRAPH = "Main Graph";
 
 	public static final String CRAYONSCRIPT_NEW_FUNCTION = "New Function";

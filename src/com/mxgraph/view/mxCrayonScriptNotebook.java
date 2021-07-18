@@ -110,18 +110,11 @@ public class mxCrayonScriptNotebook {
     }
 
     public void loadGraph(mxGraphComponent graphComponent, EditorPalette graphsPalette) {
-        String name = mxConstants.CRAYONSCRIPT_NEW_GRAPH;
+        String name = mxConstants.CRAYONSCRIPT_MAIN_GRAPH;
         // TODO: fix me to open a new graph editor file
         mxCell cell = graphComponent.createControlShape(name);
-        URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
+        URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/MainGraph.png");
         ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        graphsPalette.addTemplate(name, icon, cell);
-
-        name = mxConstants.CRAYONSCRIPT_MAIN_GRAPH;
-        // TODO: fix me to open a new graph editor file
-        cell = graphComponent.createControlShape(name);
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/MainGraph.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         graphsPalette.addTemplate(name, icon, cell);
     }
 
