@@ -623,7 +623,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                     int templateCellIndex = templateCells.indexOf(templateCell);
                     repositionTemplateCells(templateCellIndex + 1);
                 }
-                updateMarkerCell(cell, templateCell);
+                updateMarkerCellAndDescendants(cell, templateCell);
             }
             else if (previousTemplateCell != null)
             {
@@ -2701,6 +2701,15 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         return result;
     }
 
+    public void updateMarkerCellAndDescendants(mxCell cell, mxCell templateCell)
+    {
+        updateMarkerCell(cell, templateCell);
+        for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++) {
+            mxCell childCell = (mxCell) cell.getChildAt(childIndex);
+            updateMarkerCellAndDescendants(childCell, templateCell);
+        }
+    }
+
     public void updateMarkerCell(mxCell cell, mxCell templateCell)
     {
         if (!cell.isMarked()) return;
@@ -2711,6 +2720,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             markerCellMap.markers = new HashMap<>();
             templateMarkerCellMaps.put(templateCell, markerCellMap);
         }
+
         mxCell markerCell = markerCellMap.markers.get(cell);
         if (markerCell == null)
         {
