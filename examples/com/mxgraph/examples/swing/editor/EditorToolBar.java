@@ -57,15 +57,15 @@ public class EditorToolBar extends JToolBar
 				.createEmptyBorder(3, 3, 3, 3), getBorder()));
 		setFloatable(false);
 
-//		add(editor.bind("New", new NewAction(),
-//				"/com/mxgraph/examples/swing/images/new.gif"));
-//		add(editor.bind("Open", new OpenAction(),
-//				"/com/mxgraph/examples/swing/images/open.gif"));
-//		add(editor.bind("Save", new SaveAction(false),
-//				"/com/mxgraph/examples/swing/images/save.gif"));
-//
-//		addSeparator();
-//
+		add(editor.bind("New", new NewAction(),
+				"/com/mxgraph/examples/swing/images/new.gif"));
+		add(editor.bind("Open", new OpenAction(),
+				"/com/mxgraph/examples/swing/images/open.gif"));
+		add(editor.bind("Save", new SaveAction(false),
+				"/com/mxgraph/examples/swing/images/save.gif"));
+
+		addSeparator();
+
 //		add(editor.bind("Print", new PrintAction(),
 //				"/com/mxgraph/examples/swing/images/print.gif"));
 //
@@ -77,13 +77,15 @@ public class EditorToolBar extends JToolBar
 //				"/com/mxgraph/examples/swing/images/copy.gif"));
 //		add(editor.bind("Paste", TransferHandler.getPasteAction(),
 //				"/com/mxgraph/examples/swing/images/paste.gif"));
-//
-//		addSeparator();
-//
-//		add(editor.bind("Delete", mxGraphActions.getDeleteAction(),
-//				"/com/mxgraph/examples/swing/images/delete.gif"));
-//
-//		addSeparator();
+
+		add(editor.bind("Duplicate", TransferHandler.getCopyAction(),
+				"/com/mxgraph/examples/swing/images/copy.gif"));
+		addSeparator();
+
+		add(editor.bind("Delete", mxGraphActions.getDeleteAction(),
+				"/com/mxgraph/examples/swing/images/delete.gif"));
+
+		addSeparator();
 
 		add(editor.bind("Undo", new HistoryAction(true),
 				"/com/mxgraph/examples/swing/images/undo.gif"));
