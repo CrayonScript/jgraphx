@@ -22,10 +22,8 @@ public class CrayonScriptWaitForShape extends CrayonScriptBasicShape {
 
         SvgElement first = svgElements.get(0);
         SvgElement second = svgElements.get(1);
-        SvgElement third = svgElements.get(2);
 
         paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(first.fillColor), true);
         paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(second.fillColor));
-        paintRectangle(canvas, scaleRectangle(stateRect, first, third), getColor(third.fillColor));
     }
 }

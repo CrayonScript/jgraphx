@@ -132,8 +132,12 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	protected static void initialize() {
 		if (initialized) return;
 		svgElementsMap = new HashMap<>();
+		svgElementsMap.put(ShapeStructureType.EVENT,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Event.svg")));
 		svgElementsMap.put(ShapeStructureType.ASSIGN,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Assign.svg")));
+		svgElementsMap.put(ShapeStructureType.PROPERTY,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Property.svg")));
 		svgElementsMap.put(ShapeStructureType.WAIT_FOR,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/WaitFor.svg")));
 		svgElementsMap.put(ShapeStructureType.VERTICAL2,
@@ -154,8 +158,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender2.svg")));
 		svgElementsMap.put(ShapeStructureType.SEQUENTIAL_VEXTENDER2,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender2.svg")));
-		svgElementsMap.put(ShapeStructureType.HEXTENDER2,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/HExtender2.svg")));
+		svgElementsMap.put(ShapeStructureType.EXPRESSION,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Expression.svg")));
 		svgElementsMap.put(ShapeStructureType.MARKER,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Marker.svg")));
 		svgElementsMap.put(ShapeStructureType.TEMPLATE,
@@ -167,6 +171,16 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		}
 
 		// special purpose hotspot map for assign (statement) and expressions
+		SvgElement eventInner1 = hotspotSvgElementsMap.get(ShapeStructureType.EVENT).get(CellFrameEnum.INNER_1.bitIndex);
+		eventInner1 = eventInner1.copy();
+		eventInner1.rect.setFrame(
+				eventInner1.rect.getFrame().getX(),
+				eventInner1.rect.getFrame().getY(),
+				170,
+				eventInner1.rect.getFrame().getHeight());
+		hotspotSvgElementsMap.get(ShapeStructureType.EVENT).set(CellFrameEnum.INNER_1.bitIndex, eventInner1);
+
+		// special purpose hotspot map for assign (statement) and expressions
 		SvgElement assignInner1 = hotspotSvgElementsMap.get(ShapeStructureType.ASSIGN).get(CellFrameEnum.INNER_1.bitIndex);
 		assignInner1 = assignInner1.copy();
 		assignInner1.rect.setFrame(
@@ -176,14 +190,14 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				assignInner1.rect.getFrame().getHeight());
 		hotspotSvgElementsMap.get(ShapeStructureType.ASSIGN).set(CellFrameEnum.INNER_1.bitIndex, assignInner1);
 
-		SvgElement expressionInner1 = hotspotSvgElementsMap.get(ShapeStructureType.HEXTENDER2).get(CellFrameEnum.INNER_1.bitIndex);
+		SvgElement expressionInner1 = hotspotSvgElementsMap.get(ShapeStructureType.EXPRESSION).get(CellFrameEnum.INNER_1.bitIndex);
 		expressionInner1 = expressionInner1.copy();
 		expressionInner1.rect.setFrame(
 				expressionInner1.rect.getFrame().getX(),
 				expressionInner1.rect.getFrame().getY(),
 				170,
 				expressionInner1.rect.getFrame().getHeight());
-		hotspotSvgElementsMap.get(ShapeStructureType.HEXTENDER2).set(CellFrameEnum.INNER_1.bitIndex, expressionInner1);
+		hotspotSvgElementsMap.get(ShapeStructureType.EXPRESSION).set(CellFrameEnum.INNER_1.bitIndex, expressionInner1);
 
 		initialized = true;
 	}
@@ -383,10 +397,12 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected enum ShapeStructureType {
 		WAIT_FOR,
+		EVENT,
 		ASSIGN,
 		PARALLEL2,
+		PROPERTY,
 		SEQUENTIAL2,
-		HEXTENDER2,
+		EXPRESSION,
 		VERTICAL2,
 		IF,
 		ELSE_IF,

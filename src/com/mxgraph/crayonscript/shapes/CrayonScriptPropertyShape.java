@@ -8,10 +8,10 @@ import com.mxgraph.view.mxCellState;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
+public class CrayonScriptPropertyShape extends CrayonScriptBasicShape {
 
-    public CrayonScriptExpressionShape(String shapeName) {
-        super(ShapeStructureType.EXPRESSION, shapeName);
+    public CrayonScriptPropertyShape(String shapeName) {
+        super(ShapeStructureType.PROPERTY, shapeName);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
         initialize(state);
 
         Rectangle stateRect = state.getRectangle();
-        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.EXPRESSION);
+        ArrayList<SvgElement> svgElements = getSvgElements();
 
         SvgElement first = svgElements.get(0);
         SvgElement second = svgElements.get(1);
@@ -30,13 +30,18 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
         Color secondColor = second.fillColor;
 
         CellFrameEnum snapToParentDropFlag = ((mxCell) state.getCell()).snapToParentDropFlag;
-        if (snapToParentDropFlag != null && ((mxCell) state.getCell()).getParent().isShape())
+        if (snapToParentDropFlag != null && ((mxCell) ((mxCell) state.getCell()).getParent()).isShape())
         {
             secondColor = ((mxCell) ((mxCell) state.getCell()).getParent()).referenceShape.getFrameColor(snapToParentDropFlag);
         }
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(frameColor));
-        paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(secondColor));
+        Color paintedFirstColor = getColor(frameColor);
+        Color paintedSecondColor = getColor(secondColor);
+
+        paintedFrameColor = paintedFirstColor;
+
+        paintRectangle(canvas, scaleRectangle(stateRect, first, first), paintedFirstColor);
+        paintRectangle(canvas, scaleRectangle(stateRect, first, second), paintedSecondColor);
 
         drawText(canvas, ((mxCell) state.getCell()).getText(), state);
     }

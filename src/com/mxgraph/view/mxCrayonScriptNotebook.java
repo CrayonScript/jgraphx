@@ -1,7 +1,6 @@
 package com.mxgraph.view;
 
 import com.mxgraph.crayonscript.shapes.ColorCode;
-import com.mxgraph.crayonscript.shapes.CrayonScriptOnEventShape;
 import com.mxgraph.examples.swing.GraphEditor;
 import com.mxgraph.examples.swing.editor.EditorPalette;
 import com.mxgraph.model.CellFrameEnum;
@@ -24,21 +23,70 @@ import java.util.ArrayList;
 
 public class mxCrayonScriptNotebook {
 
-    URL eventsUrl = null;
-    URL functionsUrl = null;
-    URL graphsUrl = null;
-    URL objectsUrl = null;
-    URL userPrefsUrl = null;
-    URL notebookUrl = null;
+    Document notebookDocument = null;
+    ArrayList<mxCrayonScriptEventPage> eventPages = new ArrayList<>();
+    ArrayList<mxCrayonScriptFunctionPage> functionPages = new ArrayList<>();
+    ArrayList<mxCrayonScriptGraphPage> graphPages = new ArrayList<>();
+    ArrayList<mxCrayonScriptObjectPage> objectPages = new ArrayList<>();
+    mxCrayonScriptUserPrefPage userPrefPage = null;
 
-    public mxCrayonScriptNotebook(String resourceRoot)
-    {
-        eventsUrl = mxCrayonScriptNotebook.class.getResource(String.format("%s/events", resourceRoot));
-        functionsUrl = mxCrayonScriptNotebook.class.getResource(String.format("%s/functions", resourceRoot));
-        graphsUrl = mxCrayonScriptNotebook.class.getResource(String.format("%s/graphs", resourceRoot));
-        objectsUrl = mxCrayonScriptNotebook.class.getResource(String.format("%s/objects", resourceRoot));
-        userPrefsUrl = mxCrayonScriptNotebook.class.getResource(String.format("%s/CrayonScript.userprefs", resourceRoot));
-        notebookUrl = mxCrayonScriptNotebook.class.getResource(String.format("%s/CrayonScript.notebook", resourceRoot));
+    public mxCrayonScriptNotebook(String resourceRoot) {
+        this.notebookDocument = loadPageDocument(String.format("%s/CrayonScript.notebook", resourceRoot));
+        ArrayList<Document> eventDocuments = loadPageDocuments(String.format("%s/events", resourceRoot));
+        for (Document eventDocument: eventDocuments) {
+            eventPages.add(new mxCrayonScriptEventPage(eventDocument));
+        }
+        ArrayList<Document> functionDocuments = loadPageDocuments(String.format("%s/functions", resourceRoot));
+        for (Document functionDocument: functionDocuments) {
+            functionPages.add(new mxCrayonScriptFunctionPage(functionDocument));
+        }
+        ArrayList<Document> graphDocuments = loadPageDocuments(String.format("%s/graphs", resourceRoot));
+        for (Document graphDocument: graphDocuments) {
+            graphPages.add(new mxCrayonScriptGraphPage(graphDocument));
+        }
+        ArrayList<Document> objectDocuments = loadPageDocuments(String.format("%s/objects", resourceRoot));
+        for (Document objectDocument: objectDocuments) {
+            objectPages.add(new mxCrayonScriptObjectPage(objectDocument));
+        }
+        Document userPrefsDocument = loadPageDocument(String.format("%s/CrayonScript.userprefs", resourceRoot));
+        userPrefPage = new mxCrayonScriptUserPrefPage(userPrefsDocument);
+    }
+
+    private ArrayList<Document> loadPageDocuments(String resourceRoot) {
+        ArrayList<Document> documents = new ArrayList<>();
+        URL pagesUrl = mxCrayonScriptNotebook.class.getResource(resourceRoot);
+        try {
+            if (pagesUrl != null) {
+                File eventsFile = new File(pagesUrl.toURI());
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                for (File eventFile : eventsFile.listFiles()) {
+                    DocumentBuilder db = dbf.newDocumentBuilder();
+                    Document document = db.parse(eventFile);
+                    documents.add(document);
+                }
+            }
+        } catch (ParserConfigurationException | URISyntaxException e) {
+            throw new IllegalStateException(e);
+        } catch (IOException | SAXException e) {
+            e.printStackTrace();
+        }
+        return documents;
+    }
+
+    private Document loadPageDocument(String resourceRoot) {
+        URL pagesUrl = mxCrayonScriptNotebook.class.getResource(resourceRoot);
+        try {
+            File documentFile = new File(pagesUrl.toURI());
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document document = db.parse(documentFile);
+            return document;
+        } catch (ParserConfigurationException | URISyntaxException e) {
+            throw new IllegalStateException(e);
+        } catch (IOException | SAXException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void loadObjects(mxGraphComponent graphComponent, EditorPalette objectsPalette)
@@ -61,16 +109,6 @@ public class mxCrayonScriptNotebook {
         functionsPalette.addTemplate(name, icon, cell);
     }
 
-    public void loadEvents(mxGraphComponent graphComponent, EditorPalette eventsPalette)
-    {
-        String name = mxConstants.CRAYONSCRIPT_NEW_EVENT;
-        // TODO: fix me to open a new graph editor file
-        mxCell cell = graphComponent.createControlShape(name);
-        URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/New.png");
-        ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        eventsPalette.addTemplate(name, icon, cell);
-    }
-
     public void loadGraph(mxGraphComponent graphComponent, EditorPalette graphsPalette) {
         String name = mxConstants.CRAYONSCRIPT_NEW_GRAPH;
         // TODO: fix me to open a new graph editor file
@@ -91,10 +129,23 @@ public class mxCrayonScriptNotebook {
     {
         String variableSymbol = "[]";
 
-        String name = mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN;
-        mxCell cell = graphComponent.createAssignmentShape(name, MessageFormat.format("{0} = {1}", variableSymbol, variableSymbol));
-        URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Assign.png");
+        String name = mxConstants.CRAYONSCRIPT_SHAPE_EVENT;
+        // TODO: fix me to open a new graph editor file
+        mxCell cell = graphComponent.createEventShape(name, MessageFormat.format("{0} . {1}", variableSymbol, variableSymbol));
+        URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Event.png");
         ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blocksPalette.addTemplate(name, icon, cell);
+
+        name = mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN;
+        cell = graphComponent.createAssignmentShape(name, MessageFormat.format("{0} = {1}", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Assign.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blocksPalette.addTemplate(name, icon, cell);
+
+        name = mxConstants.CRAYONSCRIPT_SHAPE_PROPERTY;
+        cell = graphComponent.createPropertyShape(name, MessageFormat.format("{0} . {1}", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Property.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
 
         name = mxConstants.CRAYONSCRIPT_SHAPE_EQUALS;
@@ -237,62 +288,40 @@ public class mxCrayonScriptNotebook {
         graphComponent.repaint();
     }
 
-    static class mxCrayonScriptEvent {
-
+    static class mxCrayonScriptEventPage extends mxCrayonScriptAbstractPage {
+        mxCrayonScriptEventPage(Document document) {
+            super(document);
+        }
     }
 
-    static class mxCrayonScriptFunction {
-
+    static class mxCrayonScriptFunctionPage extends mxCrayonScriptAbstractPage {
+        mxCrayonScriptFunctionPage(Document document) {
+            super(document);
+        }
     }
 
-    static class mxCrayonScriptGraph {
-
+    static class mxCrayonScriptGraphPage extends mxCrayonScriptAbstractPage {
+        mxCrayonScriptGraphPage(Document document) {
+            super(document);
+        }
     }
 
-    static class mxCrayonScriptObject {
-
+    static class mxCrayonScriptObjectPage extends mxCrayonScriptAbstractPage {
+        mxCrayonScriptObjectPage(Document document) {
+            super(document);
+        }
     }
 
-    static class mxCrayonScriptUserPrefs {
-
+    static class mxCrayonScriptUserPrefPage extends mxCrayonScriptAbstractPage {
+        mxCrayonScriptUserPrefPage(Document document) {
+            super(document);
+        }
     }
 
-//    try {
-//        File eventsFile = new File(eventsUrl.toURI());
-//        File functionsFile = new File(functionsUrl.toURI());
-//        File graphsFile = new File(graphsUrl.toURI());
-//        File objectsFile = new File(objectsUrl.toURI());
-//        File userPrefsFile = new File(userPrefsUrl.toURI());
-//
-//        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//
-//        for (File eventFile : eventsFile.listFiles()) {
-//            DocumentBuilder db = dbf.newDocumentBuilder();
-//            Document doc = db.parse(eventFile);
-//            new mxCrayonScriptNotebook.mxCrayonScriptEvent(doc);
-//        }
-//        for (File functionFile : functionsFile.listFiles()) {
-//
-//        }
-//        for (File graphFile : graphsFile.listFiles()) {
-//
-//        }
-//        for (File objectFile : objectsFile.listFiles()) {
-//
-//        }
-//
-//    } catch (
-//    ParserConfigurationException e) {
-//        throw new IllegalStateException(e);
-//    } catch (
-//    URISyntaxException e) {
-//        throw new IllegalStateException(e);
-//    } catch (
-//    IOException e) {
-//        e.printStackTrace();
-//    } catch (
-//    SAXException e) {
-//        e.printStackTrace();
-//    }
+    static class mxCrayonScriptAbstractPage {
+        mxCrayonScriptAbstractPage(Document document) {
+
+        }
+    }
 
 }

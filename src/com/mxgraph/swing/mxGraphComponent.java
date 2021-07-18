@@ -2879,6 +2879,22 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         return cell;
     }
 
+    public mxCell createPropertyShape(String name, String initialText)
+    {
+        String style = name;
+        String value = "";
+        int width = 420;
+        int height = 70;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
+        cell.setMarked(false);
+        cell.setText(initialText);
+        cell.setDropSources(CellFrameEnum.INNER_1);
+        cell.setCellType(CellTypeEnum.PROPERTY);
+        return cell;
+    }
+
     public mxCell createExpressionShape(String name, String initialText)
     {
         String style = name;
@@ -2948,7 +2964,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
         cell.setShape(true);
-        cell.setDropTargets(CellFrameEnum.INNER_1, CellFrameEnum.INNER_2);
+        cell.setDropTargets(CellFrameEnum.INNER_1);
         cell.setDropSources(CellFrameEnum.OUTER);
         cell.setCellType(CellTypeEnum.BLOCK);
         return cell;
@@ -2965,6 +2981,22 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setVertex(true);
         cell.setShape(true);
         cell.setCellType(CellTypeEnum.MARKER);
+        return cell;
+    }
+
+    public mxCell createEventShape(String name, String initialText)
+    {
+        String style = name;
+        String value = "";
+        int width = 420;
+        int height = 70;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
+        cell.setMarked(false);
+        cell.setText(initialText);
+        cell.setDropSources(CellFrameEnum.INNER_1);
+        cell.setCellType(CellTypeEnum.EVENT);
         return cell;
     }
 

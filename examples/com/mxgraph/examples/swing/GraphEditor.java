@@ -88,8 +88,9 @@ public class GraphEditor extends BasicGraphEditor {
         });
 
         // open the notebook
-        mxCrayonScriptNotebook notebook = new mxCrayonScriptNotebook("/com/mxgraph/crayonscript/resources");
+        mxCrayonScriptNotebook notebook = new mxCrayonScriptNotebook("/com/mxgraph/crayonscript/resources/notebook");
         notebook.loadGraph(graphComponent, graphTemplates);
+        notebook.loadBlocks(graphComponent, blockTemplates);
         notebook.showGraph(graphComponent);
     }
 

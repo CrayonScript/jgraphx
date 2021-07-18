@@ -1016,6 +1016,8 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_ASSIGN = "Assignment";
 
+	public static final String CRAYONSCRIPT_SHAPE_PROPERTY = "Property";
+
 	public static final String CRAYONSCRIPT_SHAPE_EQUALS = "Equals";
 
 	public static final String CRAYONSCRIPT_SHAPE_NOTEQUALS = "Not Equals";
@@ -1048,7 +1050,7 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_TEMPLATE = "template";
 
-	public static final String CRAYONSCRIPT_NEW_EVENT = "New Event";
+	public static final String CRAYONSCRIPT_SHAPE_EVENT = "Event";
 
 	public static final String CRAYONSCRIPT_NEW_GRAPH = "New Graph";
 
