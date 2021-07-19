@@ -5,6 +5,7 @@ public enum CellTypeEnum {
     BLOCK,
     BLOCK_EXTENSION,
     EXPRESSION,
+    FUNCTION,
     EVENT,
     MARKER,
     PROPERTY,

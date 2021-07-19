@@ -432,7 +432,12 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return cellType == CellTypeEnum.EVENT;
 	}
 
-	public boolean isEditable() { return isStatement() || isExpression() || isEvent(); }
+	public boolean isFunction()
+	{
+		return cellType == CellTypeEnum.FUNCTION;
+	}
+
+	public boolean isEditable() { return isStatement() || isExpression() || isEvent() || isFunction(); }
 
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#isShape()

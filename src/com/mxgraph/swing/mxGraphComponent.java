@@ -2905,6 +2905,22 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         return cell;
     }
 
+    public mxCell createFunctionShape(String name, String initialText)
+    {
+        String style = name;
+        String value = "";
+        int width = 420;
+        int height = 70;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
+        cell.setMarked(false);
+        cell.setText(initialText);
+        cell.setDropSources(CellFrameEnum.INNER_1);
+        cell.setCellType(CellTypeEnum.FUNCTION);
+        return cell;
+    }
+
     public mxCell createExpressionShape(String name, String initialText)
     {
         String style = name;

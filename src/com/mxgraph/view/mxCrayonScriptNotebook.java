@@ -131,6 +131,12 @@ public class mxCrayonScriptNotebook {
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
 
+        name = mxConstants.CRAYONSCRIPT_SHAPE_FUNCTION;
+        cell = graphComponent.createFunctionShape(name, MessageFormat.format("function", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Function.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blocksPalette.addTemplate(name, icon, cell);
+
         name = mxConstants.CRAYONSCRIPT_SHAPE_EQUALS;
         cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} == {1} )", variableSymbol, variableSymbol));
         iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Equals.png");

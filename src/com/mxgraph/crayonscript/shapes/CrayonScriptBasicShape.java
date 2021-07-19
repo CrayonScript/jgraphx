@@ -138,6 +138,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Assign.svg")));
 		svgElementsMap.put(ShapeStructureType.PROPERTY,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Property.svg")));
+		svgElementsMap.put(ShapeStructureType.FUNCTION,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Function.svg")));
 		svgElementsMap.put(ShapeStructureType.WAIT_FOR,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/WaitFor.svg")));
 		svgElementsMap.put(ShapeStructureType.IF,
@@ -399,6 +401,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		WAIT_FOR,
 		EVENT,
 		ASSIGN,
+		FUNCTION,
 		PARALLEL,
 		PROPERTY,
 		RUN,

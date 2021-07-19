@@ -1020,6 +1020,8 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_PROPERTY = "Property";
 
+	public static final String CRAYONSCRIPT_SHAPE_FUNCTION = "Function";
+
 	public static final String CRAYONSCRIPT_SHAPE_EQUALS = "Equals";
 
 	public static final String CRAYONSCRIPT_SHAPE_NOTEQUALS = "Not Equals";

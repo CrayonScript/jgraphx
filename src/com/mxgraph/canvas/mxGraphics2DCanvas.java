@@ -86,6 +86,9 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_PROPERTY;
 		putShape(shapeName, new CrayonScriptPropertyShape(shapeName));
 
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_FUNCTION;
+		putShape(shapeName, new CrayonScriptFunctionShape(shapeName));
+
 		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_EQUALS;
 		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
 
