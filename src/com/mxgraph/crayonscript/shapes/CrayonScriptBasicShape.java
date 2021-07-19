@@ -201,6 +201,15 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				expressionInner1.rect.getFrame().getHeight());
 		hotspotSvgElementsMap.get(ShapeStructureType.EXPRESSION).set(CellFrameEnum.INNER_1.bitIndex, expressionInner1);
 
+		SvgElement functionInner1 = hotspotSvgElementsMap.get(ShapeStructureType.FUNCTION).get(CellFrameEnum.INNER_1.bitIndex);
+		functionInner1 = functionInner1.copy();
+		functionInner1.rect.setFrame(
+				functionInner1.rect.getFrame().getX(),
+				functionInner1.rect.getFrame().getY(),
+				170,
+				functionInner1.rect.getFrame().getHeight());
+		hotspotSvgElementsMap.get(ShapeStructureType.FUNCTION).set(CellFrameEnum.INNER_1.bitIndex, functionInner1);
+
 		initialized = true;
 	}
 
