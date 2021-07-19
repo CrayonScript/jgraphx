@@ -24,18 +24,12 @@ import java.util.ArrayList;
 public class mxCrayonScriptNotebook {
 
     Document notebookDocument = null;
-    ArrayList<mxCrayonScriptEventPage> eventPages = new ArrayList<>();
     ArrayList<mxCrayonScriptFunctionPage> functionPages = new ArrayList<>();
     ArrayList<mxCrayonScriptGraphPage> graphPages = new ArrayList<>();
-    ArrayList<mxCrayonScriptObjectPage> objectPages = new ArrayList<>();
     mxCrayonScriptUserPrefPage userPrefPage = null;
 
     public mxCrayonScriptNotebook(String resourceRoot) {
         this.notebookDocument = loadPageDocument(String.format("%s/CrayonScript.notebook", resourceRoot));
-        ArrayList<Document> eventDocuments = loadPageDocuments(String.format("%s/events", resourceRoot));
-        for (Document eventDocument: eventDocuments) {
-            eventPages.add(new mxCrayonScriptEventPage(eventDocument));
-        }
         ArrayList<Document> functionDocuments = loadPageDocuments(String.format("%s/functions", resourceRoot));
         for (Document functionDocument: functionDocuments) {
             functionPages.add(new mxCrayonScriptFunctionPage(functionDocument));
@@ -43,10 +37,6 @@ public class mxCrayonScriptNotebook {
         ArrayList<Document> graphDocuments = loadPageDocuments(String.format("%s/graphs", resourceRoot));
         for (Document graphDocument: graphDocuments) {
             graphPages.add(new mxCrayonScriptGraphPage(graphDocument));
-        }
-        ArrayList<Document> objectDocuments = loadPageDocuments(String.format("%s/objects", resourceRoot));
-        for (Document objectDocument: objectDocuments) {
-            objectPages.add(new mxCrayonScriptObjectPage(objectDocument));
         }
         Document userPrefsDocument = loadPageDocument(String.format("%s/CrayonScript.userprefs", resourceRoot));
         userPrefPage = new mxCrayonScriptUserPrefPage(userPrefsDocument);
@@ -214,26 +204,32 @@ public class mxCrayonScriptNotebook {
         blocksPalette.addTemplate(name, icon, cell);
 
         name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION;
-        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL);
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender2.png");
+        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_RUN_PARALLEL);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender.png");
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
 
         name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION;
-        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL);
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender2.png");
+        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_RUN_SEQUENTIAL);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender.png");
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL;
+        name = mxConstants.CRAYONSCRIPT_SHAPE_RUN_PARALLEL;
         cell = graphComponent.createStackShape(name);
         iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Parallel.png");
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL;
+        name = mxConstants.CRAYONSCRIPT_SHAPE_RUN_SEQUENTIAL;
         cell = graphComponent.createStackShape(name);
         iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Sequential.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blocksPalette.addTemplate(name, icon, cell);
+
+        name = mxConstants.CRAYONSCRIPT_SHAPE_RUN_SINGLE;
+        cell = graphComponent.createStackShape(name);
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Run.png");
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
 
@@ -281,12 +277,6 @@ public class mxCrayonScriptNotebook {
         graphComponent.repaint();
     }
 
-    static class mxCrayonScriptEventPage extends mxCrayonScriptAbstractPage {
-        mxCrayonScriptEventPage(Document document) {
-            super(document);
-        }
-    }
-
     static class mxCrayonScriptFunctionPage extends mxCrayonScriptAbstractPage {
         mxCrayonScriptFunctionPage(Document document) {
             super(document);
@@ -295,12 +285,6 @@ public class mxCrayonScriptNotebook {
 
     static class mxCrayonScriptGraphPage extends mxCrayonScriptAbstractPage {
         mxCrayonScriptGraphPage(Document document) {
-            super(document);
-        }
-    }
-
-    static class mxCrayonScriptObjectPage extends mxCrayonScriptAbstractPage {
-        mxCrayonScriptObjectPage(Document document) {
             super(document);
         }
     }

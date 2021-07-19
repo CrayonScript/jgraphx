@@ -22,7 +22,7 @@ public class CrayonScriptStylesheet extends mxStylesheet {
     {
         Map<String, Object> style = new Hashtable<String, Object>();
 
-        style.put(mxConstants.STYLE_SHAPE, mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL);
+        style.put(mxConstants.STYLE_SHAPE, mxConstants.CRAYONSCRIPT_SHAPE_RUN_PARALLEL);
         style.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_CLASSIC);
         style.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
         style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);

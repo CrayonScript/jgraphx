@@ -122,11 +122,14 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_MAX;
 		putShape(shapeName, new CrayonScriptExpressionShape(shapeName));
 
-		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL;
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_RUN_PARALLEL;
 		putShape(shapeName, new CrayonScriptParallelShape(shapeName));
 
-		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL;
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_RUN_SEQUENTIAL;
 		putShape(shapeName, new CrayonScriptSequentialShape(shapeName));
+
+		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_RUN_SINGLE;
+		putShape(shapeName, new CrayonScriptRunShape(shapeName));
 
 		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_IF;
 		putShape(shapeName, new CrayonScriptIfShape(shapeName));
@@ -145,9 +148,6 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 
 		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_WAIT_FOR;
 		putShape(mxConstants.CRAYONSCRIPT_SHAPE_WAIT_FOR, new CrayonScriptWaitForShape(shapeName));
-
-		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_GRAPH_MAIN;
-		putShape(shapeName, new CrayonScriptGraphMainShape(shapeName));
 
 		shapeName = mxConstants.CRAYONSCRIPT_SHAPE_TEMPLATE;
 		putShape(shapeName, new CrayonScriptGraphTemplateShape(shapeName));

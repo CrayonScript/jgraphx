@@ -140,8 +140,6 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Property.svg")));
 		svgElementsMap.put(ShapeStructureType.WAIT_FOR,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/WaitFor.svg")));
-		svgElementsMap.put(ShapeStructureType.VERTICAL2,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Vertical2.svg")));
 		svgElementsMap.put(ShapeStructureType.IF,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/If.svg")));
 		svgElementsMap.put(ShapeStructureType.ELSE_IF,
@@ -150,14 +148,16 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/While.svg")));
 		svgElementsMap.put(ShapeStructureType.FOR,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/For.svg")));
-		svgElementsMap.put(ShapeStructureType.PARALLEL2,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Parallel2.svg")));
-		svgElementsMap.put(ShapeStructureType.SEQUENTIAL2,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Sequential2.svg")));
-		svgElementsMap.put(ShapeStructureType.PARALLEL_VEXTENDER2,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender2.svg")));
-		svgElementsMap.put(ShapeStructureType.SEQUENTIAL_VEXTENDER2,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender2.svg")));
+		svgElementsMap.put(ShapeStructureType.PARALLEL,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Parallel.svg")));
+		svgElementsMap.put(ShapeStructureType.SEQUENTIAL,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Sequential.svg")));
+		svgElementsMap.put(ShapeStructureType.RUN,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Run.svg")));
+		svgElementsMap.put(ShapeStructureType.PARALLEL_VEXTENDER,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender.svg")));
+		svgElementsMap.put(ShapeStructureType.SEQUENTIAL_VEXTENDER,
+				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender.svg")));
 		svgElementsMap.put(ShapeStructureType.EXPRESSION,
 				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Expression.svg")));
 		svgElementsMap.put(ShapeStructureType.MARKER,
@@ -399,17 +399,17 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		WAIT_FOR,
 		EVENT,
 		ASSIGN,
-		PARALLEL2,
+		PARALLEL,
 		PROPERTY,
-		SEQUENTIAL2,
+		RUN,
+		SEQUENTIAL,
 		EXPRESSION,
-		VERTICAL2,
 		IF,
 		ELSE_IF,
 		FOR,
 		WHILE,
-		PARALLEL_VEXTENDER2,
-		SEQUENTIAL_VEXTENDER2,
+		PARALLEL_VEXTENDER,
+		SEQUENTIAL_VEXTENDER,
 		MARKER,
 		TEMPLATE,
 	}

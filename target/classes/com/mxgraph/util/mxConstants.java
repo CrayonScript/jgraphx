@@ -998,9 +998,11 @@ public class mxConstants
 	 */
 	public static final int FONT_STRIKETHROUGH= 8;
 
-	public static final String CRAYONSCRIPT_SHAPE_PARALLEL = "Parallel";
+	public static final String CRAYONSCRIPT_SHAPE_RUN_PARALLEL = "Run Parallel";
 
-	public static final String CRAYONSCRIPT_SHAPE_SEQUENTIAL = "Series";
+	public static final String CRAYONSCRIPT_SHAPE_RUN_SEQUENTIAL = "Run Series";
+
+	public static final String CRAYONSCRIPT_SHAPE_RUN_SINGLE = "Run Single";
 
 	public static final String CRAYONSCRIPT_SHAPE_IF = "If Condition";
 
@@ -1010,9 +1012,9 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_FOR = "For Loop";
 
-	public static final String CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION = "Par";
+	public static final String CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION = "Add Parallel";
 
-	public static final String CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION = "Ser";
+	public static final String CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION = "Add Series";
 
 	public static final String CRAYONSCRIPT_SHAPE_ASSIGN = "Assignment";
 
@@ -1041,8 +1043,6 @@ public class mxConstants
 	public static final String CRAYONSCRIPT_SHAPE_MIN = "Min";
 
 	public static final String CRAYONSCRIPT_SHAPE_MAX = "Max";
-
-	public static final String CRAYONSCRIPT_SHAPE_GRAPH_MAIN = "Main Graph";
 
 	public static final String CRAYONSCRIPT_SHAPE_WAIT_FOR = "Wait For";
 

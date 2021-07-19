@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CrayonScriptParallelVExtenderShape extends CrayonScriptBasicShape {
 
     public CrayonScriptParallelVExtenderShape(String shapeName) {
-        super(ShapeStructureType.PARALLEL_VEXTENDER2, shapeName);
+        super(ShapeStructureType.PARALLEL_VEXTENDER, shapeName);
     }
 
     public boolean isExtender() { return true; }

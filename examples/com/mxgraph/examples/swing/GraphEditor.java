@@ -65,9 +65,7 @@ public class GraphEditor extends BasicGraphEditor {
         // Creates the shapes palette
         EditorPalette graphTemplates = insertPalette("Graphs");
         EditorPalette blockTemplates = insertPalette("Blocks");
-        EditorPalette eventTemplates = insertPalette("Events");
         EditorPalette functionTemplates = insertPalette("Functions");
-        EditorPalette objectTemplates = insertPalette("Objects");
 
         // Sets the edge template to be used for creating new edges if an edge
         // is clicked in the shape palette

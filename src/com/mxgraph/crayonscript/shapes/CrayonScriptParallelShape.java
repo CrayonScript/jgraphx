@@ -1,7 +1,6 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
-import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxCellState;
 
 import java.awt.*;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 public class CrayonScriptParallelShape extends CrayonScriptBasicShape {
 
     public CrayonScriptParallelShape(String shapeName) {
-        super(ShapeStructureType.PARALLEL2, shapeName);
+        super(ShapeStructureType.PARALLEL, shapeName);
     }
 
     @Override
