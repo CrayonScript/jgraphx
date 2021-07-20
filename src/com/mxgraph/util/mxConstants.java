@@ -1022,6 +1022,12 @@ public class mxConstants
 
 	public static final String CRAYONSCRIPT_SHAPE_FUNCTION = "Function";
 
+	public static final String CRAYONSCRIPT_SHAPE_FOR_IN_RANGE = "For In Range";
+
+	public static final String CRAYONSCRIPT_SHAPE_FOR_EACH_EXPR = "For Each";
+
+	public static final String CRAYONSCRIPT_SHAPE_WHILE_BOOLEAN_EXPR = "While Boolean Expr";
+
 	public static final String CRAYONSCRIPT_SHAPE_EQUALS = "Equals";
 
 	public static final String CRAYONSCRIPT_SHAPE_NOTEQUALS = "Not Equals";

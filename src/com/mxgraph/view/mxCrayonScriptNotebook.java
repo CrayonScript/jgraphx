@@ -94,7 +94,7 @@ public class mxCrayonScriptNotebook {
         String name = mxConstants.CRAYONSCRIPT_SHAPE_FUNCTION;
         String functionName = "print(string)";
         // TODO: fix me to open a new graph editor file
-        mxCell cell = graphComponent.createFunctionExpressionShape(name, functionName);
+        mxCell cell = graphComponent.createFunctionShape(name, functionName);
         URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Blank.png");
         ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         functionsPalette.addTemplate(functionName, icon, cell);
@@ -193,8 +193,26 @@ public class mxCrayonScriptNotebook {
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
 
+        name = mxConstants.CRAYONSCRIPT_SHAPE_FOR_IN_RANGE;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("for $i in range($start, $end)", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ForInRangeExpr.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blocksPalette.addTemplate(name, icon, cell);
+
+        name = mxConstants.CRAYONSCRIPT_SHAPE_FOR_EACH_EXPR;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("for $var in $list", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ForEachExpr.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blocksPalette.addTemplate(name, icon, cell);
+
+        name = mxConstants.CRAYONSCRIPT_SHAPE_WHILE_BOOLEAN_EXPR;
+        cell = graphComponent.createExpressionShape(name, MessageFormat.format("while $booleanExpr", variableSymbol, variableSymbol));
+        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/WhileBooleanExpr.png");
+        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+        blocksPalette.addTemplate(name, icon, cell);
+
         name = mxConstants.CRAYONSCRIPT_SHAPE_FUNCTION;
-        cell = graphComponent.createFunctionExpressionShape(name, MessageFormat.format("function", variableSymbol, variableSymbol));
+        cell = graphComponent.createFunctionShape(name, MessageFormat.format("function", variableSymbol, variableSymbol));
         iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Function.png");
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
