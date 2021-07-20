@@ -482,7 +482,8 @@ public class mxCellEditor implements mxICellEditor
 			currentEditor.revalidate();
 			currentEditor.requestFocusInWindow();
 
-			currentEditor.addKeyListener(new mxCellEditorKeyListener(state));
+			currentEditorKeyListener = new mxCellEditorKeyListener(state);
+			currentEditor.addKeyListener(currentEditorKeyListener);
 
 			configureActionMaps();
 		}
