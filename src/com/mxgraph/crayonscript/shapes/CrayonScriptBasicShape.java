@@ -45,6 +45,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected Color paintedFrameColor;
 
+	protected ArrayList<SvgElement> currentSvgElements = null;
+
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> hotspotSvgElementsMap;
@@ -65,8 +67,20 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	public ArrayList<SvgElement> getSvgElements()
 	{
-		ArrayList<SvgElement> svgElements = svgElementsMap.get(shapeStructureType);
-		return  svgElements;
+		if (currentSvgElements == null)
+		{
+			ArrayList<SvgElement> svgElements = svgElementsMap.get(shapeStructureType);
+			currentSvgElements = new ArrayList<>();
+			for (SvgElement svgElement: svgElements) {
+				currentSvgElements.add(svgElement.copy());
+			}
+		}
+		return  currentSvgElements;
+	}
+
+	public void resetSvgElements()
+	{
+		currentSvgElements = null;
 	}
 
 	public ArrayList<SvgElement> getHotspotSvgElements()

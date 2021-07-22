@@ -417,6 +417,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return cellType == CellTypeEnum.TEMPLATE;
 	}
 
+	public boolean isBlock() { return cellType == CellTypeEnum.BLOCK; }
+
 	public boolean isExpression()
 	{
 		return cellType == CellTypeEnum.EXPRESSION;
@@ -427,10 +429,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return cellType == CellTypeEnum.STATEMENT;
 	}
 
-	public boolean isEvent()
-	{
-		return cellType == CellTypeEnum.EVENT;
-	}
+	public boolean isEvent() { return cellType == CellTypeEnum.EVENT; }
 
 	public boolean isFunction()
 	{

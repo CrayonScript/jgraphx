@@ -605,6 +605,12 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             Object[] cells = (Object[]) evt.getProperty("cells");
             mxCell cell = (mxCell) cells[0];
 
+            mxCell parentCell = (mxCell) cell.getParent();
+            boolean parentCellIsBlock = parentCell != null && parentCell.isBlock();
+            boolean thisCellIsBlock = cell.isBlock();
+
+            // this block got added to another block
+
             mxCell[] previousCells = (mxCell[]) evt.getProperty("previous");
             mxCell previousCell = previousCells == null ? null : previousCells[0];
 
