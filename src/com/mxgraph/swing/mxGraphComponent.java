@@ -2976,7 +2976,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setVertex(true);
         cell.setShape(true);
         cell.setDropTargets(CellFrameEnum.INNER_1, CellFrameEnum.INNER_2);
-        cell.setDropSources(CellFrameEnum.OUTER);
+        cell.setDropSources(CellFrameEnum.OUTER, CellFrameEnum.INNER_1, CellFrameEnum.INNER_2);
         cell.setCellType(CellTypeEnum.BLOCK);
         return cell;
     }
