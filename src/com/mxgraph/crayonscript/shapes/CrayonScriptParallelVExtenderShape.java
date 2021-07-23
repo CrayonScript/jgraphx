@@ -20,7 +20,6 @@ public class CrayonScriptParallelVExtenderShape extends CrayonScriptBasicShape {
 
         initialize(state);
 
-        Rectangle stateRect = state.getRectangle();
         ArrayList<SvgElement> svgElements = getSvgElements();
 
         SvgElement first = svgElements.get(0);
@@ -29,8 +28,8 @@ public class CrayonScriptParallelVExtenderShape extends CrayonScriptBasicShape {
 
         CellPaintMode paintMode = state.getPaintMode();
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(first.fillColor), paintMode,true, true);
-        paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(second.fillColor), paintMode);
-        paintRectangle(canvas, scaleRectangle(stateRect, first, third), getColor(third.fillColor), paintMode);
+        paintRectangle(canvas, scaleRectangle(state, first, first), getColor(first.fillColor), paintMode,true, true);
+        paintRectangle(canvas, scaleRectangle(state, first, second), getColor(second.fillColor), paintMode);
+        paintRectangle(canvas, scaleRectangle(state, first, third), getColor(third.fillColor), paintMode);
     }
 }

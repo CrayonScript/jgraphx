@@ -19,13 +19,12 @@ public class CrayonScriptMarkerShape extends CrayonScriptBasicShape {
 
         initialize(state);
 
-        Rectangle stateRect = state.getRectangle();
         ArrayList<SvgElement> svgElements = getSvgElements();
 
         SvgElement first = svgElements.get(0);
 
         CellPaintMode paintMode = state.getPaintMode();
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), ((mxCell) state.getCell()).markerColor, paintMode);
+        paintRectangle(canvas, scaleRectangle(state, first, first), ((mxCell) state.getCell()).markerColor, paintMode);
     }
 }

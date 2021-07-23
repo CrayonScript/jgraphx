@@ -405,6 +405,15 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	}
 
 	public static RoundRectangle2D scaleRectangle(
+			mxCellState state,
+			SvgElement root,
+			SvgElement target)
+	{
+		Rectangle stateRect = state.getRectangle();
+		return scaleRectangle(stateRect, root, target);
+	}
+
+	public static RoundRectangle2D scaleRectangle(
 			Rectangle stateRect,
 			SvgElement root,
 			SvgElement target)

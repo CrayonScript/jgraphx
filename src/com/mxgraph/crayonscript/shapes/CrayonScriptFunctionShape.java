@@ -20,7 +20,6 @@ public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
 
         initialize(state);
 
-        Rectangle stateRect = state.getRectangle();
         ArrayList<SvgElement> svgElements = getSvgElements();
 
         SvgElement first = svgElements.get(0);
@@ -43,8 +42,8 @@ public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
 
         CellPaintMode paintMode = state.getPaintMode();
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), paintedFirstColor, paintMode);
-        paintRectangle(canvas, scaleRectangle(stateRect, first, second), paintedSecondColor, paintMode);
+        paintRectangle(canvas, scaleRectangle(state, first, first), paintedFirstColor, paintMode);
+        paintRectangle(canvas, scaleRectangle(state, first, second), paintedSecondColor, paintMode);
 
         drawText(canvas, ((mxCell) state.getCell()).getText(), state);
     }
