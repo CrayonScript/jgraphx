@@ -2787,10 +2787,19 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                 extendedY += extendedCell.getGeometry().getY();
                 extendedCell = (mxCell) extendedCell.getParent();
             }
+            double extendedHeight = extendedGeometry.getHeight();
+            double frameArcHeight = frameRectangle.getArcHeight();
+            if (mappedCell.getPaintMode() == CellPaintMode.FRAME_IN_FRAME)
+            {
+                frameArcHeight = 0;
+                double subY = mappedCell.getSubGeometry(1).getY();
+                extendedY += subY;
+                extendedHeight -= subY;
+            }
             double markerX = templateCell.getGeometry().getX();
-            double markerY = templateCell.getGeometry().getY() + (isExtender ? 0 : frameRectangle.getArcHeight()) + extendedY;
+            double markerY = templateCell.getGeometry().getY() + (isExtender ? 0 : frameArcHeight) + extendedY;
             mappedMarkerCell.getGeometry().setWidth(30);
-            mappedMarkerCell.getGeometry().setHeight(extendedGeometry.getHeight() + (isExtender ? 0 : - frameRectangle.getArcHeight()));
+            mappedMarkerCell.getGeometry().setHeight(extendedHeight + (isExtender ? 0 : - frameArcHeight));
             mappedMarkerCell.getGeometry().setX(markerX - 40*(offset+1));
             mappedMarkerCell.getGeometry().setY(markerY);
             graph.getModel().setVisible(mappedMarkerCell, true);
