@@ -2,6 +2,7 @@ package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.CellFrameEnum;
+import com.mxgraph.model.CellPaintMode;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.shape.mxIShape;
 import com.mxgraph.view.mxCellState;
@@ -33,4 +34,6 @@ public interface CrayonScriptIShape extends mxIShape {
     RoundRectangle2D getFrame(CellFrameEnum frameEnum);
 
     boolean isExtender();
+
+    void setGeometryForPaintMode(CellPaintMode paintMode);
 }

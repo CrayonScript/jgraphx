@@ -5,6 +5,7 @@ package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.CellFrameEnum;
+import com.mxgraph.model.CellPaintMode;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxDefaultTextShape;
 import com.mxgraph.shape.mxStencilShape;
@@ -33,6 +34,11 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	{
 		this.shapeStructureType = shapeStructureType;
 		this.shapeName = shapeName;
+		this.currentSvgElements = new ArrayList<>();
+		ArrayList<SvgElement> svgElements = svgElementsMap.get(shapeStructureType);
+		for (SvgElement svgElement: svgElements) {
+			currentSvgElements.add(svgElement.copy());
+		}
 	}
 
 	protected String shapeName;
@@ -63,18 +69,17 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		TEXT_STYLE.put(mxConstants.STYLE_FONTSTYLE, 0);
 		TEXT_STYLE.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
 		TEXT_STYLE.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+
+		initialize();
 	};
+
+	public void setGeometryForPaintMode(CellPaintMode paintMode)
+	{
+
+	}
 
 	public ArrayList<SvgElement> getSvgElements()
 	{
-		if (currentSvgElements == null)
-		{
-			ArrayList<SvgElement> svgElements = svgElementsMap.get(shapeStructureType);
-			currentSvgElements = new ArrayList<>();
-			for (SvgElement svgElement: svgElements) {
-				currentSvgElements.add(svgElement.copy());
-			}
-		}
 		return  currentSvgElements;
 	}
 
@@ -140,7 +145,6 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	protected void initialize(mxCellState state)
 	{
 		checkTemplate(state);
-		initialize();
 	}
 
 	protected static void initialize() {
