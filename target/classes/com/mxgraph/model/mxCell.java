@@ -297,7 +297,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	public void setPaintMode(CellPaintMode paintMode)
 	{
-		referenceShape.setPaintMode(paintMode);
+		//referenceShape.setPaintMode(paintMode);
 	}
 
 	public void snapToParentGeometry()
