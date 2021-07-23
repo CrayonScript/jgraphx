@@ -63,11 +63,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	protected mxGeometry geometry;
 
 	/**
-	 * Holds the original geometry. Default is null
-	 */
-	protected mxGeometry originalGeometry;
-
-	/**
 	 * Holds the style as a string of the form
 	 * stylename[;key=value]. Default is null.
 	 */
