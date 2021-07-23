@@ -25,8 +25,6 @@ public interface CrayonScriptIShape extends mxIShape {
 
     int getOpacity();
 
-    Color getPaintedFrameColor();
-
     Color getFrameColor();
 
     Color getFrameColor(CellFrameEnum frameEnum);

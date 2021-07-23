@@ -25,6 +25,6 @@ public class CrayonScriptMarkerShape extends CrayonScriptBasicShape {
 
         CellPaintMode paintMode = state.getPaintMode();
 
-        paintRectangle(canvas, scaleRectangle(state, first, first), ((mxCell) state.getCell()).markerColor, paintMode);
+        paintRectangle(canvas, scaleRectangle(state, first, first, paintMode), ((mxCell) state.getCell()).markerColor, paintMode);
     }
 }

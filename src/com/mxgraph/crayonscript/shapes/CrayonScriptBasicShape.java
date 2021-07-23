@@ -44,8 +44,6 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected boolean isTemplate = false;
 
-	protected Color paintedFrameColor;
-
 	protected static Map<ShapeStructureType, Map<CellPaintMode, ArrayList<SvgElement>>> svgElementsMap;
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> hotspotSvgElementsMap;
@@ -393,15 +391,19 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return adjustedColor;
 	}
 
-	public Color getPaintedFrameColor()
-	{
-		return paintedFrameColor;
-	}
-
 	public int getOpacity()
 	{
 		int opacity = isTemplate ? 255 : 85;
 		return opacity;
+	}
+
+	public static RoundRectangle2D scaleRectangle(
+			mxCellState state,
+			SvgElement root,
+			SvgElement target,
+			CellPaintMode paintMode)
+	{
+		return scaleRectangle(state, root, target);
 	}
 
 	public static RoundRectangle2D scaleRectangle(

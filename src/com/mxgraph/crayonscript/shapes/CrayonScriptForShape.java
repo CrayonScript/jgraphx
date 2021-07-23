@@ -26,8 +26,8 @@ public class CrayonScriptForShape extends CrayonScriptBasicShape {
 
         CellPaintMode paintMode = state.getPaintMode();
 
-        paintRectangle(canvas, scaleRectangle(state, first, first), getColor(first.fillColor), paintMode, true);
-        paintRectangle(canvas, scaleRectangle(state, first, second), getColor(second.fillColor), paintMode);
-        paintRectangle(canvas, scaleRectangle(state, first, third), getColor(third.fillColor), paintMode);
+        paintRectangle(canvas, scaleRectangle(state, first, first, paintMode), getColor(first.fillColor), paintMode, true);
+        paintRectangle(canvas, scaleRectangle(state, first, second, paintMode), getColor(second.fillColor), paintMode);
+        paintRectangle(canvas, scaleRectangle(state, first, third, paintMode), getColor(third.fillColor), paintMode);
     }
 }
