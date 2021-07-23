@@ -34,8 +34,4 @@ public interface CrayonScriptIShape extends mxIShape {
     RoundRectangle2D getFrame(CellFrameEnum frameEnum);
 
     boolean isExtender();
-
-    void setPaintMode(CellPaintMode paintMode);
-
-    CellPaintMode getPaintMode();
 }

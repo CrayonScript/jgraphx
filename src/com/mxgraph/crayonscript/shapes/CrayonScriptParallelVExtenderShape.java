@@ -1,6 +1,7 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
+import com.mxgraph.model.CellPaintMode;
 import com.mxgraph.view.mxCellState;
 
 import java.awt.*;
@@ -26,8 +27,10 @@ public class CrayonScriptParallelVExtenderShape extends CrayonScriptBasicShape {
         SvgElement second = svgElements.get(1);
         SvgElement third = svgElements.get(2);
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(first.fillColor), true, true);
-        paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(second.fillColor));
-        paintRectangle(canvas, scaleRectangle(stateRect, first, third), getColor(third.fillColor));
+        CellPaintMode paintMode = state.getPaintMode();
+
+        paintRectangle(canvas, scaleRectangle(stateRect, first, first), getColor(first.fillColor), paintMode,true, true);
+        paintRectangle(canvas, scaleRectangle(stateRect, first, second), getColor(second.fillColor), paintMode);
+        paintRectangle(canvas, scaleRectangle(stateRect, first, third), getColor(third.fillColor), paintMode);
     }
 }

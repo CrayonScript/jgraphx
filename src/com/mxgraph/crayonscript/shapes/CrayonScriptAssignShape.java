@@ -2,6 +2,7 @@ package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.CellFrameEnum;
+import com.mxgraph.model.CellPaintMode;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxCellState;
 
@@ -40,8 +41,10 @@ public class CrayonScriptAssignShape extends CrayonScriptBasicShape {
 
         paintedFrameColor = paintedFirstColor;
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), paintedFirstColor);
-        paintRectangle(canvas, scaleRectangle(stateRect, first, second), paintedSecondColor);
+        CellPaintMode paintMode = state.getPaintMode();
+
+        paintRectangle(canvas, scaleRectangle(stateRect, first, first), paintedFirstColor, paintMode);
+        paintRectangle(canvas, scaleRectangle(stateRect, first, second), paintedSecondColor, paintMode);
 
         drawText(canvas, ((mxCell) state.getCell()).getText(), state);
     }

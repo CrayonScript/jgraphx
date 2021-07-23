@@ -97,6 +97,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	protected CellTypeEnum cellType = CellTypeEnum.NATIVE;
 
+	protected CellPaintMode paintMode = CellPaintMode.DEFAULT;
+
 	/**
 	 * Reference to the last marked hotspot
 	 */
@@ -287,12 +289,12 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	public CellPaintMode getPaintMode()
 	{
-		return referenceShape.getPaintMode();
+		return paintMode;
 	}
 
 	public void setPaintMode(CellPaintMode paintMode)
 	{
-		//referenceShape.setPaintMode(paintMode);
+		this.paintMode = paintMode;
 	}
 
 	public void snapToParentGeometry()

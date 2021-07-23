@@ -1,6 +1,7 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
+import com.mxgraph.model.CellPaintMode;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxCellState;
 
@@ -23,6 +24,8 @@ public class CrayonScriptMarkerShape extends CrayonScriptBasicShape {
 
         SvgElement first = svgElements.get(0);
 
-        paintRectangle(canvas, scaleRectangle(stateRect, first, first), ((mxCell) state.getCell()).markerColor);
+        CellPaintMode paintMode = state.getPaintMode();
+
+        paintRectangle(canvas, scaleRectangle(stateRect, first, first), ((mxCell) state.getCell()).markerColor, paintMode);
     }
 }

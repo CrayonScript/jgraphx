@@ -7,6 +7,7 @@ import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
 import com.mxgraph.crayonscript.shapes.CrayonScriptIShape;
 import com.mxgraph.model.CellFrameEnum;
+import com.mxgraph.model.CellPaintMode;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
@@ -180,6 +181,11 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      */
     public void setCell(Object cell) {
         this.cell = cell;
+    }
+
+    public CellPaintMode getPaintMode()
+    {
+        return ((mxCell) cell).getPaintMode();
     }
 
     /**

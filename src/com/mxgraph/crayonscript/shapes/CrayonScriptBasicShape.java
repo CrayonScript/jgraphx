@@ -46,8 +46,6 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected Color paintedFrameColor;
 
-	protected CellPaintMode paintMode = CellPaintMode.DEFAULT;
-
 	protected static Map<ShapeStructureType, Map<CellPaintMode, ArrayList<SvgElement>>> svgElementsMap;
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> hotspotSvgElementsMap;
@@ -68,19 +66,9 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		initialize();
 	};
 
-	public CellPaintMode getPaintMode()
-	{
-		return this.paintMode;
-	}
-
-	public void setPaintMode(CellPaintMode paintMode)
-	{
-		this.paintMode = paintMode;
-	}
-
 	public ArrayList<SvgElement> getSvgElements()
 	{
-		return svgElementsMap.get(shapeStructureType).get(this.paintMode);
+		return svgElementsMap.get(shapeStructureType).get(CellPaintMode.DEFAULT);
 	}
 
 	public ArrayList<SvgElement> getHotspotSvgElements()
@@ -330,17 +318,29 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return svgElements;
 	}
 
-	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor)
+	protected void paintRectangle(mxGraphics2DCanvas canvas,
+								  RoundRectangle2D roundedRect,
+								  Color fillColor,
+								  CellPaintMode paintMode)
 	{
-		paintRectangle(canvas, roundedRect, fillColor, false);
+		paintRectangle(canvas, roundedRect, fillColor, paintMode,false);
 	}
 
-	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor, boolean isFrame)
+	protected void paintRectangle(mxGraphics2DCanvas canvas,
+								  RoundRectangle2D roundedRect,
+								  Color fillColor,
+								  CellPaintMode paintMode,
+								  boolean isFrame)
 	{
-		paintRectangle(canvas, roundedRect, fillColor, isFrame, false);
+		paintRectangle(canvas, roundedRect, fillColor, paintMode, isFrame, false);
 	}
 
-	protected void paintRectangle(mxGraphics2DCanvas canvas, RoundRectangle2D roundedRect, Color fillColor, boolean isFrame, boolean isExtender)
+	protected void paintRectangle(mxGraphics2DCanvas canvas,
+								  RoundRectangle2D roundedRect,
+								  Color fillColor,
+								  CellPaintMode paintMode,
+								  boolean isFrame,
+								  boolean isExtender)
 	{
 		Color color = fillColor;
 		if (color != null)
