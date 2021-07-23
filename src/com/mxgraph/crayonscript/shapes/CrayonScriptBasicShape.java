@@ -264,6 +264,29 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected static ArrayList<SvgElement> readSvgElements(URL url, CellPaintMode paintMode) {
 		ArrayList<SvgElement> svgElements = readSvgElements(url);
+		switch (paintMode)
+		{
+			case FRAME_IN_FRAME:
+				// adjust the svg elements such that the top of the outer frame is aligned with the top of the first child
+				// and bottom of the outer frame is aligned with the bottom of the last child
+				if (svgElements.size() > 1)
+				{
+					ArrayList<SvgElement> modifiedSvgElements = new ArrayList<>();
+					SvgElement outer = svgElements.get(0);
+					SvgElement first = svgElements.get(1);
+					SvgElement last = svgElements.get(svgElements.size()-1);
+					outer = outer.copy();
+					outer.rect.setFrame(
+							outer.rect.getX(),
+							first.rect.getY(),
+							outer.rect.getWidth(),
+							last.rect.getY() + last.rect.getHeight() - first.rect.getY()
+					);
+				}
+			case DEFAULT:
+			default:
+				break;
+		}
 		return svgElements;
 	}
 
