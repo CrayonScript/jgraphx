@@ -290,10 +290,14 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return extendedGeometry;
 	}
 
-	public void setGeometryForPaintMode(CellPaintMode paintMode)
+	public CellPaintMode getPaintMode()
 	{
-		if (referenceShape == null) return;
-		referenceShape.setGeometryForPaintMode(paintMode);
+		return referenceShape.getPaintMode();
+	}
+
+	public void setPaintMode(CellPaintMode paintMode)
+	{
+		referenceShape.setPaintMode(paintMode);
 	}
 
 	public void snapToParentGeometry()

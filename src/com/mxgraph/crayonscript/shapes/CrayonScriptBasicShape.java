@@ -46,6 +46,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected Color paintedFrameColor;
 
+	protected CellPaintMode paintMode = CellPaintMode.DEFAULT;
+
 	protected static Map<ShapeStructureType, Map<CellPaintMode, ArrayList<SvgElement>>> svgElementsMap;
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> hotspotSvgElementsMap;
@@ -66,14 +68,19 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		initialize();
 	};
 
-	public void setGeometryForPaintMode(CellPaintMode paintMode)
+	public CellPaintMode getPaintMode()
 	{
+		return this.paintMode;
+	}
 
+	public void setPaintMode(CellPaintMode paintMode)
+	{
+		this.paintMode = paintMode;
 	}
 
 	public ArrayList<SvgElement> getSvgElements()
 	{
-		return svgElementsMap.get(shapeStructureType).get(CellPaintMode.DEFAULT);
+		return svgElementsMap.get(shapeStructureType).get(this.paintMode);
 	}
 
 	public ArrayList<SvgElement> getHotspotSvgElements()
@@ -141,9 +148,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		String resourceStr = String.format("/com/mxgraph/crayonscript/images/%s.svg", typeStr);
 		URL resourceUrl = CrayonScriptBasicShape.class.getResource(resourceStr);
 		for (CellPaintMode paintMode: paintModes) {
-			paintModesMap.put(CellPaintMode.DEFAULT, readSvgElements(resourceUrl, paintMode));
+			paintModesMap.put(paintMode, readSvgElements(resourceUrl, paintMode));
 		}
-
 		return paintModesMap;
 	}
 
@@ -164,28 +170,28 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		paintModesMap = buildPaintModesFor("Function", CellPaintMode.DEFAULT);
 		svgElementsMap.put(ShapeStructureType.FUNCTION, paintModesMap);
 
-		paintModesMap = buildPaintModesFor("WaitFor", CellPaintMode.DEFAULT);
+		paintModesMap = buildPaintModesFor("WaitFor", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
 		svgElementsMap.put(ShapeStructureType.WAIT_FOR, paintModesMap);
 
-		paintModesMap = buildPaintModesFor("If", CellPaintMode.DEFAULT);
+		paintModesMap = buildPaintModesFor("If", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
 		svgElementsMap.put(ShapeStructureType.IF, paintModesMap);
 
-		paintModesMap = buildPaintModesFor("ElseIf", CellPaintMode.DEFAULT);
+		paintModesMap = buildPaintModesFor("ElseIf", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
 		svgElementsMap.put(ShapeStructureType.ELSE_IF, paintModesMap);
 
-		paintModesMap = buildPaintModesFor("While", CellPaintMode.DEFAULT);
+		paintModesMap = buildPaintModesFor("While", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
 		svgElementsMap.put(ShapeStructureType.WHILE, paintModesMap);
 
-		paintModesMap = buildPaintModesFor("For", CellPaintMode.DEFAULT);
+		paintModesMap = buildPaintModesFor("For", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
 		svgElementsMap.put(ShapeStructureType.FOR, paintModesMap);
 
-		paintModesMap = buildPaintModesFor("Parallel", CellPaintMode.DEFAULT);
+		paintModesMap = buildPaintModesFor("Parallel", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
 		svgElementsMap.put(ShapeStructureType.PARALLEL, paintModesMap);
 
-		paintModesMap = buildPaintModesFor("Sequential", CellPaintMode.DEFAULT);
+		paintModesMap = buildPaintModesFor("Sequential", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
 		svgElementsMap.put(ShapeStructureType.SEQUENTIAL, paintModesMap);
 
-		paintModesMap = buildPaintModesFor("Run", CellPaintMode.DEFAULT);
+		paintModesMap = buildPaintModesFor("Run", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
 		svgElementsMap.put(ShapeStructureType.RUN, paintModesMap);
 
 		paintModesMap = buildPaintModesFor("ParallelVExtender", CellPaintMode.DEFAULT);
@@ -282,6 +288,11 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 							outer.rect.getWidth(),
 							last.rect.getY() + last.rect.getHeight() - first.rect.getY()
 					);
+					modifiedSvgElements.add(outer);
+					for (int i = 1; i < svgElements.size(); i++) {
+						modifiedSvgElements.add(svgElements.get(i));
+					}
+					svgElements = modifiedSvgElements;
 				}
 			case DEFAULT:
 			default:

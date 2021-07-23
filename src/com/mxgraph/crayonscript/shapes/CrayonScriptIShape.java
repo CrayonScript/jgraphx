@@ -35,5 +35,7 @@ public interface CrayonScriptIShape extends mxIShape {
 
     boolean isExtender();
 
-    void setGeometryForPaintMode(CellPaintMode paintMode);
+    void setPaintMode(CellPaintMode paintMode);
+
+    CellPaintMode getPaintMode();
 }

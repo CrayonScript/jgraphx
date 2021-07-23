@@ -607,9 +607,27 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
             mxCell parentCell = (mxCell) cell.getParent();
             boolean parentCellIsBlock = parentCell != null && parentCell.isBlock();
+            boolean parentCellIsTemplate = parentCell != null && parentCell.isTemplate();
             boolean thisCellIsBlock = cell.isBlock();
 
-            // this block got added to another block
+            if (cell.referenceShape != null)
+            {
+                CellPaintMode oldPaintMode = cell.getPaintMode();
+                CellPaintMode newPaintMode = CellPaintMode.DEFAULT;
+                if (thisCellIsBlock && parentCellIsBlock && !parentCellIsTemplate)
+                {
+                    // this block got added to another block
+                    newPaintMode = CellPaintMode.FRAME_IN_FRAME;
+                }
+                if (oldPaintMode != newPaintMode)
+                {
+                    cell.setPaintMode(newPaintMode);
+                    mxCellState cellState = graph.getView().getState(cell, true);
+                    graph.getView().invalidate(cell);
+                    graph.getView().updateCellState(cellState);
+                    graph.refresh();
+                }
+            }
 
             mxCell[] previousCells = (mxCell[]) evt.getProperty("previous");
             mxCell previousCell = previousCells == null ? null : previousCells[0];
