@@ -1,6 +1,7 @@
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
+import com.mxgraph.model.CellPaintMode;
 import com.mxgraph.view.mxCellState;
 
 import java.awt.*;
@@ -18,7 +19,7 @@ public class CrayonScriptGraphTemplateShape extends CrayonScriptBasicShape {
         initialize(state);
 
         Rectangle stateRect = state.getRectangle();
-        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.TEMPLATE);
+        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.TEMPLATE).get(CellPaintMode.DEFAULT);
 
         SvgElement first = svgElements.get(0);
 

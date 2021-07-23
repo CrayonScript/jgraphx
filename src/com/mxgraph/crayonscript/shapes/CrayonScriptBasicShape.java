@@ -34,11 +34,6 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	{
 		this.shapeStructureType = shapeStructureType;
 		this.shapeName = shapeName;
-		this.currentSvgElements = new ArrayList<>();
-		ArrayList<SvgElement> svgElements = svgElementsMap.get(shapeStructureType);
-		for (SvgElement svgElement: svgElements) {
-			currentSvgElements.add(svgElement.copy());
-		}
 	}
 
 	protected String shapeName;
@@ -51,9 +46,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected Color paintedFrameColor;
 
-	protected ArrayList<SvgElement> currentSvgElements = null;
-
-	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
+	protected static Map<ShapeStructureType, Map<CellPaintMode, ArrayList<SvgElement>>> svgElementsMap;
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> hotspotSvgElementsMap;
 
@@ -80,12 +73,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	public ArrayList<SvgElement> getSvgElements()
 	{
-		return  currentSvgElements;
-	}
-
-	public void resetSvgElements()
-	{
-		currentSvgElements = null;
+		return svgElementsMap.get(shapeStructureType).get(CellPaintMode.DEFAULT);
 	}
 
 	public ArrayList<SvgElement> getHotspotSvgElements()
@@ -147,47 +135,78 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		checkTemplate(state);
 	}
 
+	protected static Map<CellPaintMode, ArrayList<SvgElement>> buildPaintModesFor(String typeStr, CellPaintMode... paintModes)
+	{
+		Map<CellPaintMode, ArrayList<SvgElement>> paintModesMap = new HashMap<>();
+		String resourceStr = String.format("/com/mxgraph/crayonscript/images/%s.svg", typeStr);
+		URL resourceUrl = CrayonScriptBasicShape.class.getResource(resourceStr);
+		for (CellPaintMode paintMode: paintModes) {
+			paintModesMap.put(CellPaintMode.DEFAULT, readSvgElements(resourceUrl, paintMode));
+		}
+
+		return paintModesMap;
+	}
+
 	protected static void initialize() {
 		if (initialized) return;
+		Map<CellPaintMode, ArrayList<SvgElement>> paintModesMap = null;
 		svgElementsMap = new HashMap<>();
-		svgElementsMap.put(ShapeStructureType.EVENT,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Event.svg")));
-		svgElementsMap.put(ShapeStructureType.ASSIGN,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Assign.svg")));
-		svgElementsMap.put(ShapeStructureType.PROPERTY,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Property.svg")));
-		svgElementsMap.put(ShapeStructureType.FUNCTION,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Function.svg")));
-		svgElementsMap.put(ShapeStructureType.WAIT_FOR,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/WaitFor.svg")));
-		svgElementsMap.put(ShapeStructureType.IF,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/If.svg")));
-		svgElementsMap.put(ShapeStructureType.ELSE_IF,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/ElseIf.svg")));
-		svgElementsMap.put(ShapeStructureType.WHILE,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/While.svg")));
-		svgElementsMap.put(ShapeStructureType.FOR,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/For.svg")));
-		svgElementsMap.put(ShapeStructureType.PARALLEL,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Parallel.svg")));
-		svgElementsMap.put(ShapeStructureType.SEQUENTIAL,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Sequential.svg")));
-		svgElementsMap.put(ShapeStructureType.RUN,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Run.svg")));
-		svgElementsMap.put(ShapeStructureType.PARALLEL_VEXTENDER,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender.svg")));
-		svgElementsMap.put(ShapeStructureType.SEQUENTIAL_VEXTENDER,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender.svg")));
-		svgElementsMap.put(ShapeStructureType.EXPRESSION,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Expression.svg")));
-		svgElementsMap.put(ShapeStructureType.MARKER,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Marker.svg")));
-		svgElementsMap.put(ShapeStructureType.TEMPLATE,
-				readSvgElements(CrayonScriptBasicShape.class.getResource("/com/mxgraph/crayonscript/images/Template.svg")));
+
+		paintModesMap = buildPaintModesFor("Event", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.EVENT, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("Assign", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.ASSIGN, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("Property", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.PROPERTY, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("Function", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.FUNCTION, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("WaitFor", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.WAIT_FOR, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("If", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.IF, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("ElseIf", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.ELSE_IF, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("While", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.WHILE, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("For", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.FOR, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("Parallel", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.PARALLEL, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("Sequential", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.SEQUENTIAL, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("Run", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.RUN, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("ParallelVExtender", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.PARALLEL_VEXTENDER, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("SequentialVExtender", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.SEQUENTIAL_VEXTENDER, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("Expression", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.EXPRESSION, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("Marker", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.MARKER, paintModesMap);
+
+		paintModesMap = buildPaintModesFor("Template", CellPaintMode.DEFAULT);
+		svgElementsMap.put(ShapeStructureType.TEMPLATE, paintModesMap);
 
 		hotspotSvgElementsMap = new HashMap<>();
-		for (Map.Entry<ShapeStructureType, ArrayList<SvgElement>> entry: svgElementsMap.entrySet()) {
-			hotspotSvgElementsMap.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+		for (Map.Entry<ShapeStructureType, Map<CellPaintMode, ArrayList<SvgElement>>> entry: svgElementsMap.entrySet()) {
+			ArrayList<SvgElement> defaultPaintModeValue = entry.getValue().get(CellPaintMode.DEFAULT);
+			hotspotSvgElementsMap.put(entry.getKey(), new ArrayList<>(defaultPaintModeValue));
 		}
 
 		// special purpose hotspot map for assign (statement) and expressions
@@ -233,13 +252,19 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	public static SvgElement getTemplate()
 	{
-		ArrayList<SvgElement> templates = svgElementsMap.get(ShapeStructureType.TEMPLATE);
-		return templates.get(0);
+		Map<CellPaintMode, ArrayList<SvgElement>> templatesMap = svgElementsMap.get(ShapeStructureType.TEMPLATE);
+		ArrayList<SvgElement> defaultPaintModeList = templatesMap.get(CellPaintMode.DEFAULT);
+		return defaultPaintModeList.get(0);
 	}
 
 	protected void checkTemplate(mxCellState state)
 	{
 		isTemplate = ((mxCell) state.getCell()).isAncestorTemplate();
+	}
+
+	protected static ArrayList<SvgElement> readSvgElements(URL url, CellPaintMode paintMode) {
+		ArrayList<SvgElement> svgElements = readSvgElements(url);
+		return svgElements;
 	}
 
 	protected static ArrayList<SvgElement> readSvgElements(URL url) {
