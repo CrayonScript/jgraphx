@@ -1,6 +1,3 @@
-/**
- * Copyright (c) 2010, Gaudenz Alder, David Benson
- */
 package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
@@ -44,7 +41,9 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected boolean isTemplate = false;
 
-	protected static Map<ShapeStructureType, Map<CellPaintMode, ArrayList<SvgElement>>> svgElementsMap;
+	protected transient ArrayList<RoundRectangle2D> currentRoundRectangles;
+
+	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> hotspotSvgElementsMap;
 
@@ -52,7 +51,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected static boolean initialized;
 
-	public static HashMap<String, Object> TEXT_STYLE = new HashMap<String, Object>();
+	public static HashMap<String, Object> TEXT_STYLE = new HashMap<>();
 
 	static {
 		TEXT_STYLE.put(mxConstants.STYLE_FONTFAMILY, mxConstants.DEFAULT_FONTFAMILY);
@@ -62,17 +61,16 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		TEXT_STYLE.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
 
 		initialize();
-	};
+	}
 
 	public ArrayList<SvgElement> getSvgElements()
 	{
-		return svgElementsMap.get(shapeStructureType).get(CellPaintMode.DEFAULT);
+		return svgElementsMap.get(shapeStructureType);
 	}
 
 	public ArrayList<SvgElement> getHotspotSvgElements()
 	{
-		ArrayList<SvgElement> svgElements = hotspotSvgElementsMap.get(shapeStructureType);
-		return  svgElements;
+		return hotspotSvgElementsMap.get(shapeStructureType);
 	}
 
 	public int getSubElements()
@@ -111,8 +109,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		if (parentCell == null) return null;
 		CrayonScriptIShape referenceShape = parentCell.referenceShape;
 		if (parentCell.referenceShape == null) return null;
-		Color parentFrameColor = referenceShape.getFrameColor();
-		return parentFrameColor;
+		return referenceShape.getFrameColor();
 	}
 
 	public RoundRectangle2D getFrame(CellFrameEnum frameEnum)
@@ -128,76 +125,73 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		checkTemplate(state);
 	}
 
-	protected static Map<CellPaintMode, ArrayList<SvgElement>> buildPaintModesFor(String typeStr, CellPaintMode... paintModes)
+	protected static ArrayList<SvgElement> buildSvgElementsFor(String typeStr)
 	{
-		Map<CellPaintMode, ArrayList<SvgElement>> paintModesMap = new HashMap<>();
 		String resourceStr = String.format("/com/mxgraph/crayonscript/images/%s.svg", typeStr);
 		URL resourceUrl = CrayonScriptBasicShape.class.getResource(resourceStr);
-		for (CellPaintMode paintMode: paintModes) {
-			paintModesMap.put(paintMode, readSvgElements(resourceUrl, paintMode));
-		}
-		return paintModesMap;
+		assert resourceUrl != null;
+		return readSvgElements(resourceUrl);
 	}
 
 	protected static void initialize() {
 		if (initialized) return;
-		Map<CellPaintMode, ArrayList<SvgElement>> paintModesMap = null;
+		ArrayList<SvgElement> svgElements;
 		svgElementsMap = new HashMap<>();
 
-		paintModesMap = buildPaintModesFor("Event", CellPaintMode.DEFAULT);
-		svgElementsMap.put(ShapeStructureType.EVENT, paintModesMap);
+		svgElements = buildSvgElementsFor("Event");
+		svgElementsMap.put(ShapeStructureType.EVENT, svgElements);
 
-		paintModesMap = buildPaintModesFor("Assign", CellPaintMode.DEFAULT);
-		svgElementsMap.put(ShapeStructureType.ASSIGN, paintModesMap);
+		svgElements = buildSvgElementsFor("Assign");
+		svgElementsMap.put(ShapeStructureType.ASSIGN, svgElements);
 
-		paintModesMap = buildPaintModesFor("Property", CellPaintMode.DEFAULT);
-		svgElementsMap.put(ShapeStructureType.PROPERTY, paintModesMap);
+		svgElements = buildSvgElementsFor("Property");
+		svgElementsMap.put(ShapeStructureType.PROPERTY, svgElements);
 
-		paintModesMap = buildPaintModesFor("Function", CellPaintMode.DEFAULT);
-		svgElementsMap.put(ShapeStructureType.FUNCTION, paintModesMap);
+		svgElements = buildSvgElementsFor("Function");
+		svgElementsMap.put(ShapeStructureType.FUNCTION, svgElements);
 
-		paintModesMap = buildPaintModesFor("WaitFor", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
-		svgElementsMap.put(ShapeStructureType.WAIT_FOR, paintModesMap);
+		svgElements = buildSvgElementsFor("WaitFor");
+		svgElementsMap.put(ShapeStructureType.WAIT_FOR, svgElements);
 
-		paintModesMap = buildPaintModesFor("If", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
-		svgElementsMap.put(ShapeStructureType.IF, paintModesMap);
+		svgElements = buildSvgElementsFor("If");
+		svgElementsMap.put(ShapeStructureType.IF, svgElements);
 
-		paintModesMap = buildPaintModesFor("ElseIf", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
-		svgElementsMap.put(ShapeStructureType.ELSE_IF, paintModesMap);
+		svgElements = buildSvgElementsFor("ElseIf");
+		svgElementsMap.put(ShapeStructureType.ELSE_IF, svgElements);
 
-		paintModesMap = buildPaintModesFor("While", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
-		svgElementsMap.put(ShapeStructureType.WHILE, paintModesMap);
+		svgElements = buildSvgElementsFor("While");
+		svgElementsMap.put(ShapeStructureType.WHILE, svgElements);
 
-		paintModesMap = buildPaintModesFor("For", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
-		svgElementsMap.put(ShapeStructureType.FOR, paintModesMap);
+		svgElements = buildSvgElementsFor("For");
+		svgElementsMap.put(ShapeStructureType.FOR, svgElements);
 
-		paintModesMap = buildPaintModesFor("Parallel", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
-		svgElementsMap.put(ShapeStructureType.PARALLEL, paintModesMap);
+		svgElements = buildSvgElementsFor("Parallel");
+		svgElementsMap.put(ShapeStructureType.PARALLEL, svgElements);
 
-		paintModesMap = buildPaintModesFor("Sequential", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
-		svgElementsMap.put(ShapeStructureType.SEQUENTIAL, paintModesMap);
+		svgElements = buildSvgElementsFor("Sequential");
+		svgElementsMap.put(ShapeStructureType.SEQUENTIAL, svgElements);
 
-		paintModesMap = buildPaintModesFor("Run", CellPaintMode.DEFAULT, CellPaintMode.FRAME_IN_FRAME);
-		svgElementsMap.put(ShapeStructureType.RUN, paintModesMap);
+		svgElements = buildSvgElementsFor("Run");
+		svgElementsMap.put(ShapeStructureType.RUN, svgElements);
 
-		paintModesMap = buildPaintModesFor("ParallelVExtender", CellPaintMode.DEFAULT);
-		svgElementsMap.put(ShapeStructureType.PARALLEL_VEXTENDER, paintModesMap);
+		svgElements = buildSvgElementsFor("ParallelVExtender");
+		svgElementsMap.put(ShapeStructureType.PARALLEL_VEXTENDER, svgElements);
 
-		paintModesMap = buildPaintModesFor("SequentialVExtender", CellPaintMode.DEFAULT);
-		svgElementsMap.put(ShapeStructureType.SEQUENTIAL_VEXTENDER, paintModesMap);
+		svgElements = buildSvgElementsFor("SequentialVExtender");
+		svgElementsMap.put(ShapeStructureType.SEQUENTIAL_VEXTENDER, svgElements);
 
-		paintModesMap = buildPaintModesFor("Expression", CellPaintMode.DEFAULT);
-		svgElementsMap.put(ShapeStructureType.EXPRESSION, paintModesMap);
+		svgElements = buildSvgElementsFor("Expression");
+		svgElementsMap.put(ShapeStructureType.EXPRESSION, svgElements);
 
-		paintModesMap = buildPaintModesFor("Marker", CellPaintMode.DEFAULT);
-		svgElementsMap.put(ShapeStructureType.MARKER, paintModesMap);
+		svgElements = buildSvgElementsFor("Marker");
+		svgElementsMap.put(ShapeStructureType.MARKER, svgElements);
 
-		paintModesMap = buildPaintModesFor("Template", CellPaintMode.DEFAULT);
-		svgElementsMap.put(ShapeStructureType.TEMPLATE, paintModesMap);
+		svgElements = buildSvgElementsFor("Template");
+		svgElementsMap.put(ShapeStructureType.TEMPLATE, svgElements);
 
 		hotspotSvgElementsMap = new HashMap<>();
-		for (Map.Entry<ShapeStructureType, Map<CellPaintMode, ArrayList<SvgElement>>> entry: svgElementsMap.entrySet()) {
-			ArrayList<SvgElement> defaultPaintModeValue = entry.getValue().get(CellPaintMode.DEFAULT);
+		for (Map.Entry<ShapeStructureType, ArrayList<SvgElement>> entry: svgElementsMap.entrySet()) {
+			ArrayList<SvgElement> defaultPaintModeValue = entry.getValue();
 			hotspotSvgElementsMap.put(entry.getKey(), new ArrayList<>(defaultPaintModeValue));
 		}
 
@@ -244,9 +238,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	public static SvgElement getTemplate()
 	{
-		Map<CellPaintMode, ArrayList<SvgElement>> templatesMap = svgElementsMap.get(ShapeStructureType.TEMPLATE);
-		ArrayList<SvgElement> defaultPaintModeList = templatesMap.get(CellPaintMode.DEFAULT);
-		return defaultPaintModeList.get(0);
+		ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.TEMPLATE);
+		return svgElements.get(0);
 	}
 
 	protected void checkTemplate(mxCellState state)
@@ -290,6 +283,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	protected static ArrayList<SvgElement> readSvgElements(URL url) {
 		ArrayList<SvgElement> svgElements = new ArrayList<>();
 		Document doc = mxUtils.loadDocument(url.toString());
+		assert doc != null;
 		Node rootElement = doc.getDocumentElement();
 		Stack<Node> childNodes = new Stack<>();
 		childNodes.push(rootElement);
@@ -340,17 +334,30 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 								  boolean isFrame,
 								  boolean isExtender)
 	{
-		Color color = fillColor;
-		if (color != null)
+		if (fillColor != null)
 		{
-			canvas.getGraphics().setColor(color);
+			canvas.getGraphics().setColor(fillColor);
 		}
 
 		if (isFrame)
 		{
-			Path2D path = isExtender ? getFrameExtenderPath(roundedRect) : getFramePath(roundedRect);
-			canvas.getGraphics().fill(path);
-			canvas.getGraphics().draw(path);
+			if (paintMode == CellPaintMode.DEFAULT)
+			{
+				Path2D path = isExtender ? getFrameExtenderPath(roundedRect) : getFramePath(roundedRect);
+				canvas.getGraphics().fill(path);
+				canvas.getGraphics().draw(path);
+			}
+			else
+			{
+				RoundRectangle2D first = currentRoundRectangles.get(1);
+				canvas.getGraphics().fillRoundRect(
+						(int) roundedRect.getX(),
+						(int) first.getY(),
+						(int) roundedRect.getWidth(),
+						(int) (roundedRect.getHeight() - (first.getY() - roundedRect.getY())),
+						(int) roundedRect.getArcWidth(),
+						(int) roundedRect.getArcHeight());
+			}
 		}
 		else
 		{
@@ -380,21 +387,18 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	{
 		if (color == null) return null;
 		int opacity = getOpacity();
-		Color adjustedColor = getColor(color, opacity);
-		return adjustedColor;
+		return getColor(color, opacity);
 	}
 
 	protected Color getColor(Color color, int opacity)
 	{
 		if (color == null) return null;
-		Color adjustedColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity);
-		return adjustedColor;
+		return new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity);
 	}
 
 	public int getOpacity()
 	{
-		int opacity = isTemplate ? 255 : 85;
-		return opacity;
+		return isTemplate ? 255 : 85;
 	}
 
 	public static RoundRectangle2D scaleRectangle(
@@ -430,8 +434,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		int rw = (int) (target.rect.getArcWidth() * widthRatio);
 		int rh = (int) (target.rect.getArcHeight() * heightRatio);
 
-		RoundRectangle2D scaledRect = new RoundRectangle2D.Double(x, y, w, h, rw, rh);
-		return scaledRect;
+		return new RoundRectangle2D.Double(x, y, w, h, rw, rh);
 	}
 
 	public static Path2D getFramePath(RoundRectangle2D roundedRect)
@@ -538,8 +541,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		{
 			try
 			{
-				SvgElement copy = (SvgElement) clone();
-				return copy;
+				return (SvgElement) clone();
 			}
 			catch(CloneNotSupportedException e)
 			{
@@ -564,12 +566,12 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 		private boolean isRectangle(String tag)
 		{
-			return tag != null && tag.equals("svg:rect") || tag.equals("rect");
+			return tag != null && (tag.equals("svg:rect") || tag.equals("rect"));
 		}
 
 		private boolean isGroup(String tag)
 		{
-			return tag != null && tag.equals("svg:g") || tag.equals("g");
+			return tag != null && (tag.equals("svg:g") || tag.equals("g"));
 		}
 
 		protected void parseRectangle(Node node)
