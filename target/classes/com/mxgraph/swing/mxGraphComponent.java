@@ -599,6 +599,20 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         }
     };
 
+    protected mxIEventListener cellsRemovedHandler = new mxIEventListener() {
+        @Override
+        public void invoke(Object sender, mxEventObject evt) {
+            Object[] cells = (Object[]) evt.getProperty("cells");
+            mxCell cell = (mxCell) cells[0];
+            Object[] previousCells = (Object[]) evt.getProperty("previous");
+            mxCell previous = (mxCell) previousCells[0];
+            if (previous.isTemplate())
+            {
+                removeTemplateCell(cell, previous);
+            }
+        }
+    };
+
     protected mxIEventListener cellsAddedHandler = new mxIEventListener() {
         @Override
         public void invoke(Object sender, mxEventObject evt) {
@@ -651,19 +665,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             }
             else if (previousTemplateCell != null)
             {
-                boolean isSecondLastTemplateCell = templateCells.indexOf(previousTemplateCell) == templateCells.size()-2;
-                boolean isSecondLastTemplateEmpty = previousTemplateCell.isEmpty();
-                boolean isLastTemplateCellEmpty = templateCells.get(templateCells.size()-1).isEmpty();
-                removeMarkerCell(cell, previousTemplateCell);
-                if (isSecondLastTemplateCell && isSecondLastTemplateEmpty && isLastTemplateCellEmpty)
-                {
-                    removeTemplateCell();
-                }
-                else
-                {
-                    int previousTemplateCellIndex = templateCells.indexOf(previousTemplateCell);
-                    repositionTemplateCells(previousTemplateCellIndex + 1);
-                }
+                removeTemplateCell(cell, previousTemplateCell);
             }
         }
     };
@@ -688,6 +690,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         installDoubleClickHandler();
 
         getGraph().addListener(mxEvent.CELLS_ADDED, cellsAddedHandler);
+        getGraph().addListener(mxEvent.CELLS_REMOVED, cellsRemovedHandler);
     }
 
     /**
@@ -2723,6 +2726,23 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         }
 
         return result;
+    }
+
+    public void removeTemplateCell(mxCell cell, mxCell previousTemplateCell)
+    {
+        boolean isSecondLastTemplateCell = templateCells.indexOf(previousTemplateCell) == templateCells.size()-2;
+        boolean isSecondLastTemplateEmpty = previousTemplateCell.isEmpty();
+        boolean isLastTemplateCellEmpty = templateCells.get(templateCells.size()-1).isEmpty();
+        removeMarkerCell(cell, previousTemplateCell);
+        if (isSecondLastTemplateCell && isSecondLastTemplateEmpty && isLastTemplateCellEmpty)
+        {
+            removeTemplateCell();
+        }
+        else
+        {
+            int previousTemplateCellIndex = templateCells.indexOf(previousTemplateCell);
+            repositionTemplateCells(previousTemplateCellIndex + 1);
+        }
     }
 
     public void updateMarkerCellAndDescendants(mxCell cell, mxCell templateCell)

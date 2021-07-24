@@ -2881,6 +2881,8 @@ public class mxGraph extends mxEventSource
 			double scale = view.getScale();
 			mxPoint tr = view.getTranslate();
 
+			mxCell[] previousCells = new mxCell[cells.length];
+
 			model.beginUpdate();
 			try
 			{
@@ -2934,11 +2936,14 @@ public class mxGraph extends mxEventSource
 						}
 					}
 
+					Object previous = model.getParent(cells[i]);
+					previousCells[i] = (mxCell) previous;
+
 					model.remove(cells[i]);
 				}
 
-				fireEvent(new mxEventObject(mxEvent.CELLS_REMOVED, "cells",
-						cells));
+				fireEvent(new mxEventObject(mxEvent.CELLS_REMOVED, "cells", cells,
+						"previous", previousCells));
 			}
 			finally
 			{

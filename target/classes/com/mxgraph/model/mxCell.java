@@ -215,6 +215,12 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		cellType = value;
 	}
 
+	public boolean isParentTemplate()
+	{
+		if (parent == null) return false;
+		return parent.isTemplate();
+	}
+
 	public boolean isAncestorTemplate()
 	{
 		if (isTemplate()) return true;
