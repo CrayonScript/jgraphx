@@ -343,7 +343,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			parentCell.snapToChildrenDropFlags = new CellFrameEnum[3];
 		}
 
-		parentCell.snapToChildrenDropFlags[parentCell.hotSpotDropFlag.bitIndex] = thisCell.hotSpotDropFlag;
+		parentCell.snapToChildrenDropFlags[parentCell.hotSpotDropFlag.bitIndex] = thisDropFlag;
 	}
 
 	public RoundRectangle2D getFrame(int index)
