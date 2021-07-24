@@ -98,6 +98,8 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      */
     protected mxCellState visibleSourceState, visibleTargetState;
 
+    protected ArrayList<RoundRectangle2D> currentRoundRectangles;
+
     /**
      * Constructs an empty cell state.
      */
@@ -204,6 +206,16 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      */
     public void setStyle(Map<String, Object> style) {
         this.style = style;
+    }
+
+    public ArrayList<RoundRectangle2D> getCurrentRoundRectangles()
+    {
+        return currentRoundRectangles;
+    }
+
+    public void setCurrentRoundRectangles(ArrayList<RoundRectangle2D> value)
+    {
+        currentRoundRectangles = value;
     }
 
     /**
