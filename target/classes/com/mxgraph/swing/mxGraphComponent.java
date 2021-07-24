@@ -2737,6 +2737,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
     public void updateMarkerCell(mxCell cell, mxCell templateCell)
     {
         if (!cell.isMarked()) return;
+        if (!cell.isAncestorTemplate()) return;
         mxMarkerCellMap markerCellMap = templateMarkerCellMaps.get(templateCell);
         if (markerCellMap == null)
         {
