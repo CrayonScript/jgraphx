@@ -130,18 +130,30 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected void initializeRectangles(mxCellState state)
 	{
-		currentRoundRectangles = new ArrayList<>();
-		currentColors = new ArrayList<>();
-
-		ArrayList<SvgElement> svgElements = getSvgElements();
-		SvgElement first = svgElements.get(0);
-		currentColors.add(first.fillColor);
-		currentRoundRectangles.add(scaleRectangle(state, first, first, state.getPaintMode()));
-		for (int i = 1; i < svgElements.size(); i++)
+		if (currentColors == null)
 		{
-			SvgElement rest = svgElements.get(i);
-			currentColors.add(rest.fillColor);
-			currentRoundRectangles.add(scaleRectangle(state, first, rest, state.getPaintMode()));
+			currentColors = new ArrayList<>();
+			ArrayList<SvgElement> svgElements = getSvgElements();
+			for (int i = 0; i < svgElements.size(); i++) {
+				currentColors.add(svgElements.get(i).fillColor);
+			}
+		}
+		if (state.getCurrentRoundRectangles() == null)
+		{
+			currentRoundRectangles = new ArrayList<>();
+
+			ArrayList<SvgElement> svgElements = getSvgElements();
+			SvgElement first = svgElements.get(0);
+			currentRoundRectangles.add(scaleRectangle(state, first, first, state.getPaintMode()));
+			for (int i = 1; i < svgElements.size(); i++)
+			{
+				SvgElement rest = svgElements.get(i);
+				currentRoundRectangles.add(scaleRectangle(state, first, rest, state.getPaintMode()));
+			}
+		}
+		else
+		{
+			currentRoundRectangles = state.getCurrentRoundRectangles();
 		}
 	}
 
