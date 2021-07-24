@@ -17,15 +17,8 @@ public class CrayonScriptGraphTemplateShape extends CrayonScriptBasicShape {
 
         initialize(state);
 
-        ArrayList<SvgElement> svgElements = svgElementsMap.get(ShapeStructureType.TEMPLATE);
-
-        SvgElement first = svgElements.get(0);
-
         CellPaintMode paintMode = state.getPaintMode();
 
-        currentRoundRectangles = new ArrayList<>();
-        currentRoundRectangles.add(scaleRectangle(state, first, first));
-
-        paintRectangle(canvas, currentRoundRectangles.get(0), first.fillColor /* always opaque */, paintMode,true);
+        paintRectangle(canvas, currentRoundRectangles.get(0), currentColors.get(0) /* always opaque */, paintMode,true);
     }
 }

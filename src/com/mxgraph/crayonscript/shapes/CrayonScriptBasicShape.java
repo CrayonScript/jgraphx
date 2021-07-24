@@ -43,6 +43,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected transient ArrayList<RoundRectangle2D> currentRoundRectangles;
 
+	protected transient ArrayList<Color> currentColors;
+
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> hotspotSvgElementsMap;
@@ -123,6 +125,24 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	protected void initialize(mxCellState state)
 	{
 		checkTemplate(state);
+		initializeRectangles(state);
+	}
+
+	protected void initializeRectangles(mxCellState state)
+	{
+		currentRoundRectangles = new ArrayList<>();
+		currentColors = new ArrayList<>();
+
+		ArrayList<SvgElement> svgElements = getSvgElements();
+		SvgElement first = svgElements.get(0);
+		currentColors.add(first.fillColor);
+		currentRoundRectangles.add(scaleRectangle(state, first, first, state.getPaintMode()));
+		for (int i = 1; i < svgElements.size(); i++)
+		{
+			SvgElement rest = svgElements.get(i);
+			currentColors.add(rest.fillColor);
+			currentRoundRectangles.add(scaleRectangle(state, first, rest, state.getPaintMode()));
+		}
 	}
 
 	protected static ArrayList<SvgElement> buildSvgElementsFor(String typeStr)

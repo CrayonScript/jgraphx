@@ -20,14 +20,9 @@ public class CrayonScriptAssignShape extends CrayonScriptBasicShape {
 
         initialize(state);
 
-        ArrayList<SvgElement> svgElements = getSvgElements();
-
-        SvgElement first = svgElements.get(0);
-        SvgElement second = svgElements.get(1);
-
         Color frameColor = getParentFrameColor(state);
 
-        Color secondColor = second.fillColor;
+        Color secondColor = currentColors.get(1);
 
         CellFrameEnum snapToParentDropFlag = ((mxCell) state.getCell()).snapToParentDropFlag;
         if (snapToParentDropFlag != null && ((mxCell) ((mxCell) state.getCell()).getParent()).isShape())
@@ -39,10 +34,6 @@ public class CrayonScriptAssignShape extends CrayonScriptBasicShape {
         Color paintedSecondColor = getColor(secondColor);
 
         CellPaintMode paintMode = state.getPaintMode();
-
-        currentRoundRectangles = new ArrayList<>();
-        currentRoundRectangles.add(scaleRectangle(state, first, first, paintMode));
-        currentRoundRectangles.add(scaleRectangle(state, first, second, paintMode));
 
         paintRectangle(canvas, currentRoundRectangles.get(0), paintedFirstColor, paintMode);
         paintRectangle(canvas, currentRoundRectangles.get(1), paintedSecondColor, paintMode);

@@ -18,18 +18,9 @@ public class CrayonScriptRunShape extends CrayonScriptBasicShape {
 
         initialize(state);
 
-        ArrayList<SvgElement> svgElements = getSvgElements();
-
-        SvgElement first = svgElements.get(0);
-        SvgElement second = svgElements.get(1);
-
         CellPaintMode paintMode = state.getPaintMode();
 
-        currentRoundRectangles = new ArrayList<>();
-        currentRoundRectangles.add(scaleRectangle(state, first, first, paintMode));
-        currentRoundRectangles.add(scaleRectangle(state, first, second, paintMode));
-
-        paintRectangle(canvas, currentRoundRectangles.get(0), getColor(first.fillColor), paintMode, true);
-        paintRectangle(canvas, currentRoundRectangles.get(1), getColor(second.fillColor), paintMode);
+        paintRectangle(canvas, currentRoundRectangles.get(0), getColor(currentColors.get(0)), paintMode, true);
+        paintRectangle(canvas, currentRoundRectangles.get(1), getColor(currentColors.get(1)), paintMode);
     }
 }
