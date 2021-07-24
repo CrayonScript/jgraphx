@@ -28,8 +28,13 @@ public class CrayonScriptSequentialVExtenderShape extends CrayonScriptBasicShape
 
         CellPaintMode paintMode = state.getPaintMode();
 
-        paintRectangle(canvas, scaleRectangle(state, first, first, paintMode), getColor(first.fillColor), paintMode,true, true);
-        paintRectangle(canvas, scaleRectangle(state, first, second, paintMode), getColor(second.fillColor), paintMode);
-        paintRectangle(canvas, scaleRectangle(state, first, third, paintMode), getColor(third.fillColor), paintMode);
+        currentRoundRectangles = new ArrayList<>();
+        currentRoundRectangles.add(scaleRectangle(state, first, first, paintMode));
+        currentRoundRectangles.add(scaleRectangle(state, first, second, paintMode));
+        currentRoundRectangles.add(scaleRectangle(state, first, third, paintMode));
+
+        paintRectangle(canvas, currentRoundRectangles.get(0), getColor(first.fillColor), paintMode,true, true);
+        paintRectangle(canvas, currentRoundRectangles.get(1), getColor(second.fillColor), paintMode);
+        paintRectangle(canvas, currentRoundRectangles.get(2), getColor(third.fillColor), paintMode);
     }
 }

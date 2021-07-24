@@ -23,6 +23,9 @@ public class CrayonScriptGraphTemplateShape extends CrayonScriptBasicShape {
 
         CellPaintMode paintMode = state.getPaintMode();
 
-        paintRectangle(canvas, scaleRectangle(state, first, first), first.fillColor /* always opaque */, paintMode,true);
+        currentRoundRectangles = new ArrayList<>();
+        currentRoundRectangles.add(scaleRectangle(state, first, first));
+
+        paintRectangle(canvas, currentRoundRectangles.get(0), first.fillColor /* always opaque */, paintMode,true);
     }
 }

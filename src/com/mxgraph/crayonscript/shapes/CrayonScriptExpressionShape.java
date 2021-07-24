@@ -38,8 +38,12 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
 
         CellPaintMode paintMode = state.getPaintMode();
 
-        paintRectangle(canvas, scaleRectangle(state, first, first, paintMode), getColor(frameColor), paintMode);
-        paintRectangle(canvas, scaleRectangle(state, first, second, paintMode), getColor(secondColor), paintMode);
+        currentRoundRectangles = new ArrayList<>();
+        currentRoundRectangles.add(scaleRectangle(state, first, first, paintMode));
+        currentRoundRectangles.add(scaleRectangle(state, first, second, paintMode));
+
+        paintRectangle(canvas, currentRoundRectangles.get(0), getColor(frameColor), paintMode);
+        paintRectangle(canvas, currentRoundRectangles.get(1), getColor(secondColor), paintMode);
 
         drawText(canvas, ((mxCell) state.getCell()).getText(), state);
     }
