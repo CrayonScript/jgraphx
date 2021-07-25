@@ -16,6 +16,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextAttribute;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.BufferedReader;
@@ -1589,6 +1590,46 @@ public class mxUtils
 		{
 			return parseColor(value.toString());
 		}
+	}
+
+	public static RoundRectangle2D minY(ArrayList<RoundRectangle2D> allRoundRectangles)
+	{
+		RoundRectangle2D value = null;
+		for (RoundRectangle2D roundRectangle: allRoundRectangles)
+		{
+			if (value == null)
+			{
+				value = roundRectangle;
+			}
+			else
+			{
+				if (roundRectangle.getY() < value.getY())
+				{
+					value = roundRectangle;
+				}
+			}
+		}
+		return value;
+	}
+
+	public static RoundRectangle2D maxY(ArrayList<RoundRectangle2D> allRoundRectangles)
+	{
+		RoundRectangle2D value = null;
+		for (RoundRectangle2D roundRectangle: allRoundRectangles)
+		{
+			if (value == null)
+			{
+				value = roundRectangle;
+			}
+			else
+			{
+				if (roundRectangle.getY() > value.getY())
+				{
+					value = roundRectangle;
+				}
+			}
+		}
+		return value;
 	}
 
 	/**

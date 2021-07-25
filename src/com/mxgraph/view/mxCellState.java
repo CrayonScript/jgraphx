@@ -6,14 +6,12 @@ package com.mxgraph.view;
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
 import com.mxgraph.crayonscript.shapes.CrayonScriptIShape;
-import com.mxgraph.model.CellFrameEnum;
-import com.mxgraph.model.CellPaintMode;
-import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxICell;
+import com.mxgraph.model.*;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxRectangle;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,8 +95,6 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      * Caches the visible source and target terminal states.
      */
     protected mxCellState visibleSourceState, visibleTargetState;
-
-    protected ArrayList<RoundRectangle2D> currentRoundRectangles;
 
     /**
      * Constructs an empty cell state.
@@ -206,16 +202,6 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
      */
     public void setStyle(Map<String, Object> style) {
         this.style = style;
-    }
-
-    public ArrayList<RoundRectangle2D> getCurrentRoundRectangles()
-    {
-        return currentRoundRectangles;
-    }
-
-    public void setCurrentRoundRectangles(ArrayList<RoundRectangle2D> value)
-    {
-        currentRoundRectangles = value;
     }
 
     /**
@@ -545,6 +531,113 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         view.invalidate(cell);
         view.updateCellState(this);
         view.getGraph().refresh();
+    }
+
+    public ArrayList<RoundRectangle2D> getCurrentRoundRectangles()
+    {
+        mxCell thisCell = (mxCell) cell;
+        ArrayList<RoundRectangle2D> paintedRectangles = thisCell.getCurrentRoundRectangles();
+        if (paintedRectangles == null)
+        {
+            paintedRectangles = getRectangles();
+        }
+        return paintedRectangles;
+    }
+
+    public ArrayList<RoundRectangle2D> getAllOuterRectangles()
+    {
+        ArrayList<RoundRectangle2D> allRoundRectangles = new ArrayList<>();
+        mxCell thisCell = (mxCell) getCell();
+        ArrayList<RoundRectangle2D> currentRoundRectangles = getCurrentRoundRectangles();
+        allRoundRectangles.add(currentRoundRectangles.get(0));
+        for (int childIndex = 0; childIndex < thisCell.getChildCount(); childIndex++)
+        {
+            mxCell childCell = (mxCell) thisCell.getChildAt(childIndex);
+            mxCellState childCellState = getView().getState(childCell, true);
+            allRoundRectangles.addAll(childCellState.getAllInnerRectangles());
+        }
+        return allRoundRectangles;
+    }
+
+    public ArrayList<RoundRectangle2D> getAllInnerRectangles()
+    {
+        ArrayList<RoundRectangle2D> allRoundRectangles = new ArrayList<>();
+        mxCell thisCell = (mxCell) getCell();
+        ArrayList<RoundRectangle2D> currentRoundRectangles = getCurrentRoundRectangles();
+        allRoundRectangles.addAll(currentRoundRectangles.subList(1, currentRoundRectangles.size()));
+        for (int childIndex = 0; childIndex < thisCell.getChildCount(); childIndex++)
+        {
+            mxCell childCell = (mxCell) thisCell.getChildAt(childIndex);
+            mxCellState childCellState = getView().getState(childCell, true);
+            allRoundRectangles.addAll(childCellState.getAllInnerRectangles());
+        }
+        return allRoundRectangles;
+    }
+
+    public ArrayList<RoundRectangle2D> getRectangles()
+    {
+        ArrayList<RoundRectangle2D> roundRectangles = new ArrayList<>();
+        CrayonScriptIShape shape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(getStyle());
+        if (shape != null)
+        {
+            ArrayList<CrayonScriptBasicShape.SvgElement> svgElements = shape.getSvgElements();
+
+            CrayonScriptBasicShape.SvgElement first = svgElements.get(0);
+            roundRectangles.add(CrayonScriptBasicShape.scaleRectangle(this, first, first, getPaintMode()));
+
+            for (int i = 1; i < svgElements.size(); i++) {
+                CrayonScriptBasicShape.SvgElement rest = svgElements.get(i);
+                roundRectangles.add(CrayonScriptBasicShape.scaleRectangle(this, first, rest, getPaintMode()));
+            }
+        }
+        return roundRectangles;
+    }
+
+    public Rectangle2D getExtendedPaintedRect()
+    {
+        Rectangle2D paintedRect = null;
+        ArrayList<RoundRectangle2D> thisPaintedRectangles = getRectangles();
+        mxCell thisCell = (mxCell) getCell();
+        CellPaintMode cellPaintMode = thisCell.getPaintMode();
+        if (cellPaintMode == CellPaintMode.FRAME_IN_FRAME)
+        {
+            paintedRect = thisPaintedRectangles.get(1).getFrame();
+            Rectangle2D.union(paintedRect, thisPaintedRectangles.get(thisPaintedRectangles.size()-1).getFrame(), paintedRect);
+        }
+        else
+        {
+            paintedRect = thisPaintedRectangles.get(0).getFrame();
+        }
+        for (int childIndex = 0; childIndex < thisCell.getChildCount(); childIndex++)
+        {
+            mxCell childCell = (mxCell) thisCell.getChildAt(childIndex);
+            mxCellState childCellState = getView().getState(childCell, true);
+            Rectangle2D childPaintedRect = childCellState.getExtendedPaintedRect();
+            Rectangle2D.union(paintedRect, childPaintedRect, paintedRect);
+        }
+        return paintedRect;
+    }
+
+    public ArrayList<RoundRectangle2D> getPaintedRectangles()
+    {
+        mxCell thisCell = (mxCell) getCell();
+        CellPaintMode cellPaintMode = thisCell.getPaintMode();
+        ArrayList<RoundRectangle2D> roundRectangles = new ArrayList<>();
+        CrayonScriptIShape shape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(getStyle());
+        if (shape != null)
+        {
+            ArrayList<CrayonScriptBasicShape.SvgElement> svgElements = shape.getSvgElements();
+            CrayonScriptBasicShape.SvgElement first = svgElements.get(0);
+            if (cellPaintMode != CellPaintMode.FRAME_IN_FRAME)
+            {
+                roundRectangles.add(CrayonScriptBasicShape.scaleRectangle(this, first, first, getPaintMode()));
+            }
+            for (int i = 1; i < svgElements.size(); i++) {
+                CrayonScriptBasicShape.SvgElement rest = svgElements.get(i);
+                roundRectangles.add(CrayonScriptBasicShape.scaleRectangle(this, first, rest, getPaintMode()));
+            }
+        }
+        return roundRectangles;
     }
 
     public Rectangle getEditorBounds()

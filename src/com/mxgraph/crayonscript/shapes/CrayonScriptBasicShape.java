@@ -130,6 +130,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected void initializeRectangles(mxCellState state)
 	{
+		mxCell cell = (mxCell) state.getCell();
+
 		if (currentColors == null)
 		{
 			currentColors = new ArrayList<>();
@@ -138,22 +140,13 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				currentColors.add(svgElements.get(i).fillColor);
 			}
 		}
-		if (state.getCurrentRoundRectangles() == null)
+		if (cell.getCurrentRoundRectangles() == null)
 		{
-			currentRoundRectangles = new ArrayList<>();
-
-			ArrayList<SvgElement> svgElements = getSvgElements();
-			SvgElement first = svgElements.get(0);
-			currentRoundRectangles.add(scaleRectangle(state, first, first, state.getPaintMode()));
-			for (int i = 1; i < svgElements.size(); i++)
-			{
-				SvgElement rest = svgElements.get(i);
-				currentRoundRectangles.add(scaleRectangle(state, first, rest, state.getPaintMode()));
-			}
+			currentRoundRectangles = state.getRectangles();
 		}
 		else
 		{
-			currentRoundRectangles = state.getCurrentRoundRectangles();
+			currentRoundRectangles = cell.getCurrentRoundRectangles();
 		}
 	}
 
@@ -382,11 +375,13 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 			else
 			{
 				RoundRectangle2D first = currentRoundRectangles.get(1);
+				RoundRectangle2D last = currentRoundRectangles.get(currentRoundRectangles.size()-1);
+				double height = last.getY() + last.getHeight() - first.getY();
 				canvas.getGraphics().fillRoundRect(
 						(int) roundedRect.getX(),
 						(int) first.getY(),
 						(int) roundedRect.getWidth(),
-						(int) (roundedRect.getHeight() - (first.getY() - roundedRect.getY())),
+						(int) (height),
 						(int) roundedRect.getArcWidth(),
 						(int) roundedRect.getArcHeight());
 			}

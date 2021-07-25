@@ -99,6 +99,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	protected CellPaintMode paintMode = CellPaintMode.DEFAULT;
 
+	protected ArrayList<RoundRectangle2D> currentRoundRectangles;
+
 	/**
 	 * Reference to the last marked hotspot
 	 */
@@ -210,6 +212,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		this.value = value;
 	}
 
+	public CellTypeEnum getCellType() { return cellType; }
+
 	public void setCellType(CellTypeEnum value)
 	{
 		cellType = value;
@@ -291,6 +295,16 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		extendedGeometry.setHeight(extendedHeight);
 
 		return extendedGeometry;
+	}
+
+	public ArrayList<RoundRectangle2D> getCurrentRoundRectangles()
+	{
+		return currentRoundRectangles;
+	}
+
+	public void setCurrentRoundRectangles(ArrayList<RoundRectangle2D> value)
+	{
+		currentRoundRectangles = value;
 	}
 
 	public CellPaintMode getPaintMode()
@@ -998,6 +1012,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		clone.marked = marked;
 
 		clone.cellType = cellType;
+		clone.setCurrentRoundRectangles(currentRoundRectangles);
 
 		return clone;
 	}

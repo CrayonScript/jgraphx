@@ -22,6 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
@@ -619,7 +620,14 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             Object[] cells = (Object[]) evt.getProperty("cells");
             mxCell cell = (mxCell) cells[0];
 
+            mxCell[] previousParentCells = (mxCell[]) evt.getProperty("previous");
+            mxCell previousParentCell = previousParentCells == null ? null : previousParentCells[0];
+
+            mxCell templateCell = cell.getAncestorTemplate();
+            mxCell previousTemplateCell = previousParentCell == null ? null : previousParentCell.getAncestorTemplate();
+
             mxCell parentCell = (mxCell) cell.getParent();
+
             boolean parentCellIsBlock = parentCell != null && parentCell.isBlock();
             boolean parentCellIsTemplate = parentCell != null && parentCell.isTemplate();
             boolean thisCellIsBlock = cell.isBlock();
@@ -640,14 +648,80 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                     graph.getView().invalidate(cell);
                     graph.getView().updateCellState(cellState);
                     graph.refresh();
+
+                    // adjust the parent cell geometry
+                    if (cell.snapToParentDropFlag == CellFrameEnum.INNER_1)
+                    {
+                        mxCell resizeCell = previousTemplateCell == null ? parentCell : previousParentCell;
+                        mxCellState resizeCellState = graph.getView().getState(resizeCell, true);
+
+                        ArrayList<RoundRectangle2D> paintedRectangles = resizeCellState.getCurrentRoundRectangles();
+                        RoundRectangle2D outerRect = paintedRectangles.get(0);
+                        RoundRectangle2D inner1Rect = paintedRectangles.get(1);
+                        RoundRectangle2D inner2Rect = paintedRectangles.get(2);
+                        double scaledHeightToAdd = inner2Rect.getY()
+                                + inner2Rect.getHeight()
+                                - inner1Rect.getY()
+                                - inner1Rect.getHeight();
+                        double heightToAdd = (scaledHeightToAdd / graph.getView().getScale());
+
+                        if (newPaintMode == CellPaintMode.DEFAULT)
+                        {
+                            scaledHeightToAdd = -scaledHeightToAdd/2;
+                            heightToAdd = -heightToAdd/2;
+                        }
+
+                        inner2Rect.setFrame(
+                                inner2Rect.getX(),
+                                inner2Rect.getY() + scaledHeightToAdd,
+                                inner2Rect.getWidth(),
+                                inner2Rect.getHeight());
+
+                        outerRect.setFrame(
+                                outerRect.getX(),
+                                outerRect.getY(),
+                                outerRect.getWidth(),
+                                outerRect.getHeight() + scaledHeightToAdd);
+
+                        resizeCell.setCurrentRoundRectangles(paintedRectangles);
+                        resizeCell.getGeometry().setHeight(resizeCell.getGeometry().getHeight() + heightToAdd);
+
+                        graph.getView().invalidate(resizeCell);
+                        graph.getView().updateCellState(resizeCellState);
+                        graph.refresh();
+                    }
+                    else if (cell.snapToParentDropFlag == CellFrameEnum.INNER_2)
+                    {
+                        mxCell resizeCell = previousTemplateCell == null ? parentCell : previousParentCell;
+                        mxCellState resizeCellState = graph.getView().getState(resizeCell, true);
+
+                        ArrayList<RoundRectangle2D> paintedRectangles = resizeCellState.getCurrentRoundRectangles();
+                        RoundRectangle2D outerRect = paintedRectangles.get(0);
+                        RoundRectangle2D inner2Rect = paintedRectangles.get(2);
+                        double scaledHeightToAdd = outerRect.getHeight() + outerRect.getY() - inner2Rect.getY() - inner2Rect.getHeight();
+                        double heightToAdd = (scaledHeightToAdd / graph.getView().getScale());
+
+                        if (newPaintMode == CellPaintMode.DEFAULT)
+                        {
+                            scaledHeightToAdd = -scaledHeightToAdd/2;
+                            heightToAdd = -heightToAdd/2;
+                        }
+
+                        outerRect.setFrame(
+                                outerRect.getX(),
+                                outerRect.getY(),
+                                outerRect.getWidth(),
+                                outerRect.getHeight() + scaledHeightToAdd);
+
+                        resizeCell.setCurrentRoundRectangles(paintedRectangles);
+                        resizeCell.getGeometry().setHeight(resizeCell.getGeometry().getHeight() + heightToAdd);
+
+                        graph.getView().invalidate(resizeCell);
+                        graph.getView().updateCellState(resizeCellState);
+                        graph.refresh();
+                    }
                 }
             }
-
-            mxCell[] previousCells = (mxCell[]) evt.getProperty("previous");
-            mxCell previousCell = previousCells == null ? null : previousCells[0];
-
-            mxCell templateCell = cell.getAncestorTemplate();
-            mxCell previousTemplateCell = previousCell == null ? null : previousCell.getAncestorTemplate();
 
             if (templateCell != null)
             {
@@ -2747,11 +2821,11 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
     public void updateMarkerCellAndDescendants(mxCell cell, mxCell templateCell)
     {
-        updateMarkerCell(cell, templateCell);
         for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++) {
             mxCell childCell = (mxCell) cell.getChildAt(childIndex);
             updateMarkerCellAndDescendants(childCell, templateCell);
         }
+        updateMarkerCell(cell, templateCell);
     }
 
     public void updateMarkerCell(mxCell cell, mxCell templateCell)
@@ -2796,35 +2870,27 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         }
         mxGeometry templateGeometry = templateCell.getGeometry();
         for (mxCell mappedCell: markerCellMap.markers.keySet()) {
+            mxCellState mappedCellState = graph.getView().getState(mappedCell, true);
+            graph.getView().invalidate(mappedCell);
+            graph.getView().updateCellState(mappedCellState);
+            boolean isExtender = mappedCell.referenceShape.isExtender();
+            ArrayList<RoundRectangle2D> outerRectangles = mappedCellState.getAllOuterRectangles();
+            ArrayList<RoundRectangle2D> innerRectangles = mappedCellState.getAllInnerRectangles();
+            RoundRectangle2D outer = outerRectangles.get(0);
+            RoundRectangle2D first = mxUtils.minY(innerRectangles);
+            RoundRectangle2D last = mxUtils.maxY(innerRectangles);
+            double markerX = templateCell.getGeometry().getX();
+            double markerYTop = first.getY() / graph.getView().getScale();
+            double markerYBottom = (last.getY() + last.getHeight()) / graph.getView().getScale();
+            double markerHeight = (markerYBottom - markerYTop);
             mxCell mappedMarkerCell = markerCellMap.markers.get(mappedCell);
             int offset = (maxTemplateLevel - mappedMarkerCell.templateLevel);
-            boolean isExtender = mappedCell.referenceShape.isExtender();
-            RoundRectangle2D frameRectangle = mappedCell.getFrame(0);
-            mxGeometry extendedGeometry = mappedCell.getExtendedGeometry();
-            double extendedY = 0;
-            mxCell extendedCell = mappedCell;
-            while (extendedCell != templateCell)
-            {
-                extendedY += extendedCell.getGeometry().getY();
-                extendedCell = (mxCell) extendedCell.getParent();
-            }
-            double extendedHeight = extendedGeometry.getHeight();
-            double frameArcHeight = frameRectangle.getArcHeight();
-            if (mappedCell.getPaintMode() == CellPaintMode.FRAME_IN_FRAME)
-            {
-                frameArcHeight = 0;
-                double subY = mappedCell.getSubGeometry(1).getY();
-                extendedY += subY;
-                extendedHeight -= subY;
-            }
-            double markerX = templateCell.getGeometry().getX();
-            double markerY = templateCell.getGeometry().getY() + (isExtender ? 0 : frameArcHeight) + extendedY;
-            mappedMarkerCell.getGeometry().setWidth(30);
-            mappedMarkerCell.getGeometry().setHeight(extendedHeight + (isExtender ? 0 : - frameArcHeight));
-            mappedMarkerCell.getGeometry().setX(markerX - 40*(offset+1));
-            mappedMarkerCell.getGeometry().setY(markerY);
             graph.getModel().setVisible(mappedMarkerCell, true);
             mxCellState mappedMarkerCellState = graph.getView().getState(mappedMarkerCell, true);
+            mappedMarkerCell.getGeometry().setWidth(30);
+            mappedMarkerCell.getGeometry().setHeight(markerHeight);
+            mappedMarkerCell.getGeometry().setX(markerX - 40*(offset+1));
+            mappedMarkerCell.getGeometry().setY(markerYTop);
             graph.getView().invalidate(mappedMarkerCell);
             graph.getView().updateCellState(mappedMarkerCellState);
         }
@@ -2881,13 +2947,14 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         {
             mxCell previousTemplateCell = templateCells.get(currentIndex - 1);
             mxCell currentTemplateCell = templateCells.get(currentIndex);
-            mxGeometry previousTemplateCellExtendedGeometry = previousTemplateCell.getExtendedGeometry();
+            mxCellState previousTemplateCellState = graph.getView().getState(previousTemplateCell, true);
+            mxCellState currentTemplateCellState = graph.getView().getState(currentTemplateCell, true);
+            Rectangle2D previousPaintedRect = previousTemplateCellState.getExtendedPaintedRect();
             double currentY = currentTemplateCell.getGeometry().getY();
-            double ty = previousTemplateCellExtendedGeometry.getY() + previousTemplateCellExtendedGeometry.getHeight() - 24;
+            double ty = (previousPaintedRect.getY() + previousPaintedRect.getHeight())/graph.getView().getScale() - 24;
             currentTemplateCell.getGeometry().setY(ty);
-            mxCellState cellState = graph.getView().getState(currentTemplateCell, true);
             graph.getView().invalidate(currentTemplateCell);
-            graph.getView().updateCellState(cellState);
+            graph.getView().updateCellState(currentTemplateCellState);
             currentIndex++;
         }
         updateMarkerCells();
