@@ -442,6 +442,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	public boolean isBlock() { return cellType == CellTypeEnum.BLOCK; }
 
+	public boolean isBlockExtension() { return cellType == CellTypeEnum.BLOCK_EXTENSION; }
+
 	public boolean isExpression()
 	{
 		return cellType == CellTypeEnum.EXPRESSION;

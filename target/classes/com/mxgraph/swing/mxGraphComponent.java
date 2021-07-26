@@ -629,14 +629,19 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             mxCell parentCell = (mxCell) cell.getParent();
 
             boolean parentCellIsBlock = parentCell != null && parentCell.isBlock();
+            boolean parentCellIsBlockExtension = parentCell != null && parentCell.isBlockExtension();
             boolean parentCellIsTemplate = parentCell != null && parentCell.isTemplate();
             boolean thisCellIsBlock = cell.isBlock();
+            boolean thisCellIsBlockExtension = cell.isBlockExtension();
+
+            boolean inFrameBlockAdded = (thisCellIsBlock || thisCellIsBlockExtension)
+                    && (parentCellIsBlock || parentCellIsBlockExtension) && !parentCellIsTemplate;
 
             if (cell.isShape())
             {
                 CellPaintMode oldPaintMode = cell.getPaintMode();
                 CellPaintMode newPaintMode = CellPaintMode.DEFAULT;
-                if (thisCellIsBlock && parentCellIsBlock && !parentCellIsTemplate)
+                if (inFrameBlockAdded)
                 {
                     // this block got added to another block
                     newPaintMode = CellPaintMode.FRAME_IN_FRAME;
@@ -728,7 +733,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                     int templateCellIndex = templateCells.indexOf(templateCell);
                     repositionTemplateCells(templateCellIndex + 1);
                 }
-                updateMarkerCellAndDescendants(cell, templateCell);
+                updateTemplateMarkerCells(templateCell);
             }
             else if (previousTemplateCell != null)
             {
@@ -2812,13 +2817,22 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         }
     }
 
+    public void updateTemplateMarkerCells(mxCell templateCell)
+    {
+        for (int childIndex = 0; childIndex < templateCell.getChildCount(); childIndex++)
+        {
+            mxCell cell = (mxCell) templateCell.getChildAt(childIndex);
+            updateMarkerCellAndDescendants(cell, templateCell);
+        }
+    }
+
     public void updateMarkerCellAndDescendants(mxCell cell, mxCell templateCell)
     {
+        updateMarkerCell(cell, templateCell);
         for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++) {
             mxCell childCell = (mxCell) cell.getChildAt(childIndex);
             updateMarkerCellAndDescendants(childCell, templateCell);
         }
-        updateMarkerCell(cell, templateCell);
     }
 
     public void updateMarkerCell(mxCell cell, mxCell templateCell)
