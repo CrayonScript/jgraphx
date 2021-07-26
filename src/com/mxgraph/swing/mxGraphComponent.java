@@ -632,7 +632,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             boolean parentCellIsTemplate = parentCell != null && parentCell.isTemplate();
             boolean thisCellIsBlock = cell.isBlock();
 
-            if (cell.referenceShape != null)
+            if (cell.isShape())
             {
                 CellPaintMode oldPaintMode = cell.getPaintMode();
                 CellPaintMode newPaintMode = CellPaintMode.DEFAULT;
@@ -654,9 +654,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                     {
                         mxCell resizeCell = previousTemplateCell == null ? parentCell : previousParentCell;
                         mxCellState resizeCellState = graph.getView().getState(resizeCell, true);
-
                         ArrayList<RoundRectangle2D> paintedRectangles = resizeCellState.getCurrentRoundRectangles();
-                        RoundRectangle2D outerRect = paintedRectangles.get(0);
                         RoundRectangle2D inner1Rect = paintedRectangles.get(1);
                         RoundRectangle2D inner2Rect = paintedRectangles.get(2);
                         double scaledHeightToAdd = inner2Rect.getY()
@@ -664,60 +662,55 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                                 - inner1Rect.getY()
                                 - inner1Rect.getHeight();
                         double heightToAdd = (scaledHeightToAdd / graph.getView().getScale());
-
                         if (newPaintMode == CellPaintMode.DEFAULT)
                         {
                             scaledHeightToAdd = -scaledHeightToAdd/2;
                             heightToAdd = -heightToAdd/2;
                         }
-
-                        inner2Rect.setFrame(
-                                inner2Rect.getX(),
-                                inner2Rect.getY() + scaledHeightToAdd,
-                                inner2Rect.getWidth(),
-                                inner2Rect.getHeight());
-
-                        outerRect.setFrame(
-                                outerRect.getX(),
-                                outerRect.getY(),
-                                outerRect.getWidth(),
-                                outerRect.getHeight() + scaledHeightToAdd);
-
-                        resizeCell.setCurrentRoundRectangles(paintedRectangles);
+                        ArrayList<RoundRectangle2D> unscaledRectangles = resizeCell.getRoundRectangles();
+                        RoundRectangle2D unscaledOuterRect = unscaledRectangles.get(0);
+                        RoundRectangle2D unscaledInner2Rect = unscaledRectangles.get(2);
+                        unscaledOuterRect.setFrame(
+                                unscaledOuterRect.getX(),
+                                unscaledOuterRect.getY(),
+                                unscaledOuterRect.getWidth(),
+                                unscaledOuterRect.getHeight() + heightToAdd
+                        );
+                        unscaledInner2Rect.setFrame(
+                                unscaledInner2Rect.getX(),
+                                unscaledInner2Rect.getY() + heightToAdd,
+                                unscaledInner2Rect.getWidth(),
+                                unscaledInner2Rect.getHeight());
                         resizeCell.getGeometry().setHeight(resizeCell.getGeometry().getHeight() + heightToAdd);
-
-                        graph.getView().invalidate(resizeCell);
                         graph.getView().updateCellState(resizeCellState);
+                        graph.getView().invalidate(resizeCell);
                         graph.refresh();
                     }
                     else if (cell.snapToParentDropFlag == CellFrameEnum.INNER_2)
                     {
                         mxCell resizeCell = previousTemplateCell == null ? parentCell : previousParentCell;
                         mxCellState resizeCellState = graph.getView().getState(resizeCell, true);
-
                         ArrayList<RoundRectangle2D> paintedRectangles = resizeCellState.getCurrentRoundRectangles();
                         RoundRectangle2D outerRect = paintedRectangles.get(0);
                         RoundRectangle2D inner2Rect = paintedRectangles.get(2);
                         double scaledHeightToAdd = outerRect.getHeight() + outerRect.getY() - inner2Rect.getY() - inner2Rect.getHeight();
                         double heightToAdd = (scaledHeightToAdd / graph.getView().getScale());
-
                         if (newPaintMode == CellPaintMode.DEFAULT)
                         {
                             scaledHeightToAdd = -scaledHeightToAdd/2;
                             heightToAdd = -heightToAdd/2;
                         }
-
-                        outerRect.setFrame(
-                                outerRect.getX(),
-                                outerRect.getY(),
-                                outerRect.getWidth(),
-                                outerRect.getHeight() + scaledHeightToAdd);
-
-                        resizeCell.setCurrentRoundRectangles(paintedRectangles);
+                        ArrayList<RoundRectangle2D> unscaledRectangles = resizeCell.getRoundRectangles();
+                        RoundRectangle2D unscaledOuterRect = unscaledRectangles.get(0);
+                        RoundRectangle2D unscaledInner2Rect = unscaledRectangles.get(2);
+                        unscaledOuterRect.setFrame(
+                                unscaledOuterRect.getX(),
+                                unscaledOuterRect.getY(),
+                                unscaledOuterRect.getWidth(),
+                                unscaledOuterRect.getHeight() + heightToAdd);
                         resizeCell.getGeometry().setHeight(resizeCell.getGeometry().getHeight() + heightToAdd);
-
-                        graph.getView().invalidate(resizeCell);
                         graph.getView().updateCellState(resizeCellState);
+                        graph.getView().invalidate(resizeCell);
                         graph.refresh();
                     }
                 }

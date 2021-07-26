@@ -41,8 +41,6 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected boolean isTemplate = false;
 
-	protected transient ArrayList<RoundRectangle2D> currentRoundRectangles;
-
 	protected transient ArrayList<Color> currentColors;
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
@@ -139,14 +137,6 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 			for (int i = 0; i < svgElements.size(); i++) {
 				currentColors.add(svgElements.get(i).fillColor);
 			}
-		}
-		if (cell.getCurrentRoundRectangles() == null)
-		{
-			currentRoundRectangles = state.getRectangles();
-		}
-		else
-		{
-			currentRoundRectangles = cell.getCurrentRoundRectangles();
 		}
 	}
 
@@ -336,24 +326,27 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	}
 
 	protected void paintRectangle(mxGraphics2DCanvas canvas,
-								  RoundRectangle2D roundedRect,
+								  mxCellState cellState,
+								  int index,
 								  Color fillColor,
 								  CellPaintMode paintMode)
 	{
-		paintRectangle(canvas, roundedRect, fillColor, paintMode,false);
+		paintRectangle(canvas, cellState, index, fillColor, paintMode,false);
 	}
 
 	protected void paintRectangle(mxGraphics2DCanvas canvas,
-								  RoundRectangle2D roundedRect,
+								  mxCellState cellState,
+								  int index,
 								  Color fillColor,
 								  CellPaintMode paintMode,
 								  boolean isFrame)
 	{
-		paintRectangle(canvas, roundedRect, fillColor, paintMode, isFrame, false);
+		paintRectangle(canvas, cellState, index, fillColor, paintMode, isFrame, false);
 	}
 
 	protected void paintRectangle(mxGraphics2DCanvas canvas,
-								  RoundRectangle2D roundedRect,
+								  mxCellState cellState,
+								  int index,
 								  Color fillColor,
 								  CellPaintMode paintMode,
 								  boolean isFrame,
@@ -363,6 +356,9 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		{
 			canvas.getGraphics().setColor(fillColor);
 		}
+
+		ArrayList<RoundRectangle2D> currentRoundRectangles = cellState.getCurrentRoundRectangles();
+		RoundRectangle2D roundedRect = currentRoundRectangles.get(index);
 
 		if (isFrame)
 		{
@@ -562,6 +558,11 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 			{
 				svgElementType = SvgElementType.RECTANGLE;
 			}
+		}
+
+		public RoundRectangle2D getRect()
+		{
+			return rect;
 		}
 
 		public SvgElement copy()

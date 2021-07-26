@@ -62,6 +62,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 */
 	protected mxGeometry geometry;
 
+	protected ArrayList<RoundRectangle2D> roundRectangles = new ArrayList<>();
+
 	/**
 	 * Holds the style as a string of the form
 	 * stylename[;key=value]. Default is null.
@@ -98,8 +100,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	protected CellTypeEnum cellType = CellTypeEnum.NATIVE;
 
 	protected CellPaintMode paintMode = CellPaintMode.DEFAULT;
-
-	protected ArrayList<RoundRectangle2D> currentRoundRectangles;
 
 	/**
 	 * Reference to the last marked hotspot
@@ -297,16 +297,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return extendedGeometry;
 	}
 
-	public ArrayList<RoundRectangle2D> getCurrentRoundRectangles()
-	{
-		return currentRoundRectangles;
-	}
-
-	public void setCurrentRoundRectangles(ArrayList<RoundRectangle2D> value)
-	{
-		currentRoundRectangles = value;
-	}
-
 	public CellPaintMode getPaintMode()
 	{
 		return paintMode;
@@ -366,42 +356,48 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		parentCell.snapToChildrenDropFlags[parentCell.hotSpotDropFlag.bitIndex] = thisDropFlag;
 	}
 
-	public RoundRectangle2D getFrame(int index)
+	public ArrayList<RoundRectangle2D> getRoundRectangles()
 	{
-		if (this.shape)
-		{
-			if (this.referenceShape == null)
-			{
-				this.referenceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(getStyle());
-			}
-			CrayonScriptBasicShape.SvgElement rootSvgElement = this.referenceShape.getSvgElements().get(0);
-			CrayonScriptBasicShape.SvgElement svgElement = this.referenceShape.getSvgElements().get(index);
-			RoundRectangle2D subRect = CrayonScriptBasicShape.scaleRectangle(this.geometry.getRectangle(), rootSvgElement, svgElement);
-			return subRect;
-		}
-		return null;
+		initializeReferenceRectangles();
+		return roundRectangles;
 	}
 
 	public mxGeometry getSubGeometry(int subIndex)
 	{
 		if (this.shape)
 		{
-			if (this.referenceShape == null)
-			{
-				this.referenceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(getStyle());
-			}
-			CrayonScriptBasicShape.SvgElement rootElement = this.referenceShape.getSvgElements().get(0);
-			CrayonScriptBasicShape.SvgElement subElement = this.referenceShape.getSvgElements().get(subIndex);
-			RoundRectangle2D rootRect = CrayonScriptBasicShape.scaleRectangle(this.geometry.getRectangle(), rootElement, rootElement);
-			RoundRectangle2D subRect = CrayonScriptBasicShape.scaleRectangle(this.geometry.getRectangle(), rootElement, subElement);
+			initializeReferenceRectangles();
+
+			RoundRectangle2D unscaledRootRect = this.roundRectangles.get(0);
+			RoundRectangle2D unscaledSubRect = this.roundRectangles.get(subIndex);
+			RoundRectangle2D scaledRootRect = scaleRectangle(this.geometry.getRectangle(), unscaledRootRect, unscaledRootRect);
+			RoundRectangle2D scaledSubRect = scaleRectangle(this.geometry.getRectangle(), unscaledRootRect, unscaledSubRect);
 			mxGeometry subGeometry = new mxGeometry(
-					subRect.getX() - rootRect.getX(),
-					subRect.getY() - rootRect.getY(),
-					   subRect.getWidth(),
-					   subRect.getHeight());
+					scaledSubRect.getX() - scaledRootRect.getX(),
+					scaledSubRect.getY() - scaledRootRect.getY(),
+					   scaledSubRect.getWidth(),
+					   scaledSubRect.getHeight());
 			return subGeometry;
 		}
 		return null;
+	}
+
+	public static RoundRectangle2D scaleRectangle(
+			Rectangle stateRect,
+			RoundRectangle2D root,
+			RoundRectangle2D target)
+	{
+		double widthRatio = stateRect.getWidth() / root.getWidth();
+		double heightRatio = stateRect.getHeight() / root.getHeight();
+
+		int x = (int) (stateRect.x + (target.getX() - root.getX()) * widthRatio);
+		int y = (int) (stateRect.y + (target.getY() - root.getY()) * heightRatio);
+		int w = (int) (target.getWidth() * widthRatio);
+		int h = (int) (target.getHeight() * heightRatio);
+		int rw = (int) (target.getArcWidth() * widthRatio);
+		int rh = (int) (target.getArcHeight() * heightRatio);
+
+		return new RoundRectangle2D.Double(x, y, w, h, rw, rh);
 	}
 
 	/* (non-Javadoc)
@@ -971,6 +967,19 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		}
 	}
 
+	protected void initializeReferenceRectangles()
+	{
+		if (this.referenceShape == null)
+		{
+			this.referenceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(getStyle());
+			for (CrayonScriptBasicShape.SvgElement svgElement: this.referenceShape.getSvgElements()) {
+				svgElement = svgElement.copy();
+				RoundRectangle2D roundedRectangle = svgElement.getRect();
+				this.roundRectangles.add(roundedRectangle);
+			}
+		}
+	}
+
 	/**
 	 * Returns a clone of the cell.
 	 */
@@ -991,6 +1000,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		clone.setTarget(null);
 		clone.children = null;
 		clone.edges = null;
+		clone.roundRectangles = roundRectangles;
 
 		mxGeometry geometry = getGeometry();
 
@@ -1012,7 +1022,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		clone.marked = marked;
 
 		clone.cellType = cellType;
-		clone.setCurrentRoundRectangles(currentRoundRectangles);
 
 		return clone;
 	}

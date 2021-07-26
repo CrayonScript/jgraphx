@@ -726,6 +726,8 @@ public class mxGraphView extends mxEventSource
 
 				// Updates the cached label
 				updateLabel(state);
+
+				// update the inner rectangles
 			}
 		}
 	}

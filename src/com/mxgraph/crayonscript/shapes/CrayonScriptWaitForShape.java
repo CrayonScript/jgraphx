@@ -20,7 +20,7 @@ public class CrayonScriptWaitForShape extends CrayonScriptBasicShape {
 
         CellPaintMode paintMode = state.getPaintMode();
 
-        paintRectangle(canvas, currentRoundRectangles.get(0), getColor(currentColors.get(0)), paintMode, true);
-        paintRectangle(canvas, currentRoundRectangles.get(1), getColor(currentColors.get(1)), paintMode);
+        paintRectangle(canvas, state, 0, getColor(currentColors.get(0)), paintMode, true);
+        paintRectangle(canvas, state, 1, getColor(currentColors.get(1)), paintMode);
     }
 }

@@ -40,12 +40,8 @@ public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
 
         CellPaintMode paintMode = state.getPaintMode();
 
-        currentRoundRectangles = new ArrayList<>();
-        currentRoundRectangles.add(scaleRectangle(state, first, first, paintMode));
-        currentRoundRectangles.add(scaleRectangle(state, first, second, paintMode));
-
-        paintRectangle(canvas, currentRoundRectangles.get(0), paintedFirstColor, paintMode);
-        paintRectangle(canvas, currentRoundRectangles.get(1), paintedSecondColor, paintMode);
+        paintRectangle(canvas, state, 0, paintedFirstColor, paintMode);
+        paintRectangle(canvas, state, 1, paintedSecondColor, paintMode);
 
         drawText(canvas, ((mxCell) state.getCell()).getText(), state);
     }
