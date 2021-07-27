@@ -605,11 +605,21 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         public void invoke(Object sender, mxEventObject evt) {
             Object[] cells = (Object[]) evt.getProperty("cells");
             mxCell cell = (mxCell) cells[0];
-            Object[] previousCells = (Object[]) evt.getProperty("previous");
-            mxCell previous = (mxCell) previousCells[0];
-            if (previous.isTemplate())
+            mxCell[] previousParentCells = (mxCell[]) evt.getProperty("previous");
+            mxCell previousParentCell = previousParentCells == null ? null : previousParentCells[0];
+            mxCell parentCell = (mxCell) cell.getParent();
+
+            mxCell previousResizableAncestorCell = findResizableAncestorCell(previousParentCell);
+
+            resizeCellAndDescendants(previousResizableAncestorCell);
+
+            mxCell previousTemplateCell = previousParentCell == null ? null : previousParentCell.getAncestorTemplate();
+
+            if (previousTemplateCell != null)
             {
-                removeTemplateCell(cell, previous);
+                int previousTemplateCellIndex = templateCells.indexOf(previousTemplateCell);
+                removeTemplateCell(cell, previousTemplateCell);
+                repositionTemplateCells(previousTemplateCellIndex + 1);
             }
         }
     };
