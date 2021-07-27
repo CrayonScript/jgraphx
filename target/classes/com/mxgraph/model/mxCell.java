@@ -380,6 +380,24 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return paintedRect;
 	}
 
+	public ArrayList<RoundRectangle2D> getUnscaledPaintedRoundRectangles()
+	{
+		ArrayList<RoundRectangle2D> paintedRoundRectangles = new ArrayList<>();
+		ArrayList<RoundRectangle2D> roundRectangles = getUnscaledRoundRectangles();
+		mxCell thisCell = this;
+		CellPaintMode cellPaintMode = thisCell.calcPaintMode();
+		RoundRectangle2D first = roundRectangles.get(0);
+		if (cellPaintMode != CellPaintMode.FRAME_IN_FRAME)
+		{
+			paintedRoundRectangles.add(first);
+		}
+		for (int i = 1; i < roundRectangles.size(); i++) {
+			RoundRectangle2D rest = roundRectangles.get(i);
+			paintedRoundRectangles.add(rest);
+		}
+		return paintedRoundRectangles;
+	}
+
 	public ArrayList<RoundRectangle2D> getUnscaledRoundRectangles()
 	{
 		initializeUnscaledRoundRectangles();

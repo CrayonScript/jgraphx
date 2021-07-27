@@ -3,9 +3,7 @@
  */
 package com.mxgraph.view;
 
-import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
-import com.mxgraph.crayonscript.shapes.CrayonScriptIShape;
 import com.mxgraph.model.*;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxRectangle;
@@ -691,8 +689,8 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         mxCell sourceCell = (mxCell) otherCell;
         mxCell targetCell = (mxCell) cell;
 
-        List<RoundRectangle2D> sourceRectangles = sourceCell.getUnscaledRoundRectangles();
-        List<RoundRectangle2D> targetRectangles = targetCell.getUnscaledRoundRectangles();
+        List<RoundRectangle2D> sourceRectangles = sourceCell.getUnscaledPaintedRoundRectangles();
+        List<RoundRectangle2D> targetRectangles = targetCell.getUnscaledPaintedRoundRectangles();
 
         Rectangle stateRect = getRectangle();
 
