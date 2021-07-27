@@ -2736,6 +2736,11 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         resizeCell(cell);
     }
 
+    public CellFrameEnum getChildSnapOnPosition(mxCell parentCell, CellFrameEnum parentCellFrameEnum)
+    {
+        return parentCell.snapToChildrenDropFlags[parentCellFrameEnum.bitIndex];
+    }
+
     public mxCell getChildSnappedTo(mxCell cell, CellFrameEnum cellFrameEnum)
     {
         for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++) {
@@ -2754,11 +2759,11 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
         // at this point, the cell's children have been resized
         // max of 2 children (TODO: this can change)
-        mxCell inner1Cell = getChildSnappedTo(cell, CellFrameEnum.INNER_1);
-        mxCell inner2Cell = getChildSnappedTo(cell, CellFrameEnum.INNER_2);
+        mxCell childSnappedToInner1 = getChildSnappedTo(cell, CellFrameEnum.INNER_1);
+        mxCell childSnappedToInner2 = getChildSnappedTo(cell, CellFrameEnum.INNER_2);
 
-        if (inner1Cell != null && inner1Cell.isInline()) inner1Cell = null;
-        if (inner2Cell != null && inner2Cell.isInline()) inner2Cell = null;
+        if (childSnappedToInner1 != null && childSnappedToInner1.isInline()) childSnappedToInner1 = null;
+        if (childSnappedToInner2 != null && childSnappedToInner2.isInline()) childSnappedToInner2 = null;
 
         ArrayList<RoundRectangle2D> roundRectangles = cell.getUnscaledRoundRectangles();
         RoundRectangle2D outerRect = roundRectangles.get(0);
@@ -2767,11 +2772,11 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
         mxCellState cellState = graph.getView().getState(cell, true);
 
-        Rectangle2D inner1PaintedRect = inner1Cell == null ? null : inner1Cell.getExtendedUnscaledPaintedRectangle();
-        Rectangle2D inner2PaintedRect = inner2Cell == null ? null : inner2Cell.getExtendedUnscaledPaintedRectangle();
+        Rectangle2D inner1PaintedRect = childSnappedToInner1 == null ? null : childSnappedToInner1.getExtendedUnscaledPaintedRectangle();
+        Rectangle2D inner2PaintedRect = childSnappedToInner2 == null ? null : childSnappedToInner2.getExtendedUnscaledPaintedRectangle();
 
-        double inner1Height = inner1Rect == null ? 0 : (inner1Cell == null ? inner1Rect.getHeight() : inner1PaintedRect.getHeight());
-        double inner2Height = inner2Rect == null ? 0 : (inner2Cell == null ? inner2Rect.getHeight() : inner2PaintedRect.getHeight());
+        double inner1Height = inner1Rect == null ? 0 : (childSnappedToInner1 == null ? inner1Rect.getHeight() : inner1PaintedRect.getHeight());
+        double inner2Height = inner2Rect == null ? 0 : (childSnappedToInner2 == null ? inner2Rect.getHeight() : inner2PaintedRect.getHeight());
 
         double inner1BottomToInner2TopGap = cell.getOriginalGap(CellGapEnum.INNER_1_BOTTOM_TO_INNER_2_TOP);
         double inner2BottomToOuterBottomGap = cell.getOriginalGap(CellGapEnum.INNER_2_BOTTOM_TO_OUTER_BOTTOM);
@@ -2784,11 +2789,28 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                 inner2Rect.getHeight()
         );
 
-        if (inner2Cell != null)
+        if (childSnappedToInner2 != null)
         {
-            inner2Cell.getGeometry().setY(newInner2RectY);
-            graph.getView().invalidate(inner2Cell);
-            mxCellState inner2CellState = graph.getView().getState(inner2Cell, true);
+            // find out where exactly the snap on position on the child
+            CellFrameEnum childSnapOnPosition = getChildSnapOnPosition(cell, CellFrameEnum.INNER_2);
+            // find the gap from the snap on position and top
+            double childSnapOnPositionGap = 0;
+            if (childSnapOnPosition == CellFrameEnum.INNER_1)
+            {
+                // child's inner1 frame was snapped on this parent
+                childSnapOnPositionGap = childSnappedToInner2.getOriginalGap(CellGapEnum.OUTER_TOP_TO_INNER_1_TOP);
+            }
+            else if (childSnapOnPosition == CellFrameEnum.INNER_2)
+            {
+                // child's inner2 frame was snapped on to this parent
+                childSnapOnPositionGap = childSnappedToInner2.getOriginalGap(CellGapEnum.OUTER_TOP_TO_INNER_2_TOP);
+            }
+
+            double adjustedYOffset = newInner2RectY - childSnapOnPositionGap;
+
+            childSnappedToInner2.getGeometry().setY(adjustedYOffset);
+            graph.getView().invalidate(childSnappedToInner2);
+            mxCellState inner2CellState = graph.getView().getState(childSnappedToInner2, true);
             graph.getView().updateCellState(inner2CellState);
         }
 
