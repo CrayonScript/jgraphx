@@ -621,105 +621,18 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             mxCell cell = (mxCell) cells[0];
 
             mxCell[] previousParentCells = (mxCell[]) evt.getProperty("previous");
+
             mxCell previousParentCell = previousParentCells == null ? null : previousParentCells[0];
+            mxCell parentCell = (mxCell) cell.getParent();
+
+            mxCell previousResizableAncestorCell = findResizableAncestorCell(previousParentCell);
+            mxCell resizableAncestorCell = findResizableAncestorCell(parentCell);
+
+            resizeCellAndDescendants(previousResizableAncestorCell);
+            resizeCellAndDescendants(resizableAncestorCell);
 
             mxCell templateCell = cell.getAncestorTemplate();
             mxCell previousTemplateCell = previousParentCell == null ? null : previousParentCell.getAncestorTemplate();
-
-            mxCell parentCell = (mxCell) cell.getParent();
-
-            boolean parentCellIsBlock = parentCell != null && parentCell.isBlock();
-            boolean parentCellIsBlockExtension = parentCell != null && parentCell.isBlockExtension();
-            boolean parentCellIsTemplate = parentCell != null && parentCell.isTemplate();
-            boolean thisCellIsBlock = cell.isBlock();
-            boolean thisCellIsBlockExtension = cell.isBlockExtension();
-
-            boolean inFrameBlockAdded = (thisCellIsBlock || thisCellIsBlockExtension)
-                    && (parentCellIsBlock || parentCellIsBlockExtension) && !parentCellIsTemplate;
-
-            if (cell.isShape())
-            {
-                CellPaintMode oldPaintMode = cell.getPaintMode();
-                CellPaintMode newPaintMode = CellPaintMode.DEFAULT;
-                if (inFrameBlockAdded)
-                {
-                    // this block got added to another block
-                    newPaintMode = CellPaintMode.FRAME_IN_FRAME;
-                }
-                if (oldPaintMode != newPaintMode)
-                {
-                    cell.setPaintMode(newPaintMode);
-                    mxCellState cellState = graph.getView().getState(cell, true);
-                    graph.getView().invalidate(cell);
-                    graph.getView().updateCellState(cellState);
-                    graph.refresh();
-
-                    // adjust the parent cell geometry
-                    if (cell.snapToParentDropFlag == CellFrameEnum.INNER_1)
-                    {
-                        mxCell resizeCell = previousTemplateCell == null ? parentCell : previousParentCell;
-                        mxCellState resizeCellState = graph.getView().getState(resizeCell, true);
-                        ArrayList<RoundRectangle2D> paintedRectangles = resizeCellState.getCurrentRoundRectangles();
-                        RoundRectangle2D inner1Rect = paintedRectangles.get(1);
-                        RoundRectangle2D inner2Rect = paintedRectangles.get(2);
-                        double scaledHeightToAdd = inner2Rect.getY()
-                                + inner2Rect.getHeight()
-                                - inner1Rect.getY()
-                                - inner1Rect.getHeight();
-                        double heightToAdd = (scaledHeightToAdd / graph.getView().getScale());
-                        if (newPaintMode == CellPaintMode.DEFAULT)
-                        {
-                            scaledHeightToAdd = -scaledHeightToAdd/2;
-                            heightToAdd = -heightToAdd/2;
-                        }
-                        ArrayList<RoundRectangle2D> unscaledRectangles = resizeCell.getRoundRectangles();
-                        RoundRectangle2D unscaledOuterRect = unscaledRectangles.get(0);
-                        RoundRectangle2D unscaledInner2Rect = unscaledRectangles.get(2);
-                        unscaledOuterRect.setFrame(
-                                unscaledOuterRect.getX(),
-                                unscaledOuterRect.getY(),
-                                unscaledOuterRect.getWidth(),
-                                unscaledOuterRect.getHeight() + heightToAdd
-                        );
-                        unscaledInner2Rect.setFrame(
-                                unscaledInner2Rect.getX(),
-                                unscaledInner2Rect.getY() + heightToAdd,
-                                unscaledInner2Rect.getWidth(),
-                                unscaledInner2Rect.getHeight());
-                        resizeCell.getGeometry().setHeight(resizeCell.getGeometry().getHeight() + heightToAdd);
-                        graph.getView().updateCellState(resizeCellState);
-                        graph.getView().invalidate(resizeCell);
-                        graph.refresh();
-                    }
-                    else if (cell.snapToParentDropFlag == CellFrameEnum.INNER_2)
-                    {
-                        mxCell resizeCell = previousTemplateCell == null ? parentCell : previousParentCell;
-                        mxCellState resizeCellState = graph.getView().getState(resizeCell, true);
-                        ArrayList<RoundRectangle2D> paintedRectangles = resizeCellState.getCurrentRoundRectangles();
-                        RoundRectangle2D outerRect = paintedRectangles.get(0);
-                        RoundRectangle2D inner2Rect = paintedRectangles.get(2);
-                        double scaledHeightToAdd = outerRect.getHeight() + outerRect.getY() - inner2Rect.getY() - inner2Rect.getHeight();
-                        double heightToAdd = (scaledHeightToAdd / graph.getView().getScale());
-                        if (newPaintMode == CellPaintMode.DEFAULT)
-                        {
-                            scaledHeightToAdd = -scaledHeightToAdd/2;
-                            heightToAdd = -heightToAdd/2;
-                        }
-                        ArrayList<RoundRectangle2D> unscaledRectangles = resizeCell.getRoundRectangles();
-                        RoundRectangle2D unscaledOuterRect = unscaledRectangles.get(0);
-                        RoundRectangle2D unscaledInner2Rect = unscaledRectangles.get(2);
-                        unscaledOuterRect.setFrame(
-                                unscaledOuterRect.getX(),
-                                unscaledOuterRect.getY(),
-                                unscaledOuterRect.getWidth(),
-                                unscaledOuterRect.getHeight() + heightToAdd);
-                        resizeCell.getGeometry().setHeight(resizeCell.getGeometry().getHeight() + heightToAdd);
-                        graph.getView().updateCellState(resizeCellState);
-                        graph.getView().invalidate(resizeCell);
-                        graph.refresh();
-                    }
-                }
-            }
 
             if (templateCell != null)
             {
@@ -2798,6 +2711,205 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         }
 
         return result;
+    }
+
+    public void resizeCellAndDescendants(mxCell cell) {
+        if (cell == null) return;
+
+        // this cell is either on a template or on the board
+        // first resize the children, then the parents
+        for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++) {
+            mxCell childCell = (mxCell) cell.getChildAt(childIndex);
+            resizeCell(childCell);
+        }
+
+        resizeCell(cell);
+    }
+
+    public mxCell getChildSnappedTo(mxCell cell, CellFrameEnum cellFrameEnum)
+    {
+        for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++) {
+            mxCell childCell = (mxCell) cell.getChildAt(childIndex);
+            if (childCell.snapToParentDropFlag == cellFrameEnum) {
+                return childCell;
+            }
+        }
+        return null;
+    }
+
+    public void resizeCell(mxCell cell) {
+
+        // if this cell is not a block or a block extension, nothing to do
+        if (!(cell.isBlock() || cell.isBlockExtension())) return;
+
+        // at this point, the cell's children have been resized
+        // max of 2 children (TODO: this can change)
+        mxCell inner1Cell = getChildSnappedTo(cell, CellFrameEnum.INNER_1);
+        mxCell inner2Cell = getChildSnappedTo(cell, CellFrameEnum.INNER_2);
+
+        if (inner1Cell != null && inner1Cell.isInline()) inner1Cell = null;
+        if (inner2Cell != null && inner2Cell.isInline()) inner2Cell = null;
+
+        ArrayList<RoundRectangle2D> roundRectangles = cell.getUnscaledRoundRectangles();
+        RoundRectangle2D outerRect = roundRectangles.get(0);
+        RoundRectangle2D inner1Rect = roundRectangles.size() > 1 ? roundRectangles.get(1) : null;
+        RoundRectangle2D inner2Rect = roundRectangles.size() > 2 ? roundRectangles.get(2) : null;
+
+        mxCellState cellState = graph.getView().getState(cell, true);
+
+        Rectangle2D inner1PaintedRect = inner1Cell == null ? null : inner1Cell.getExtendedUnscaledPaintedRectangle();
+        Rectangle2D inner2PaintedRect = inner2Cell == null ? null : inner2Cell.getExtendedUnscaledPaintedRectangle();
+
+        double inner1Height = inner1Rect == null ? 0 : (inner1Cell == null ? inner1Rect.getHeight() : inner1PaintedRect.getHeight());
+        double inner2Height = inner2Rect == null ? 0 : (inner2Cell == null ? inner2Rect.getHeight() : inner2PaintedRect.getHeight());
+
+        double inner1BottomToInner2TopGap = cell.getOriginalGap(CellGapEnum.INNER_1_BOTTOM_TO_INNER_2_TOP);
+        double inner2BottomToOuterBottomGap = cell.getOriginalGap(CellGapEnum.INNER_2_BOTTOM_TO_OUTER_BOTTOM);
+
+        double newInner2RectY = inner1Rect.getY() + inner1Height + inner1BottomToInner2TopGap;
+        inner2Rect.setFrame(
+                inner2Rect.getX(),
+                newInner2RectY,
+                inner2Rect.getWidth(),
+                inner2Rect.getHeight()
+        );
+
+        if (inner2Cell != null)
+        {
+            inner2Cell.getGeometry().setY(newInner2RectY);
+            graph.getView().invalidate(inner2Cell);
+            mxCellState inner2CellState = graph.getView().getState(inner2Cell, true);
+            graph.getView().updateCellState(inner2CellState);
+        }
+
+        double newOuterRectY = inner2Rect.getY() + inner2Height + inner2BottomToOuterBottomGap;
+        double newOuterRectHeight = newOuterRectY - outerRect.getY();
+        outerRect.setFrame(
+                outerRect.getX(),
+                outerRect.getY(),
+                outerRect.getWidth(),
+                newOuterRectHeight
+        );
+
+        cell.syncGeometry();
+
+        graph.getView().invalidate(cell);
+        graph.getView().updateCellState(cellState);
+        graph.refresh();
+
+        // TODO: 06/26/21 - remove after new code stabilizes
+        /*
+        boolean parentCellIsBlock = parentCell != null && parentCell.isBlock();
+        boolean parentCellIsBlockExtension = parentCell != null && parentCell.isBlockExtension();
+        boolean parentCellIsTemplate = parentCell != null && parentCell.isTemplate();
+        boolean thisCellIsBlock = cell.isBlock();
+        boolean thisCellIsBlockExtension = cell.isBlockExtension();
+
+        boolean inFrameBlockAdded = (thisCellIsBlock || thisCellIsBlockExtension)
+                && (parentCellIsBlock || parentCellIsBlockExtension) && !parentCellIsTemplate;
+
+        if (cell.isShape())
+        {
+            CellPaintMode oldPaintMode = cell.getPaintMode();
+            CellPaintMode newPaintMode = CellPaintMode.DEFAULT;
+            if (inFrameBlockAdded)
+            {
+                // this block got added to another block
+                newPaintMode = CellPaintMode.FRAME_IN_FRAME;
+            }
+            if (oldPaintMode != newPaintMode)
+            {
+                cell.setPaintMode(newPaintMode);
+                mxCellState cellState = graph.getView().getState(cell, true);
+                graph.getView().invalidate(cell);
+                graph.getView().updateCellState(cellState);
+                graph.refresh();
+
+                // adjust the parent cell geometry
+                if (cell.snapToParentDropFlag == CellFrameEnum.INNER_1)
+                {
+                    mxCell resizeCell = previousTemplateCell == null ? parentCell : previousParentCell;
+                    mxCellState resizeCellState = graph.getView().getState(resizeCell, true);
+                    ArrayList<RoundRectangle2D> paintedRectangles = resizeCellState.getCurrentRoundRectangles();
+                    RoundRectangle2D inner1Rect = paintedRectangles.get(1);
+                    RoundRectangle2D inner2Rect = paintedRectangles.get(2);
+                    double scaledHeightToAdd = inner2Rect.getY()
+                            + inner2Rect.getHeight()
+                            - inner1Rect.getY()
+                            - inner1Rect.getHeight();
+                    double heightToAdd = (scaledHeightToAdd / graph.getView().getScale());
+                    if (newPaintMode == CellPaintMode.DEFAULT)
+                    {
+                        scaledHeightToAdd = -scaledHeightToAdd/2;
+                        heightToAdd = -heightToAdd/2;
+                    }
+                    ArrayList<RoundRectangle2D> unscaledRectangles = resizeCell.getRoundRectangles();
+                    RoundRectangle2D unscaledOuterRect = unscaledRectangles.get(0);
+                    RoundRectangle2D unscaledInner2Rect = unscaledRectangles.get(2);
+                    unscaledOuterRect.setFrame(
+                            unscaledOuterRect.getX(),
+                            unscaledOuterRect.getY(),
+                            unscaledOuterRect.getWidth(),
+                            unscaledOuterRect.getHeight() + heightToAdd
+                    );
+                    unscaledInner2Rect.setFrame(
+                            unscaledInner2Rect.getX(),
+                            unscaledInner2Rect.getY() + heightToAdd,
+                            unscaledInner2Rect.getWidth(),
+                            unscaledInner2Rect.getHeight());
+                    resizeCell.getGeometry().setHeight(resizeCell.getGeometry().getHeight() + heightToAdd);
+                    graph.getView().updateCellState(resizeCellState);
+                    graph.getView().invalidate(resizeCell);
+                    graph.refresh();
+                }
+                else if (cell.snapToParentDropFlag == CellFrameEnum.INNER_2)
+                {
+                    mxCell resizeCell = previousTemplateCell == null ? parentCell : previousParentCell;
+                    mxCellState resizeCellState = graph.getView().getState(resizeCell, true);
+                    ArrayList<RoundRectangle2D> paintedRectangles = resizeCellState.getCurrentRoundRectangles();
+                    RoundRectangle2D outerRect = paintedRectangles.get(0);
+                    RoundRectangle2D inner2Rect = paintedRectangles.get(2);
+                    double scaledHeightToAdd = outerRect.getHeight() + outerRect.getY() - inner2Rect.getY() - inner2Rect.getHeight();
+                    double heightToAdd = (scaledHeightToAdd / graph.getView().getScale());
+                    if (newPaintMode == CellPaintMode.DEFAULT)
+                    {
+                        scaledHeightToAdd = -scaledHeightToAdd/2;
+                        heightToAdd = -heightToAdd/2;
+                    }
+                    ArrayList<RoundRectangle2D> unscaledRectangles = resizeCell.getRoundRectangles();
+                    RoundRectangle2D unscaledOuterRect = unscaledRectangles.get(0);
+                    RoundRectangle2D unscaledInner2Rect = unscaledRectangles.get(2);
+                    unscaledOuterRect.setFrame(
+                            unscaledOuterRect.getX(),
+                            unscaledOuterRect.getY(),
+                            unscaledOuterRect.getWidth(),
+                            unscaledOuterRect.getHeight() + heightToAdd);
+                    resizeCell.getGeometry().setHeight(resizeCell.getGeometry().getHeight() + heightToAdd);
+                    graph.getView().updateCellState(resizeCellState);
+                    graph.getView().invalidate(resizeCell);
+                    graph.refresh();
+                }
+            }
+        }
+        */
+    }
+
+    public mxCell findResizableAncestorCell(mxCell cell)
+    {
+        mxCell currentCell = cell;
+        if (currentCell != null)
+        {
+            mxCell currentParentCell = (mxCell) currentCell.getParent();
+            while (!currentParentCell.isTemplate() && !currentParentCell.isNative())
+            {
+                currentCell = currentParentCell;
+                currentParentCell = (mxCell) currentCell.getParent();
+            }
+            if (currentCell.isNative()) return null;
+            if (currentCell.isTemplate()) return null;
+            return currentCell;
+        }
+        return null;
     }
 
     public void removeTemplateCell(mxCell cell, mxCell previousTemplateCell)

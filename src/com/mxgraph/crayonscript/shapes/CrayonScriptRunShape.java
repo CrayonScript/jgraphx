@@ -18,9 +18,7 @@ public class CrayonScriptRunShape extends CrayonScriptBasicShape {
 
         initialize(state);
 
-        CellPaintMode paintMode = state.getPaintMode();
-
-        paintRectangle(canvas, state, 0, getColor(currentColors.get(0)), paintMode, true);
-        paintRectangle(canvas, state, 1, getColor(currentColors.get(1)), paintMode);
+        paintRectangle(canvas, state, 0, getColor(currentColors.get(0)), true);
+        paintRectangle(canvas, state, 1, getColor(currentColors.get(1)));
     }
 }

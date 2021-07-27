@@ -30,10 +30,8 @@ public class CrayonScriptExpressionShape extends CrayonScriptBasicShape {
             secondColor = ((mxCell) ((mxCell) state.getCell()).getParent()).referenceShape.getFrameColor(snapToParentDropFlag);
         }
 
-        CellPaintMode paintMode = state.getPaintMode();
-
-        paintRectangle(canvas, state, 0, getColor(frameColor), paintMode);
-        paintRectangle(canvas, state, 1, getColor(secondColor), paintMode);
+        paintRectangle(canvas, state, 0, getColor(frameColor));
+        paintRectangle(canvas, state, 1, getColor(secondColor));
 
         drawText(canvas, ((mxCell) state.getCell()).getText(), state);
     }

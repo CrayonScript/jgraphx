@@ -38,10 +38,8 @@ public class CrayonScriptFunctionShape extends CrayonScriptBasicShape {
         Color paintedFirstColor = getColor(frameColor);
         Color paintedSecondColor = getColor(secondColor);
 
-        CellPaintMode paintMode = state.getPaintMode();
-
-        paintRectangle(canvas, state, 0, paintedFirstColor, paintMode);
-        paintRectangle(canvas, state, 1, paintedSecondColor, paintMode);
+        paintRectangle(canvas, state, 0, paintedFirstColor);
+        paintRectangle(canvas, state, 1, paintedSecondColor);
 
         drawText(canvas, ((mxCell) state.getCell()).getText(), state);
     }

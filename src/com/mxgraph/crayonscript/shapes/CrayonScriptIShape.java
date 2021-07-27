@@ -2,6 +2,7 @@ package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.CellFrameEnum;
+import com.mxgraph.model.CellGapEnum;
 import com.mxgraph.model.CellPaintMode;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.shape.mxIShape;
@@ -19,8 +20,6 @@ public interface CrayonScriptIShape extends mxIShape {
 
     ArrayList<CrayonScriptBasicShape.SvgElement> getSvgElements();
 
-    ArrayList<CrayonScriptBasicShape.SvgElement> getHotspotSvgElements();
-
     int getSubElements();
 
     int getOpacity();
@@ -32,4 +31,6 @@ public interface CrayonScriptIShape extends mxIShape {
     RoundRectangle2D getFrame(CellFrameEnum frameEnum);
 
     boolean isExtender();
+
+    double getOriginalGap(CellGapEnum gapEnum);
 }

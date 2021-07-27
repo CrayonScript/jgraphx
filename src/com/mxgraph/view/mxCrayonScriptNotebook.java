@@ -130,13 +130,13 @@ public class mxCrayonScriptNotebook {
         blocksPalette.addTemplate(name, icon, cell);
 
         name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION;
-        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_RUN_PARALLEL);
+        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION);
         iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender.png");
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
 
         name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION;
-        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_RUN_SEQUENTIAL);
+        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION);
         iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender.png");
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);

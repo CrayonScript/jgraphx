@@ -18,10 +18,8 @@ public class CrayonScriptElseIfShape extends CrayonScriptBasicShape {
 
         initialize(state);
 
-        CellPaintMode paintMode = state.getPaintMode();
-
-        paintRectangle(canvas, state, 0, getColor(currentColors.get(0)), paintMode, true);
-        paintRectangle(canvas, state, 1, getColor(currentColors.get(1)), paintMode);
-        paintRectangle(canvas, state, 2, getColor(currentColors.get(2)), paintMode);
+        paintRectangle(canvas, state, 0, getColor(currentColors.get(0)), true);
+        paintRectangle(canvas, state, 1, getColor(currentColors.get(1)));
+        paintRectangle(canvas, state, 2, getColor(currentColors.get(2)));
     }
 }

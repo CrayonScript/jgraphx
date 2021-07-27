@@ -181,11 +181,6 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         this.cell = cell;
     }
 
-    public CellPaintMode getPaintMode()
-    {
-        return ((mxCell) cell).getPaintMode();
-    }
-
     /**
      * Returns the cell style as a map of key, value pairs.
      *
@@ -538,7 +533,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         ArrayList<RoundRectangle2D> scaledRoundRectangles = new ArrayList<>();
         mxCell thisCell = (mxCell) cell;
         Rectangle stateRect = getRectangle();
-        ArrayList<RoundRectangle2D> roundedRectangles = thisCell.getRoundRectangles();
+        ArrayList<RoundRectangle2D> roundedRectangles = thisCell.getUnscaledRoundRectangles();
         RoundRectangle2D first = roundedRectangles.get(0);
         scaledRoundRectangles.add(thisCell.scaleRectangle(stateRect, first, first));
         for (int i = 1; i < roundedRectangles.size(); i++) {
@@ -583,7 +578,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         Rectangle2D paintedRect = null;
         ArrayList<RoundRectangle2D> thisPaintedRectangles = getCurrentRoundRectangles();
         mxCell thisCell = (mxCell) getCell();
-        CellPaintMode cellPaintMode = thisCell.getPaintMode();
+        CellPaintMode cellPaintMode = thisCell.calcPaintMode();
         if (cellPaintMode == CellPaintMode.FRAME_IN_FRAME)
         {
             paintedRect = thisPaintedRectangles.get(1).getFrame();
@@ -608,7 +603,7 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         ArrayList<RoundRectangle2D> paintedRoundRectangles = new ArrayList<>();
         ArrayList<RoundRectangle2D> roundRectangles = getCurrentRoundRectangles();
         mxCell thisCell = (mxCell) getCell();
-        CellPaintMode cellPaintMode = thisCell.getPaintMode();
+        CellPaintMode cellPaintMode = thisCell.calcPaintMode();
         RoundRectangle2D first = roundRectangles.get(0);
         if (cellPaintMode != CellPaintMode.FRAME_IN_FRAME)
         {
@@ -693,9 +688,11 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
 
         Rectangle sourceStateRect = sourceState.getRectangle();
 
-        // get the source shape and target shape
-        CrayonScriptIShape sourceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(((mxICell) otherCell).getStyle());
-        CrayonScriptIShape targetShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(((mxICell) cell).getStyle());
+        mxCell sourceCell = (mxCell) otherCell;
+        mxCell targetCell = (mxCell) cell;
+
+        List<RoundRectangle2D> sourceRectangles = sourceCell.getUnscaledRoundRectangles();
+        List<RoundRectangle2D> targetRectangles = targetCell.getUnscaledRoundRectangles();
 
         Rectangle stateRect = getRectangle();
 
@@ -708,12 +705,12 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
 
                 RoundRectangle2D sourceRect = CrayonScriptBasicShape.scaleRectangle(
                         sourceStateRect,
-                        sourceShape.getHotspotSvgElements().get(0),
-                        sourceShape.getHotspotSvgElements().get(dropSourceFlag.bitIndex));
+                        sourceRectangles.get(0),
+                        sourceRectangles.get(dropSourceFlag.bitIndex));
                 RoundRectangle2D targetRect = CrayonScriptBasicShape.scaleRectangle(
                         stateRect,
-                        targetShape.getHotspotSvgElements().get(0),
-                        targetShape.getHotspotSvgElements().get(dropTargetFlag.bitIndex));
+                        targetRectangles.get(0),
+                        targetRectangles.get(dropTargetFlag.bitIndex));
 
                 if (intersects(sourceRect, targetRect, hotspot, min, max))
                 {

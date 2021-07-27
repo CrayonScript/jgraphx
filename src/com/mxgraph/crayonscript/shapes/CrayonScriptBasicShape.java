@@ -2,6 +2,7 @@ package com.mxgraph.crayonscript.shapes;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.CellFrameEnum;
+import com.mxgraph.model.CellGapEnum;
 import com.mxgraph.model.CellPaintMode;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxDefaultTextShape;
@@ -17,6 +18,7 @@ import org.w3c.dom.NodeList;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 	protected static Map<ShapeStructureType, ArrayList<SvgElement>> svgElementsMap;
 
-	protected static Map<ShapeStructureType, ArrayList<SvgElement>> hotspotSvgElementsMap;
+	protected static Map<ShapeStructureType, HashMap<CellGapEnum, Point2D>> svgElementsGapsMap;
 
 	private static final Logger log = Logger.getLogger(mxStencilShape.class.getName());
 
@@ -68,9 +70,16 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		return svgElementsMap.get(shapeStructureType);
 	}
 
-	public ArrayList<SvgElement> getHotspotSvgElements()
+	public HashMap<CellGapEnum, Point2D> getSvgElementGaps()
 	{
-		return hotspotSvgElementsMap.get(shapeStructureType);
+		return svgElementsGapsMap.get(shapeStructureType);
+	}
+
+	public double getOriginalGap(CellGapEnum gapEnum)
+	{
+		HashMap<CellGapEnum, Point2D> gaps = getSvgElementGaps();
+		Point2D gap = gaps.get(gapEnum);
+		return gap.getY();
 	}
 
 	public int getSubElements()
@@ -204,51 +213,169 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 		svgElements = buildSvgElementsFor("Template");
 		svgElementsMap.put(ShapeStructureType.TEMPLATE, svgElements);
 
-		hotspotSvgElementsMap = new HashMap<>();
+		svgElementsGapsMap = new HashMap<>();
 		for (Map.Entry<ShapeStructureType, ArrayList<SvgElement>> entry: svgElementsMap.entrySet()) {
-			ArrayList<SvgElement> defaultPaintModeValue = entry.getValue();
-			hotspotSvgElementsMap.put(entry.getKey(), new ArrayList<>(defaultPaintModeValue));
+			ArrayList<SvgElement> gapElements = entry.getValue();
+			HashMap<CellGapEnum, Point2D> gapMap = new HashMap<>();
+			svgElementsGapsMap.put(entry.getKey(), gapMap);
+
+			{
+				double gap = gapElements.get(0).rect.getHeight();
+				gapMap.put(CellGapEnum.OUTER_TOP_TO_OUTER_BOTTOM, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 1 ?
+						(
+								getInner1Top(gapElements) - getOuterTop(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.OUTER_TOP_TO_INNER_1_TOP, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 1 ?
+						(
+								getInner1Bottom(gapElements) - getOuterTop(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.OUTER_TOP_TO_INNER_1_BOTTOM, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 2 ?
+						(
+								getInner2Top(gapElements) - getOuterTop(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.OUTER_TOP_TO_INNER_2_TOP, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 2 ?
+						(
+								getInner2Bottom(gapElements) - getOuterTop(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.OUTER_TOP_TO_INNER_2_BOTTOM, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 2 ?
+						(
+								getInner2Top(gapElements) - getInner1Top(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.INNER_1_TOP_TO_INNER_2_TOP, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 2 ?
+						(
+								getInner2Bottom(gapElements) - getInner1Top(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.INNER_1_TOP_TO_INNER_2_BOTTOM, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 2 ?
+						(
+								getOuterBottom(gapElements) - getInner1Top(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.INNER_1_TOP_TO_OUTER_BOTTOM, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 2 ?
+						(
+								getInner2Top(gapElements) - getInner1Bottom(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.INNER_1_BOTTOM_TO_INNER_2_TOP, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 2 ?
+						(
+								getInner2Bottom(gapElements) - getInner1Bottom(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.INNER_1_BOTTOM_TO_INNER_2_BOTTOM, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 2 ?
+						(
+								getOuterBottom(gapElements) - getInner1Bottom(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.INNER_1_BOTTOM_TO_OUTER_BOTTOM, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 2 ?
+						(
+								getOuterBottom(gapElements) - getInner2Top(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.INNER_2_TOP_TO_OUTER_BOTTOM, new Point2D.Double(0, gap));
+			}
+
+			{
+				double gap = gapElements.size() > 2 ?
+						(
+								getOuterBottom(gapElements) - getInner2Bottom(gapElements)
+						)
+						: 0;
+				gapMap.put(CellGapEnum.INNER_2_BOTTOM_TO_OUTER_BOTTOM, new Point2D.Double(0, gap));
+			}
 		}
 
-		// special purpose hotspot map for assign (statement) and expressions
-		SvgElement eventInner1 = hotspotSvgElementsMap.get(ShapeStructureType.EVENT).get(CellFrameEnum.INNER_1.bitIndex);
-		eventInner1 = eventInner1.copy();
-		eventInner1.rect.setFrame(
-				eventInner1.rect.getFrame().getX(),
-				eventInner1.rect.getFrame().getY(),
-				170,
-				eventInner1.rect.getFrame().getHeight());
-		hotspotSvgElementsMap.get(ShapeStructureType.EVENT).set(CellFrameEnum.INNER_1.bitIndex, eventInner1);
-
-		// special purpose hotspot map for assign (statement) and expressions
-		SvgElement assignInner1 = hotspotSvgElementsMap.get(ShapeStructureType.ASSIGN).get(CellFrameEnum.INNER_1.bitIndex);
-		assignInner1 = assignInner1.copy();
-		assignInner1.rect.setFrame(
-				assignInner1.rect.getFrame().getX(),
-				assignInner1.rect.getFrame().getY(),
-				170,
-				assignInner1.rect.getFrame().getHeight());
-		hotspotSvgElementsMap.get(ShapeStructureType.ASSIGN).set(CellFrameEnum.INNER_1.bitIndex, assignInner1);
-
-		SvgElement expressionInner1 = hotspotSvgElementsMap.get(ShapeStructureType.EXPRESSION).get(CellFrameEnum.INNER_1.bitIndex);
-		expressionInner1 = expressionInner1.copy();
-		expressionInner1.rect.setFrame(
-				expressionInner1.rect.getFrame().getX(),
-				expressionInner1.rect.getFrame().getY(),
-				170,
-				expressionInner1.rect.getFrame().getHeight());
-		hotspotSvgElementsMap.get(ShapeStructureType.EXPRESSION).set(CellFrameEnum.INNER_1.bitIndex, expressionInner1);
-
-		SvgElement functionInner1 = hotspotSvgElementsMap.get(ShapeStructureType.FUNCTION).get(CellFrameEnum.INNER_1.bitIndex);
-		functionInner1 = functionInner1.copy();
-		functionInner1.rect.setFrame(
-				functionInner1.rect.getFrame().getX(),
-				functionInner1.rect.getFrame().getY(),
-				170,
-				functionInner1.rect.getFrame().getHeight());
-		hotspotSvgElementsMap.get(ShapeStructureType.FUNCTION).set(CellFrameEnum.INNER_1.bitIndex, functionInner1);
-
 		initialized = true;
+	}
+
+	protected static double getSvgElementTop(ArrayList<SvgElement> svgElements, int elementIndex)
+	{
+		if (svgElements.size() <= elementIndex) return 0;
+		return (svgElements.get(elementIndex).rect.getY());
+	}
+
+	protected static double getSvgElementBottom(ArrayList<SvgElement> svgElements, int elementIndex)
+	{
+		if (svgElements.size() <= elementIndex) return 0;
+		return (svgElements.get(elementIndex).rect.getY() + svgElements.get(elementIndex).rect.getHeight());
+	}
+
+	protected static double getOuterTop(ArrayList<SvgElement> svgElements)
+	{
+		return getSvgElementTop(svgElements, 0);
+	}
+
+	protected static double getOuterBottom(ArrayList<SvgElement> svgElements)
+	{
+		return getSvgElementBottom(svgElements, 0);
+	}
+
+	protected static double getInner1Top(ArrayList<SvgElement> svgElements)
+	{
+		return getSvgElementTop(svgElements, 1);
+	}
+
+	protected static double getInner1Bottom(ArrayList<SvgElement> svgElements)
+	{
+		return getSvgElementBottom(svgElements, 1);
+	}
+
+	protected static double getInner2Top(ArrayList<SvgElement> svgElements)
+	{
+		return getSvgElementTop(svgElements, 2);
+	}
+
+	protected static double getInner2Bottom(ArrayList<SvgElement> svgElements)
+	{
+		return getSvgElementBottom(svgElements, 2);
 	}
 
 	public static SvgElement getTemplate()
@@ -328,27 +455,24 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 	protected void paintRectangle(mxGraphics2DCanvas canvas,
 								  mxCellState cellState,
 								  int index,
-								  Color fillColor,
-								  CellPaintMode paintMode)
+								  Color fillColor)
 	{
-		paintRectangle(canvas, cellState, index, fillColor, paintMode,false);
+		paintRectangle(canvas, cellState, index, fillColor, false);
 	}
 
 	protected void paintRectangle(mxGraphics2DCanvas canvas,
 								  mxCellState cellState,
 								  int index,
 								  Color fillColor,
-								  CellPaintMode paintMode,
 								  boolean isFrame)
 	{
-		paintRectangle(canvas, cellState, index, fillColor, paintMode, isFrame, false);
+		paintRectangle(canvas, cellState, index, fillColor, isFrame, false);
 	}
 
 	protected void paintRectangle(mxGraphics2DCanvas canvas,
 								  mxCellState cellState,
 								  int index,
 								  Color fillColor,
-								  CellPaintMode paintMode,
 								  boolean isFrame,
 								  boolean isExtender)
 	{
@@ -362,6 +486,8 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 
 		if (isFrame)
 		{
+			CellPaintMode paintMode = ((mxCell) cellState.getCell()).calcPaintMode();
+
 			if (paintMode == CellPaintMode.DEFAULT)
 			{
 				Path2D path = isExtender ? getFrameExtenderPath(roundedRect) : getFramePath(roundedRect);
@@ -447,15 +573,23 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 			SvgElement root,
 			SvgElement target)
 	{
-		double widthRatio = stateRect.getWidth() / root.rect.getWidth();
-		double heightRatio = stateRect.getHeight() / root.rect.getHeight();
+		return scaleRectangle(stateRect, root.getRect(), target.getRect());
+	}
 
-		int x = (int) (stateRect.x + (target.rect.getX() - root.rect.getX()) * widthRatio);
-		int y = (int) (stateRect.y + (target.rect.getY() - root.rect.getY()) * heightRatio);
-		int w = (int) (target.rect.getWidth() * widthRatio);
-		int h = (int) (target.rect.getHeight() * heightRatio);
-		int rw = (int) (target.rect.getArcWidth() * widthRatio);
-		int rh = (int) (target.rect.getArcHeight() * heightRatio);
+	public static RoundRectangle2D scaleRectangle(
+			Rectangle stateRect,
+			RoundRectangle2D root,
+			RoundRectangle2D target)
+	{
+		double widthRatio = stateRect.getWidth() / root.getWidth();
+		double heightRatio = stateRect.getHeight() / root.getHeight();
+
+		int x = (int) (stateRect.x + (target.getX() - root.getX()) * widthRatio);
+		int y = (int) (stateRect.y + (target.getY() - root.getY()) * heightRatio);
+		int w = (int) (target.getWidth() * widthRatio);
+		int h = (int) (target.getHeight() * heightRatio);
+		int rw = (int) (target.getArcWidth() * widthRatio);
+		int rh = (int) (target.getArcHeight() * heightRatio);
 
 		return new RoundRectangle2D.Double(x, y, w, h, rw, rh);
 	}

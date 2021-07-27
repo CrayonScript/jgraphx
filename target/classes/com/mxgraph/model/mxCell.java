@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 */
 	protected mxGeometry geometry;
 
-	protected ArrayList<RoundRectangle2D> roundRectangles = new ArrayList<>();
+	protected ArrayList<RoundRectangle2D> unscaledRoundRectangles;
 
 	/**
 	 * Holds the style as a string of the form
@@ -98,8 +99,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	protected double boundingBoxWidth = Double.NaN, boundingBoxHeight = Double.NaN;
 
 	protected CellTypeEnum cellType = CellTypeEnum.NATIVE;
-
-	protected CellPaintMode paintMode = CellPaintMode.DEFAULT;
 
 	/**
 	 * Reference to the last marked hotspot
@@ -297,15 +296,16 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return extendedGeometry;
 	}
 
-	public CellPaintMode getPaintMode()
+	public CellPaintMode calcPaintMode()
 	{
-		return paintMode;
+		if (this.isInline()) return CellPaintMode.DEFAULT;
+		mxCell parentCell = (mxCell) this.getParent();
+		if (parentCell == null) return CellPaintMode.DEFAULT;
+		if (parentCell.isNative()) return CellPaintMode.DEFAULT;
+		if (parentCell.isTemplate()) return CellPaintMode.DEFAULT;
+		return CellPaintMode.FRAME_IN_FRAME;
 	}
 
-	public void setPaintMode(CellPaintMode paintMode)
-	{
-		this.paintMode = paintMode;
-	}
 
 	public void snapToParentGeometry()
 	{
@@ -356,20 +356,56 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		parentCell.snapToChildrenDropFlags[parentCell.hotSpotDropFlag.bitIndex] = thisDropFlag;
 	}
 
-	public ArrayList<RoundRectangle2D> getRoundRectangles()
+	public Rectangle2D getExtendedUnscaledPaintedRectangle()
 	{
-		initializeReferenceRectangles();
-		return roundRectangles;
+		Rectangle2D paintedRect = null;
+		ArrayList<RoundRectangle2D> thisPaintedRectangles = getUnscaledRoundRectangles();
+		mxCell thisCell = this;
+		CellPaintMode cellPaintMode = thisCell.calcPaintMode();
+		if (cellPaintMode == CellPaintMode.FRAME_IN_FRAME)
+		{
+			paintedRect = thisPaintedRectangles.get(1).getFrame();
+			Rectangle2D.union(paintedRect, thisPaintedRectangles.get(thisPaintedRectangles.size()-1).getFrame(), paintedRect);
+		}
+		else
+		{
+			paintedRect = thisPaintedRectangles.get(0).getFrame();
+		}
+		for (int childIndex = 0; childIndex < thisCell.getChildCount(); childIndex++)
+		{
+			mxCell childCell = (mxCell) thisCell.getChildAt(childIndex);
+			Rectangle2D childPaintedRect = childCell.getExtendedUnscaledPaintedRectangle();
+			Rectangle2D.union(paintedRect, childPaintedRect, paintedRect);
+		}
+		return paintedRect;
+	}
+
+	public ArrayList<RoundRectangle2D> getUnscaledRoundRectangles()
+	{
+		initializeUnscaledRoundRectangles();
+		return unscaledRoundRectangles;
+	}
+
+	public void syncGeometry()
+	{
+		// sync geometry with the rounded rect
+		if (this.geometry != null)
+		{
+			initializeUnscaledRoundRectangles();
+			RoundRectangle2D outerRect = this.unscaledRoundRectangles.get(0);
+			this.geometry.setWidth(outerRect.getWidth());
+			this.geometry.setHeight(outerRect.getHeight());
+		}
 	}
 
 	public mxGeometry getSubGeometry(int subIndex)
 	{
 		if (this.shape)
 		{
-			initializeReferenceRectangles();
+			initializeUnscaledRoundRectangles();
 
-			RoundRectangle2D unscaledRootRect = this.roundRectangles.get(0);
-			RoundRectangle2D unscaledSubRect = this.roundRectangles.get(subIndex);
+			RoundRectangle2D unscaledRootRect = this.unscaledRoundRectangles.get(0);
+			RoundRectangle2D unscaledSubRect = this.unscaledRoundRectangles.get(subIndex);
 			RoundRectangle2D scaledRootRect = scaleRectangle(this.geometry.getRectangle(), unscaledRootRect, unscaledRootRect);
 			RoundRectangle2D scaledSubRect = scaleRectangle(this.geometry.getRectangle(), unscaledRootRect, unscaledSubRect);
 			mxGeometry subGeometry = new mxGeometry(
@@ -440,13 +476,20 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return cellType == CellTypeEnum.TEMPLATE;
 	}
 
+	public boolean isNative() { return cellType == CellTypeEnum.NATIVE; }
+
 	public boolean isBlock() { return cellType == CellTypeEnum.BLOCK; }
 
 	public boolean isBlockExtension() { return cellType == CellTypeEnum.BLOCK_EXTENSION; }
 
-	public boolean isExpression()
-	{
-		return cellType == CellTypeEnum.EXPRESSION;
+	public boolean isExpression() { return cellType == CellTypeEnum.EXPRESSION; }
+
+	public boolean isInline() {
+		return cellType == CellTypeEnum.EXPRESSION
+				|| cellType == CellTypeEnum.STATEMENT
+				|| cellType == CellTypeEnum.PROPERTY
+				|| cellType == CellTypeEnum.EVENT
+				|| cellType == CellTypeEnum.FUNCTION;
 	}
 
 	public boolean isStatement()
@@ -969,15 +1012,21 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		}
 	}
 
-	protected void initializeReferenceRectangles()
+	public double getOriginalGap(CellGapEnum gapEnum)
+	{
+		return this.referenceShape.getOriginalGap(gapEnum);
+	}
+
+	protected void initializeUnscaledRoundRectangles()
 	{
 		if (this.referenceShape == null)
 		{
 			this.referenceShape = (CrayonScriptIShape) mxGraphics2DCanvas.getShape(getStyle());
+			this.unscaledRoundRectangles = new ArrayList<>();
 			for (CrayonScriptBasicShape.SvgElement svgElement: this.referenceShape.getSvgElements()) {
 				svgElement = svgElement.copy();
 				RoundRectangle2D roundedRectangle = svgElement.getRect();
-				this.roundRectangles.add(roundedRectangle);
+				this.unscaledRoundRectangles.add(roundedRectangle);
 			}
 		}
 	}
@@ -1002,7 +1051,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		clone.setTarget(null);
 		clone.children = null;
 		clone.edges = null;
-		clone.roundRectangles = roundRectangles;
+		clone.unscaledRoundRectangles = unscaledRoundRectangles;
 
 		mxGeometry geometry = getGeometry();
 
