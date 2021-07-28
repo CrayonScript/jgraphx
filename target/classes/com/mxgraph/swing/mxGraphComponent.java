@@ -2975,11 +2975,11 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
     public void updateMarkerCellAndDescendants(mxCell cell, mxCell templateCell)
     {
-        updateMarkerCell(cell, templateCell);
         for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++) {
             mxCell childCell = (mxCell) cell.getChildAt(childIndex);
             updateMarkerCellAndDescendants(childCell, templateCell);
         }
+        updateMarkerCell(cell, templateCell);
     }
 
     public void updateMarkerCell(mxCell cell, mxCell templateCell)
@@ -3022,32 +3022,31 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             mxCell value = markerCellMap.markers.get(key);
             maxTemplateLevel = Math.max(maxTemplateLevel, value.templateLevel);
         }
+        mxCell mappedCell = cell;
         mxGeometry templateGeometry = templateCell.getGeometry();
-        for (mxCell mappedCell: markerCellMap.markers.keySet()) {
-            mxCellState mappedCellState = graph.getView().getState(mappedCell, true);
-            graph.getView().invalidate(mappedCell);
-            graph.getView().updateCellState(mappedCellState);
-            boolean isExtender = mappedCell.referenceShape.isExtender();
-            ArrayList<RoundRectangle2D> outerRectangles = mappedCellState.getAllOuterRectangles();
-            ArrayList<RoundRectangle2D> innerRectangles = mappedCellState.getAllInnerRectangles();
-            RoundRectangle2D outer = outerRectangles.get(0);
-            RoundRectangle2D first = mxUtils.minY(innerRectangles);
-            RoundRectangle2D last = mxUtils.maxY(innerRectangles);
-            double markerX = templateCell.getGeometry().getX();
-            double markerYTop = first.getY() / graph.getView().getScale();
-            double markerYBottom = (last.getY() + last.getHeight()) / graph.getView().getScale();
-            double markerHeight = (markerYBottom - markerYTop);
-            mxCell mappedMarkerCell = markerCellMap.markers.get(mappedCell);
-            int offset = (maxTemplateLevel - mappedMarkerCell.templateLevel);
-            graph.getModel().setVisible(mappedMarkerCell, true);
-            mxCellState mappedMarkerCellState = graph.getView().getState(mappedMarkerCell, true);
-            mappedMarkerCell.getGeometry().setWidth(30);
-            mappedMarkerCell.getGeometry().setHeight(markerHeight);
-            mappedMarkerCell.getGeometry().setX(markerX - 40*(offset+1));
-            mappedMarkerCell.getGeometry().setY(markerYTop);
-            graph.getView().invalidate(mappedMarkerCell);
-            graph.getView().updateCellState(mappedMarkerCellState);
-        }
+        mxCellState mappedCellState = graph.getView().getState(mappedCell, true);
+        graph.getView().invalidate(mappedCell);
+        graph.getView().updateCellState(mappedCellState);
+        boolean isExtender = mappedCell.referenceShape.isExtender();
+        ArrayList<RoundRectangle2D> outerRectangles = mappedCellState.getAllOuterRectangles();
+        ArrayList<RoundRectangle2D> innerRectangles = mappedCellState.getAllInnerRectangles();
+        RoundRectangle2D outer = outerRectangles.get(0);
+        RoundRectangle2D first = mxUtils.minY(innerRectangles);
+        RoundRectangle2D last = mxUtils.maxY(innerRectangles);
+        double markerX = templateCell.getGeometry().getX();
+        double markerYTop = first.getY() / graph.getView().getScale();
+        double markerYBottom = (last.getY() + last.getHeight()) / graph.getView().getScale();
+        double markerHeight = (markerYBottom - markerYTop);
+        mxCell mappedMarkerCell = markerCellMap.markers.get(mappedCell);
+        int offset = (maxTemplateLevel - mappedMarkerCell.templateLevel);
+        graph.getModel().setVisible(mappedMarkerCell, true);
+        mxCellState mappedMarkerCellState = graph.getView().getState(mappedMarkerCell, true);
+        mappedMarkerCell.getGeometry().setWidth(30);
+        mappedMarkerCell.getGeometry().setHeight(markerHeight);
+        mappedMarkerCell.getGeometry().setX(markerX - 40*(offset+1));
+        mappedMarkerCell.getGeometry().setY(markerYTop);
+        graph.getView().invalidate(mappedMarkerCell);
+        graph.getView().updateCellState(mappedMarkerCellState);
         graph.refresh();
     }
 
