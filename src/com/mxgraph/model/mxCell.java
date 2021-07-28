@@ -416,7 +416,7 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			double adjustedY = 0;
 			double parentGap = thisCell.getGapFromOuterTopToSnapOnPosition(snapToPositionOnParent);
 			adjustedY += parentGap;
-			double childGap = thisCell.getGapFromOuterTopToSnapOnPosition(snapToPositionOnChild);
+			double childGap = childCell.getGapFromOuterTopToSnapOnPosition(snapToPositionOnChild);
 			adjustedY -= childGap;
 			childPaintedRect.setFrame(
 				childPaintedRect.getX(),
