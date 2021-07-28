@@ -258,6 +258,29 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return all;
 	}
 
+	public CellFrameEnum getSnapToPosition()
+	{
+		return ((mxCell) parent).snapToChildrenDropFlags[snapToParentDropFlag.bitIndex];
+	}
+
+	public CellFrameEnum getSnapToPositionOnParent()
+	{
+		return snapToParentDropFlag;
+	}
+
+	public double getGapFromOuterTopToSnapOnPosition(CellFrameEnum snapOnPosition)
+	{
+		if (snapOnPosition == CellFrameEnum.INNER_1)
+		{
+			return referenceShape.getOriginalGap(CellGapEnum.OUTER_TOP_TO_INNER_1_TOP);
+		}
+		if (snapOnPosition == CellFrameEnum.INNER_2)
+		{
+			return referenceShape.getOriginalGap(CellGapEnum.OUTER_TOP_TO_INNER_2_TOP);
+		}
+		return 0;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#getGeometry()
 	 */
@@ -374,17 +397,33 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		CellPaintMode cellPaintMode = thisCell.calcPaintMode();
 		if (cellPaintMode == CellPaintMode.FRAME_IN_FRAME)
 		{
-			paintedRect = thisPaintedRectangles.get(1).getFrame();
+			paintedRect = (Rectangle2D) thisPaintedRectangles.get(1).getFrame().clone();
 			Rectangle2D.union(paintedRect, thisPaintedRectangles.get(thisPaintedRectangles.size()-1).getFrame(), paintedRect);
 		}
 		else
 		{
-			paintedRect = thisPaintedRectangles.get(0).getFrame();
+			paintedRect = (Rectangle2D) thisPaintedRectangles.get(0).getFrame().clone();
 		}
 		for (int childIndex = 0; childIndex < thisCell.getChildCount(); childIndex++)
 		{
 			mxCell childCell = (mxCell) thisCell.getChildAt(childIndex);
 			Rectangle2D childPaintedRect = childCell.getExtendedUnscaledPaintedRectangle();
+			// where was this snapped to on child
+			CellFrameEnum snapToPositionOnChild = childCell.getSnapToPosition();
+			CellFrameEnum snapToPositionOnParent = childCell.getSnapToPositionOnParent();
+			// get the adjusted y position
+			// first find the gap from the parent outer to the snap to position
+			double adjustedY = 0;
+			double parentGap = thisCell.getGapFromOuterTopToSnapOnPosition(snapToPositionOnParent);
+			adjustedY += parentGap;
+			double childGap = thisCell.getGapFromOuterTopToSnapOnPosition(snapToPositionOnChild);
+			adjustedY -= childGap;
+			childPaintedRect.setFrame(
+				childPaintedRect.getX(),
+				childPaintedRect.getY() + adjustedY,
+				childPaintedRect.getWidth(),
+				childPaintedRect.getHeight()
+			);
 			Rectangle2D.union(paintedRect, childPaintedRect, paintedRect);
 		}
 		return paintedRect;

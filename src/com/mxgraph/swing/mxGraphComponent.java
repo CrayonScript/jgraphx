@@ -2731,13 +2731,13 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         // first resize the children, then the parents
         for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++) {
             mxCell childCell = (mxCell) cell.getChildAt(childIndex);
-            resizeCell(childCell);
+            resizeCellAndDescendants(childCell);
         }
 
         resizeCell(cell);
     }
 
-    public CellFrameEnum getChildSnapOnPosition(mxCell parentCell, CellFrameEnum parentCellFrameEnum)
+    public CellFrameEnum getChildSnapToPosition(mxCell parentCell, CellFrameEnum parentCellFrameEnum)
     {
         return parentCell.snapToChildrenDropFlags[parentCellFrameEnum.bitIndex];
     }
@@ -2793,7 +2793,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         if (childSnappedToInner2 != null)
         {
             // find out where exactly the snap on position on the child
-            CellFrameEnum childSnapOnPosition = getChildSnapOnPosition(cell, CellFrameEnum.INNER_2);
+            CellFrameEnum childSnapOnPosition = getChildSnapToPosition(cell, CellFrameEnum.INNER_2);
             // find the gap from the snap on position and top
             double childSnapOnPositionGap = 0;
             if (childSnapOnPosition == CellFrameEnum.INNER_1)
