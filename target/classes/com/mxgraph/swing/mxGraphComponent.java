@@ -1720,6 +1720,80 @@ public class mxGraphComponent extends JScrollPane implements Printable {
     }
 
     /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public mxCell getGridCellAt(int x, int y) {
+        // start with the default parent which is the grid and then walk all the children, picking
+        // the one that intersects the (x, y)
+        mxCell gridCell = null;
+        mxGraphView view = graph.getView();
+        mxCell grid = (mxCell) graph.getDefaultParent();
+        Rectangle hit = new Rectangle(x, y, 1, 1);
+        for (int childIndex = 0; childIndex < grid.getChildCount(); childIndex++) {
+            mxCell childCell = (mxCell) grid.getChildAt(childIndex);
+            mxCellState state = view.getState(childCell);
+            if (state != null && canvas.intersects(this, hit, state)) {
+                gridCell = childCell;
+                break;
+            }
+        }
+        return gridCell;
+    }
+
+    /**
+     * Returns all the cells that intersects the given point (x, y) in
+     * the cell hierarchy starting at the given parent.
+     *
+     * The cell to check initially is a grid cell, which is a cell whose parent is the grid
+     * The grid cell is returned if its a block
+     *
+     * @param x      X-coordinate of the location to be checked.
+     * @param y      Y-coordinate of the location to be checked.
+     * @param parent <mxCell> that should be used as the root of the recursion.
+     *               Default is <defaultParent>.
+     * @return Returns the children at the given location.
+     */
+    public ArrayList<mxCell> getCellsAt(int x, int y, mxCell parent) {
+        ArrayList<mxCell> hitCells = new ArrayList<>();
+        if (parent == null) {
+            parent = getGridCellAt(x, y);
+            if (parent.isBlock()) {
+                hitCells.add(parent);
+            }
+        }
+        if (parent != null) {
+            mxPoint previousTranslate = canvas.getTranslate();
+            double previousScale = canvas.getScale();
+            try {
+                canvas.setScale(graph.getView().getScale());
+                canvas.setTranslate(0, 0);
+                mxGraphView view = graph.getView();
+                Rectangle hit = new Rectangle(x, y, 1, 1);
+                for (int childIndex = 0; childIndex < parent.getChildCount(); childIndex++) {
+                    mxCell childCell = (mxCell) parent.getChildAt(childIndex);
+                    if (graph.isCellVisible(childCell)) {
+                        mxCellState childCellState = view.getState(childCell);
+                        if (childCellState != null && canvas.intersects(this, hit, childCellState)) {
+                            hitCells.add(childCell);
+                        }
+                    }
+                    ArrayList<mxCell> restHitCells = getCellsAt(x, y, childCell);
+                    if (!restHitCells.isEmpty()) {
+                        hitCells.addAll(restHitCells);
+                    }
+                }
+            } finally {
+                canvas.setScale(previousScale);
+                canvas.setTranslate((int) previousTranslate.getX(), (int) previousTranslate.getY());
+            }
+        }
+        return hitCells;
+    }
+
+    /**
      * Returns the bottom-most cell that intersects the given point (x, y) in
      * the cell hierarchy starting at the given parent.
      *
@@ -1775,6 +1849,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
         return null;
     }
+
 
     /**
      *

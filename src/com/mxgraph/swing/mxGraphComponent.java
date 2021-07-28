@@ -1756,13 +1756,15 @@ public class mxGraphComponent extends JScrollPane implements Printable {
      *               Default is <defaultParent>.
      * @return Returns the children at the given location.
      */
-    public ArrayList<mxCell> getCellsAt(int x, int y, Object parent) {
+    public ArrayList<mxCell> getCellsAt(int x, int y, mxCell parent) {
         ArrayList<mxCell> hitCells = new ArrayList<>();
         if (parent == null) {
             parent = getGridCellAt(x, y);
+            if (parent.isBlock()) {
+                hitCells.add(parent);
+            }
         }
         if (parent != null) {
-            mxCell parentCell = (mxCell) parent;
             mxPoint previousTranslate = canvas.getTranslate();
             double previousScale = canvas.getScale();
             try {
@@ -1770,8 +1772,8 @@ public class mxGraphComponent extends JScrollPane implements Printable {
                 canvas.setTranslate(0, 0);
                 mxGraphView view = graph.getView();
                 Rectangle hit = new Rectangle(x, y, 1, 1);
-                for (int childIndex = 0; childIndex < parentCell.getChildCount(); childIndex++) {
-                    mxCell childCell = (mxCell) parentCell.getChildAt(childIndex);
+                for (int childIndex = 0; childIndex < parent.getChildCount(); childIndex++) {
+                    mxCell childCell = (mxCell) parent.getChildAt(childIndex);
                     if (graph.isCellVisible(childCell)) {
                         mxCellState childCellState = view.getState(childCell);
                         if (childCellState != null && canvas.intersects(this, hit, childCellState)) {
@@ -1786,9 +1788,6 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             } finally {
                 canvas.setScale(previousScale);
                 canvas.setTranslate((int) previousTranslate.getX(), (int) previousTranslate.getY());
-            }
-            if (parentCell.isBlock()) {
-                hitCells.add(parentCell);
             }
         }
         return hitCells;
