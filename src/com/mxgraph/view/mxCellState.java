@@ -598,6 +598,24 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         return paintedRect;
     }
 
+    public Rectangle2D getPaintedRect()
+    {
+        Rectangle2D paintedRect = null;
+        ArrayList<RoundRectangle2D> thisPaintedRectangles = getCurrentRoundRectangles();
+        mxCell thisCell = (mxCell) getCell();
+        CellPaintMode cellPaintMode = thisCell.calcPaintMode();
+        if (cellPaintMode == CellPaintMode.FRAME_IN_FRAME)
+        {
+            paintedRect = thisPaintedRectangles.get(1).getFrame();
+            Rectangle2D.union(paintedRect, thisPaintedRectangles.get(thisPaintedRectangles.size()-1).getFrame(), paintedRect);
+        }
+        else
+        {
+            paintedRect = thisPaintedRectangles.get(0).getFrame();
+        }
+        return paintedRect;
+    }
+
     public ArrayList<RoundRectangle2D> getPaintedRectangles()
     {
         ArrayList<RoundRectangle2D> paintedRoundRectangles = new ArrayList<>();

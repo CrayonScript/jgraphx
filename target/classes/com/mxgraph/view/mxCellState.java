@@ -3,7 +3,9 @@
  */
 package com.mxgraph.view;
 
+import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.crayonscript.shapes.CrayonScriptBasicShape;
+import com.mxgraph.crayonscript.shapes.CrayonScriptIShape;
 import com.mxgraph.model.*;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxRectangle;
@@ -596,6 +598,24 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         return paintedRect;
     }
 
+    public Rectangle2D getPaintedRect()
+    {
+        Rectangle2D paintedRect = null;
+        ArrayList<RoundRectangle2D> thisPaintedRectangles = getCurrentRoundRectangles();
+        mxCell thisCell = (mxCell) getCell();
+        CellPaintMode cellPaintMode = thisCell.calcPaintMode();
+        if (cellPaintMode == CellPaintMode.FRAME_IN_FRAME)
+        {
+            paintedRect = thisPaintedRectangles.get(1).getFrame();
+            Rectangle2D.union(paintedRect, thisPaintedRectangles.get(thisPaintedRectangles.size()-1).getFrame(), paintedRect);
+        }
+        else
+        {
+            paintedRect = thisPaintedRectangles.get(0).getFrame();
+        }
+        return paintedRect;
+    }
+
     public ArrayList<RoundRectangle2D> getPaintedRectangles()
     {
         ArrayList<RoundRectangle2D> paintedRoundRectangles = new ArrayList<>();
@@ -689,8 +709,8 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
         mxCell sourceCell = (mxCell) otherCell;
         mxCell targetCell = (mxCell) cell;
 
-        List<RoundRectangle2D> sourceRectangles = sourceCell.getUnscaledPaintedRoundRectangles();
-        List<RoundRectangle2D> targetRectangles = targetCell.getUnscaledPaintedRoundRectangles();
+        List<RoundRectangle2D> sourceRectangles = sourceCell.getUnscaledRoundRectangles();
+        List<RoundRectangle2D> targetRectangles = targetCell.getUnscaledRoundRectangles();
 
         Rectangle stateRect = getRectangle();
 
