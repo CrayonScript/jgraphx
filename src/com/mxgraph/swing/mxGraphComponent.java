@@ -2950,7 +2950,9 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         boolean isSecondLastTemplateCell = templateCells.indexOf(previousTemplateCell) == templateCells.size()-2;
         boolean isSecondLastTemplateEmpty = previousTemplateCell.isEmpty();
         boolean isLastTemplateCellEmpty = templateCells.get(templateCells.size()-1).isEmpty();
-        removeMarkerCell(cell, previousTemplateCell);
+        for (mxCell markedCell: cell.getSelfAndDescendants()) {
+            removeMarkerCell(markedCell, previousTemplateCell);
+        }
         if (isSecondLastTemplateCell && isSecondLastTemplateEmpty && isLastTemplateCellEmpty)
         {
             removeTemplateCell();
@@ -3234,7 +3236,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setVertex(true);
         cell.setShape(true);
         cell.setDropTargets(CellFrameEnum.INNER_1, CellFrameEnum.INNER_2);
-        cell.setDropSources(CellFrameEnum.OUTER);
+        cell.setDropSources(CellFrameEnum.OUTER, CellFrameEnum.INNER_1, CellFrameEnum.INNER_2);
         cell.setCellType(CellTypeEnum.BLOCK);
         return cell;
     }

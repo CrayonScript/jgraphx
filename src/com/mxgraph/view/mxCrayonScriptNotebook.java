@@ -129,17 +129,18 @@ public class mxCrayonScriptNotebook {
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION;
-        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION);
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
-
-        name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION;
-        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION);
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+        // TODO: these blocks are replaced with the SHAPE_RUN_PARALLEL and SHAPE_RUN_SEQUENTIAL
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION;
+//        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION);
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ParallelVExtender.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
+//
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION;
+//        cell = graphComponent.createExtensionShape(name, mxConstants.CRAYONSCRIPT_SHAPE_SEQUENTIAL_EXTENSION);
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/SequentialVExtender.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
         name = mxConstants.CRAYONSCRIPT_SHAPE_IF;
         cell = graphComponent.createControlShape(name);

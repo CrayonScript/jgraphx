@@ -248,6 +248,16 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return null;
 	}
 
+	public ArrayList<mxCell> getSelfAndDescendants()
+	{
+		ArrayList<mxCell> all = new ArrayList<>();
+		all.add(this);
+		for (int childIndex = 0; childIndex < getChildCount(); childIndex++) {
+			all.addAll(((mxCell) getChildAt(childIndex)).getSelfAndDescendants());
+		}
+		return all;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#getGeometry()
 	 */
