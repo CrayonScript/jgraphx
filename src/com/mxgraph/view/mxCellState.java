@@ -732,13 +732,19 @@ public class mxCellState extends mxRectangle implements mxIHighlightSource {
 
                 if (intersects(sourceRect, targetRect, hotspot, min, max))
                 {
-                    ((mxCell) cell).hotspotRect = targetRect;
-                    ((mxCell) cell).hotSpotDropFlag = dropTargetFlag;
+                    // if a block shape is being dropped onto the native target then allow OUTER as the source flag
+                    // else if the block shape is being dropped onto a template target then allow OUTER as the source flag
+                    // else disallow OUTER as the source flag
+                    if (dropSourceFlag != CellFrameEnum.OUTER || ((mxCell) cell).isTemplate() || ((mxCell) cell).isNative())
+                    {
+                        ((mxCell) cell).hotspotRect = targetRect;
+                        ((mxCell) cell).hotSpotDropFlag = dropTargetFlag;
 
-                    ((mxCell) otherCell).hotspotRect = sourceRect;
-                    ((mxCell) otherCell).hotSpotDropFlag = dropSourceFlag;
+                        ((mxCell) otherCell).hotspotRect = sourceRect;
+                        ((mxCell) otherCell).hotSpotDropFlag = dropSourceFlag;
 
-                    return true;
+                        return true;
+                    }
                 }
             }
         }
