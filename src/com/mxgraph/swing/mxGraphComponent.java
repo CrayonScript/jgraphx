@@ -2729,9 +2729,25 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
         // this cell is either on a template or on the board
         // first resize the children, then the parents
-        for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++) {
-            mxCell childCell = (mxCell) cell.getVisualChildAt(childIndex);
-            resizeCellAndDescendants(childCell);
+
+        // resize order
+        // INNER_1
+        // INNER_2
+        // OUTER
+
+        mxCell inner1Child = (mxCell) cell.getVisualChildAt(CellFrameEnum.INNER_1);
+        if (inner1Child != null) {
+            resizeCellAndDescendants(inner1Child);
+        }
+
+        mxCell inner2Child = (mxCell) cell.getVisualChildAt(CellFrameEnum.INNER_2);
+        if (inner2Child != null) {
+            resizeCellAndDescendants(inner2Child);
+        }
+
+        mxCell outerChild = (mxCell) cell.getVisualChildAt(CellFrameEnum.OUTER);
+        if (outerChild != null) {
+            resizeCellAndDescendants(outerChild);
         }
 
         resizeCell(cell);

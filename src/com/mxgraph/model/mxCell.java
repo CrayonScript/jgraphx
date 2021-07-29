@@ -14,6 +14,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -91,8 +92,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 * Holds the child cells, components and connected edges.
 	 */
 	protected List<Object> children, edges;
-
-	protected ArrayList<mxCell> visualChildren;
 
 	protected int dropSourceBitMask = 0;
 
@@ -293,19 +292,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return snapToParentDropFlag;
 	}
 
-	public double getGapFromOuterTopToSnapOnPosition(CellFrameEnum snapOnPosition)
-	{
-		if (snapOnPosition == CellFrameEnum.INNER_1)
-		{
-			return referenceShape.getOriginalGap(CellGapEnum.OUTER_TOP_TO_INNER_1_TOP);
-		}
-		if (snapOnPosition == CellFrameEnum.INNER_2)
-		{
-			return referenceShape.getOriginalGap(CellGapEnum.OUTER_TOP_TO_INNER_2_TOP);
-		}
-		return 0;
-	}
-
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#getGeometry()
 	 */
@@ -416,10 +402,19 @@ public class mxCell implements mxICell, Cloneable, Serializable
 
 	public Rectangle2D getExtendedUnscaledPaintedRectangle()
 	{
-		Rectangle2D paintedRect = null;
+		HashMap<CellFrameEnum, Rectangle2D> allRectangles = calcExtendedUnscaledPaintedRectangles();
+		return allRectangles.get(CellFrameEnum.OUTER);
+	}
+
+	// this includes all extended rectangles including the outer, inner_1, inner_2
+	public HashMap<CellFrameEnum, Rectangle2D> calcExtendedUnscaledPaintedRectangles()
+	{
+		HashMap<CellFrameEnum, Rectangle2D> extendedPaintedRectanglesMap = new HashMap<>();
+
 		ArrayList<RoundRectangle2D> thisPaintedRectangles = getUnscaledRoundRectangles();
-		mxCell thisCell = this;
-		CellPaintMode cellPaintMode = thisCell.calcPaintMode();
+
+		Rectangle2D paintedRect;
+		CellPaintMode cellPaintMode = calcPaintMode();
 		if (cellPaintMode == CellPaintMode.FRAME_IN_FRAME)
 		{
 			paintedRect = (Rectangle2D) thisPaintedRectangles.get(1).getFrame().clone();
@@ -429,29 +424,94 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		{
 			paintedRect = (Rectangle2D) thisPaintedRectangles.get(0).getFrame().clone();
 		}
-		for (int childIndex = 0; childIndex < thisCell.getChildCount(); childIndex++)
+		// initial painted rect
+		// this will get updated below
+		extendedPaintedRectanglesMap.put(CellFrameEnum.OUTER, paintedRect);
+
 		{
-			mxCell childCell = (mxCell) thisCell.getChildAt(childIndex);
-			Rectangle2D childPaintedRect = childCell.getExtendedUnscaledPaintedRectangle();
-			// where was this snapped to on child
-			CellFrameEnum snapToPositionOnChild = childCell.getSnapToPosition();
-			CellFrameEnum snapToPositionOnParent = childCell.getSnapToPositionOnParent();
-			// get the adjusted y position
-			// first find the gap from the parent outer to the snap to position
-			double adjustedY = 0;
-			double parentGap = thisCell.getGapFromOuterTopToSnapOnPosition(snapToPositionOnParent);
-			adjustedY += parentGap;
-			double childGap = childCell.getGapFromOuterTopToSnapOnPosition(snapToPositionOnChild);
-			adjustedY -= childGap;
-			childPaintedRect.setFrame(
-				childPaintedRect.getX(),
-				childPaintedRect.getY() + adjustedY,
-				childPaintedRect.getWidth(),
-				childPaintedRect.getHeight()
-			);
-			Rectangle2D.union(paintedRect, childPaintedRect, paintedRect);
+			// child snapped to OUTER
+			mxCell child = getVisualChildAt(CellFrameEnum.OUTER);
+			if (child != null)
+			{
+				Rectangle2D childPaintedRect = child.getExtendedUnscaledPaintedRectangle();
+				Rectangle2D.union(paintedRect, childPaintedRect, paintedRect);
+			}
 		}
-		return paintedRect;
+
+		{
+			// child snapped to INNER_1
+			mxCell child = getVisualChildAt(CellFrameEnum.INNER_1);
+			if (child == null)
+			{
+				if (thisPaintedRectangles.size() > 1)
+				{
+					Rectangle2D inner1Rect = (Rectangle2D) thisPaintedRectangles.get(1).getFrame().clone();
+					extendedPaintedRectanglesMap.put(CellFrameEnum.INNER_1, inner1Rect);
+				}
+			}
+			else
+			{
+				double adjustedY = 0;
+				HashMap<CellFrameEnum, Rectangle2D> childPaintedRectMap = child.calcExtendedUnscaledPaintedRectangles();
+				// get the adjusted y position
+				// first find the gap from the parent outer to the snap to position
+				double parentGap = referenceShape.getOriginalGap(CellGapEnum.OUTER_TOP_TO_INNER_1_TOP);;
+				adjustedY += parentGap;
+				CellFrameEnum snapToPositionOnChild = child.getSnapToPosition();
+				Rectangle2D childSnapToPaintedRect = childPaintedRectMap.get(snapToPositionOnChild);
+				double childGap = childSnapToPaintedRect.getY();
+				adjustedY -= childGap;
+				Rectangle2D childPaintedRect = childPaintedRectMap.get(CellFrameEnum.OUTER);
+				childPaintedRect.setFrame(
+						childPaintedRect.getX(),
+						childPaintedRect.getY() + adjustedY,
+						childPaintedRect.getWidth(),
+						childPaintedRect.getHeight()
+				);
+				Rectangle2D.union(paintedRect, childPaintedRect, paintedRect);
+				extendedPaintedRectanglesMap.put(CellFrameEnum.INNER_1, childPaintedRect);
+			}
+		}
+
+		{
+			// child snapped to INNER_2
+			mxCell child = getVisualChildAt(CellFrameEnum.INNER_2);
+			if (child == null)
+			{
+				if (thisPaintedRectangles.size() > 2)
+				{
+					Rectangle2D inner2Rect = (Rectangle2D) thisPaintedRectangles.get(2).getFrame().clone();
+					extendedPaintedRectanglesMap.put(CellFrameEnum.INNER_2, inner2Rect);
+				}
+			}
+			else
+			{
+				double adjustedY = 0;
+				HashMap<CellFrameEnum, Rectangle2D> childPaintedRectMap = child.calcExtendedUnscaledPaintedRectangles();
+				// get the adjusted y position
+				// first find the gap from the parent outer to the snap to position
+				Rectangle2D inner1PaintedRect = extendedPaintedRectanglesMap.get(CellFrameEnum.INNER_1);
+				double parentGap = inner1PaintedRect.getY();
+				parentGap += inner1PaintedRect.getHeight();
+				parentGap += referenceShape.getOriginalGap(CellGapEnum.INNER_1_BOTTOM_TO_INNER_2_TOP);
+				adjustedY += parentGap;
+				CellFrameEnum snapToPositionOnChild = child.getSnapToPosition();
+				Rectangle2D childSnapToPaintedRect = childPaintedRectMap.get(snapToPositionOnChild);
+				double childGap = childSnapToPaintedRect.getY();
+				adjustedY -= childGap;
+				Rectangle2D childPaintedRect = childPaintedRectMap.get(CellFrameEnum.OUTER);
+				childPaintedRect.setFrame(
+						childPaintedRect.getX(),
+						childPaintedRect.getY() + adjustedY,
+						childPaintedRect.getWidth(),
+						childPaintedRect.getHeight()
+				);
+				Rectangle2D.union(paintedRect, childPaintedRect, paintedRect);
+				extendedPaintedRectanglesMap.put(CellFrameEnum.INNER_2, childPaintedRect);
+			}
+		}
+
+		return extendedPaintedRectanglesMap;
 	}
 
 	public ArrayList<RoundRectangle2D> getUnscaledPaintedRoundRectangles()
@@ -888,28 +948,15 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return (children != null) ? (mxICell) children.get(index) : null;
 	}
 
-	public mxCell getVisualChildAt(int index) {
-		if (visualChildren == null) {
-			if (children != null) {
-				visualChildren = new ArrayList<>();
-				mxCell[] slots = new mxCell[CellFrameEnum.values().length]; // max
-				for (int childIndex = 0; childIndex < children.size(); childIndex++) {
-					mxCell child = (mxCell) children.get(childIndex);
-					if (child.snapToParentDropFlag != null) {
-						slots[child.snapToParentDropFlag.bitIndex] = child;
-					} else {
-						visualChildren.add(child);
-					}
-				}
-				for (mxCell slot: slots) {
-					if (slot != null) {
-						visualChildren.add(slot);
-					}
-				}
+	public mxCell getVisualChildAt(CellFrameEnum cellFrameEnum)
+	{
+		for (int childIndex = 0; childIndex < getChildCount(); childIndex++) {
+			mxCell childCell = (mxCell) getChildAt(childIndex);
+			if (childCell.snapToParentDropFlag == cellFrameEnum) {
+				return childCell;
 			}
 		}
-		// check outer
-		return (visualChildren != null) ? (mxCell) visualChildren.get(index) : null;
+		return null;
 	}
 
 	/* (non-Javadoc)
@@ -946,8 +993,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			{
 				children.add(index, child);
 			}
-
-			visualChildren = null;
 		}
 
 		return child;
@@ -978,8 +1023,6 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		{
 			children.remove(child);
 			child.setParent(null);
-
-			visualChildren = null;
 		}
 
 		return child;
