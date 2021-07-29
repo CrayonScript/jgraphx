@@ -244,7 +244,14 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		mxCell ancestor = (mxCell) parent;
 		while (ancestor != null)
 		{
-			if (ancestor.isTemplate()) return ancestor;
+			if (ancestor.isTemplate())
+			{
+				// verify ancestor truly have children snapped to it
+				if (!ancestor.hasSnapToChildren()) {
+					break;
+				}
+				return ancestor;
+			}
 			ancestor = (mxCell) ancestor.parent;
 		}
 		return null;
@@ -258,6 +265,22 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			all.addAll(((mxCell) getChildAt(childIndex)).getSelfAndDescendants());
 		}
 		return all;
+	}
+
+	public boolean hasSnapToChildren()
+	{
+		if (children == null) return false;
+		if (children.isEmpty()) return false;
+		if (snapToChildrenDropFlags == null) return false;
+		if (snapToChildrenDropFlags.length == 0) return false;
+		for (CellFrameEnum snapToChild: snapToChildrenDropFlags)
+		{
+			if (snapToChild != null)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public CellFrameEnum getSnapToPosition()

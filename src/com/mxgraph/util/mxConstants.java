@@ -998,19 +998,19 @@ public class mxConstants
 	 */
 	public static final int FONT_STRIKETHROUGH= 8;
 
-	public static final String CRAYONSCRIPT_SHAPE_RUN_PARALLEL = "Parallel";
+	public static final String CRAYONSCRIPT_SHAPE_RUN_PARALLEL = "Parallel Block";
 
-	public static final String CRAYONSCRIPT_SHAPE_RUN_SEQUENTIAL = "Series";
+	public static final String CRAYONSCRIPT_SHAPE_RUN_SEQUENTIAL = "Series Block";
 
-	public static final String CRAYONSCRIPT_SHAPE_RUN_SINGLE = "Run";
+	public static final String CRAYONSCRIPT_SHAPE_RUN_SINGLE = "Block";
 
-	public static final String CRAYONSCRIPT_SHAPE_IF = "If";
+	public static final String CRAYONSCRIPT_SHAPE_IF = "If Block";
 
-	public static final String CRAYONSCRIPT_SHAPE_ELSE_IF = "Else";
+	public static final String CRAYONSCRIPT_SHAPE_ELSE_IF = "Else Block";
 
-	public static final String CRAYONSCRIPT_SHAPE_WHILE = "While";
+	public static final String CRAYONSCRIPT_SHAPE_WHILE = "While Block";
 
-	public static final String CRAYONSCRIPT_SHAPE_FOR = "For";
+	public static final String CRAYONSCRIPT_SHAPE_FOR = "For Block";
 
 	public static final String CRAYONSCRIPT_SHAPE_PARALLEL_EXTENSION = "Add Parallel";
 

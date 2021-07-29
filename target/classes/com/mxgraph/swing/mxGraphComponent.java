@@ -3127,7 +3127,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
 
     public void addTemplateCell() {
         int size = templateCells.size();
-        double tx = getPageFormat().getWidth() * 0.7 - 120;
+        double tx = getPageFormat().getWidth() * 0.7 - 200;
         double ty = 294 * (templateCells.size()) + 80;
         double width = 240.0d;
         double height = 320.0d;
