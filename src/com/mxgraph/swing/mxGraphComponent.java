@@ -2730,7 +2730,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         // this cell is either on a template or on the board
         // first resize the children, then the parents
         for (int childIndex = 0; childIndex < cell.getChildCount(); childIndex++) {
-            mxCell childCell = (mxCell) cell.getChildAt(childIndex);
+            mxCell childCell = (mxCell) cell.getVisualChildAt(childIndex);
             resizeCellAndDescendants(childCell);
         }
 
@@ -2783,12 +2783,14 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         double inner2BottomToOuterBottomGap = cell.getOriginalGap(CellGapEnum.INNER_2_BOTTOM_TO_OUTER_BOTTOM);
 
         double newInner2RectY = inner1Rect.getY() + inner1Height + inner1BottomToInner2TopGap;
-        inner2Rect.setFrame(
-                inner2Rect.getX(),
-                newInner2RectY,
-                inner2Rect.getWidth(),
-                inner2Rect.getHeight()
-        );
+        if (inner2Rect != null) {
+            inner2Rect.setFrame(
+                    inner2Rect.getX(),
+                    newInner2RectY,
+                    inner2Rect.getWidth(),
+                    inner2Rect.getHeight()
+            );
+        }
 
         if (childSnappedToInner2 != null)
         {
@@ -2815,14 +2817,16 @@ public class mxGraphComponent extends JScrollPane implements Printable {
             graph.getView().updateCellState(inner2CellState);
         }
 
-        double newOuterRectY = inner2Rect.getY() + inner2Height + inner2BottomToOuterBottomGap;
-        double newOuterRectHeight = newOuterRectY - outerRect.getY();
-        outerRect.setFrame(
-                outerRect.getX(),
-                outerRect.getY(),
-                outerRect.getWidth(),
-                newOuterRectHeight
-        );
+        if (inner2Rect != null) {
+            double newOuterRectY = inner2Rect.getY() + inner2Height + inner2BottomToOuterBottomGap;
+            double newOuterRectHeight = newOuterRectY - outerRect.getY();
+            outerRect.setFrame(
+                    outerRect.getX(),
+                    outerRect.getY(),
+                    outerRect.getWidth(),
+                    newOuterRectHeight
+            );
+        }
 
         cell.syncGeometry();
 
@@ -3015,7 +3019,9 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         else
         {
             mxCell parentMarkerCell = markerCellMap.markers.get(parentCell);
-            markerCell.templateLevel = parentMarkerCell.templateLevel + 1;
+            if (parentMarkerCell != null) {
+                markerCell.templateLevel = parentMarkerCell.templateLevel + 1;
+            }
         }
         int maxTemplateLevel = 0;
         for (mxCell key: markerCellMap.markers.keySet()) {
@@ -3222,6 +3228,21 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         cell.setDropSources(CellFrameEnum.INNER_1);
         cell.setDropTargets(CellFrameEnum.INNER_1, CellFrameEnum.INNER_2);
         cell.setCellType(CellTypeEnum.BLOCK_EXTENSION);
+        return cell;
+    }
+
+    public mxCell createSingleStackShape(String name)
+    {
+        String style = name;
+        String value = name;
+        int width = 240;
+        int height = 320;
+        mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
+        cell.setVertex(true);
+        cell.setShape(true);
+        cell.setDropTargets(CellFrameEnum.INNER_1);
+        cell.setDropSources(CellFrameEnum.OUTER, CellFrameEnum.INNER_1);
+        cell.setCellType(CellTypeEnum.BLOCK);
         return cell;
     }
 

@@ -92,6 +92,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 	 */
 	protected List<Object> children, edges;
 
+	protected ArrayList<mxCell> visualChildren;
+
 	protected int dropSourceBitMask = 0;
 
 	protected int dropTargetBitMask = 0;
@@ -863,16 +865,28 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return (children != null) ? (mxICell) children.get(index) : null;
 	}
 
-	public mxCell getVisualChildAt(int index)
-	{
-		for (int childIndex = 0; childIndex < children.size(); childIndex++) {
-			mxCell child = (mxCell) children.get(childIndex);
-			CellFrameEnum snapToParentPosition = child.snapToParentDropFlag;
-			if (snapToParentPosition.bitIndex - 1 == index) {
-				return child;
+	public mxCell getVisualChildAt(int index) {
+		if (visualChildren == null) {
+			if (children != null) {
+				visualChildren = new ArrayList<>();
+				mxCell[] slots = new mxCell[CellFrameEnum.values().length]; // max
+				for (int childIndex = 0; childIndex < children.size(); childIndex++) {
+					mxCell child = (mxCell) children.get(childIndex);
+					if (child.snapToParentDropFlag != null) {
+						slots[child.snapToParentDropFlag.bitIndex] = child;
+					} else {
+						visualChildren.add(child);
+					}
+				}
+				for (mxCell slot: slots) {
+					if (slot != null) {
+						visualChildren.add(slot);
+					}
+				}
 			}
 		}
-		return null;
+		// check outer
+		return (visualChildren != null) ? (mxCell) visualChildren.get(index) : null;
 	}
 
 	/* (non-Javadoc)
@@ -909,6 +923,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 			{
 				children.add(index, child);
 			}
+
+			visualChildren = null;
 		}
 
 		return child;
@@ -939,6 +955,8 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		{
 			children.remove(child);
 			child.setParent(null);
+
+			visualChildren = null;
 		}
 
 		return child;

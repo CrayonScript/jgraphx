@@ -112,7 +112,7 @@ public class mxCrayonScriptNotebook {
     public void loadBlocks(mxGraphComponent graphComponent, EditorPalette blocksPalette)
     {
         String name = mxConstants.CRAYONSCRIPT_SHAPE_RUN_SINGLE;
-        mxCell cell = graphComponent.createStackShape(name);
+        mxCell cell = graphComponent.createSingleStackShape(name);
         URL iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Run.png");
         ImageIcon icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
