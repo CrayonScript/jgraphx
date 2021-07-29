@@ -863,6 +863,18 @@ public class mxCell implements mxICell, Cloneable, Serializable
 		return (children != null) ? (mxICell) children.get(index) : null;
 	}
 
+	public mxCell getVisualChildAt(int index)
+	{
+		for (int childIndex = 0; childIndex < children.size(); childIndex++) {
+			mxCell child = (mxCell) children.get(childIndex);
+			CellFrameEnum snapToParentPosition = child.snapToParentDropFlag;
+			if (snapToParentPosition.bitIndex - 1 == index) {
+				return child;
+			}
+		}
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.mxgraph.model.mxICell#insert(com.mxgraph.model.mxICell)
 	 */
