@@ -182,113 +182,114 @@ public class mxCrayonScriptNotebook {
         icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
         blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN;
-        cell = graphComponent.createAssignmentShape(name, MessageFormat.format("{0} = {1}", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Assign.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+        // TODO: commented out, expressions will be directly in the blocks
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_ASSIGN;
+//        cell = graphComponent.createAssignmentShape(name, MessageFormat.format("{0} = {1}", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Assign.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_PROPERTY;
-        cell = graphComponent.createPropertyShape(name, MessageFormat.format("{0} . {1}", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Property.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_PROPERTY;
+//        cell = graphComponent.createPropertyShape(name, MessageFormat.format("{0} . {1}", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Property.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_FOR_IN_RANGE;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("for $i in range($start, $end)", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ForInRangeExpr.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_FOR_IN_RANGE;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("for $i in range($start, $end)", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ForInRangeExpr.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_FOR_EACH_EXPR;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("for $var in $list", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ForEachExpr.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_FOR_EACH_EXPR;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("for $var in $list", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/ForEachExpr.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_WHILE_BOOLEAN_EXPR;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("while $booleanExpr", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/WhileBooleanExpr.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_WHILE_BOOLEAN_EXPR;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("while $booleanExpr", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/WhileBooleanExpr.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_FUNCTION;
-        cell = graphComponent.createFunctionShape(name, MessageFormat.format("function", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Function.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_FUNCTION;
+//        cell = graphComponent.createFunctionShape(name, MessageFormat.format("function", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Function.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_EQUALS;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} == {1} )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Equals.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_EQUALS;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} == {1} )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Equals.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_NOTEQUALS;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} != {1} )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/NotEquals.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_NOTEQUALS;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} != {1} )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/NotEquals.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_GT;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} > {1} )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThan.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_GT;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} > {1} )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThan.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_GT_OR_EQUALS;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} >= {1} )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThanOrEquals.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_GT_OR_EQUALS;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} >= {1} )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/GreaterThanOrEquals.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_LT;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} < {1} )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThan.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_LT;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} < {1} )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThan.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_LT_OR_EQUALS;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} <= {1} )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThanOrEquals.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_LT_OR_EQUALS;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} <= {1} )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/LessThanOrEquals.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_AND;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} and {1} )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/And.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_AND;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} and {1} )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/And.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_OR;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} or {1} )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Or.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_OR;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} or {1} )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Or.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_NOT;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( not {0} )", variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Not.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_NOT;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( not {0} )", variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Not.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_MOD;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} mod {1} )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Mod.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_MOD;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( {0} mod {1} )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Mod.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_MIN;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( min({0}, {1}) )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Min.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_MIN;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( min({0}, {1}) )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Min.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
 
-        name = mxConstants.CRAYONSCRIPT_SHAPE_MAX;
-        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( max({0}, {1}) )", variableSymbol, variableSymbol));
-        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Max.png");
-        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
-        blocksPalette.addTemplate(name, icon, cell);
+//        name = mxConstants.CRAYONSCRIPT_SHAPE_MAX;
+//        cell = graphComponent.createExpressionShape(name, MessageFormat.format("( max({0}, {1}) )", variableSymbol, variableSymbol));
+//        iconUrl = GraphEditor.class.getResource("/com/mxgraph/crayonscript/images/Max.png");
+//        icon = new GraphEditor.CustomImageIcon(iconUrl, ColorCode.DEFAULT_COLOR.color).imageIcon;
+//        blocksPalette.addTemplate(name, icon, cell);
     }
 
     public void showGraph(mxGraphComponent graphComponent)
