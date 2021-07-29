@@ -499,24 +499,20 @@ public abstract class CrayonScriptBasicShape implements CrayonScriptIShape
 				RoundRectangle2D first = currentRoundRectangles.get(1);
 				RoundRectangle2D last = currentRoundRectangles.get(currentRoundRectangles.size()-1);
 				double height = last.getY() + last.getHeight() - first.getY();
-				canvas.getGraphics().fillRoundRect(
+				canvas.getGraphics().fillRect(
 						(int) roundedRect.getX(),
 						(int) first.getY(),
 						(int) roundedRect.getWidth(),
-						(int) (height),
-						(int) roundedRect.getArcWidth(),
-						(int) roundedRect.getArcHeight());
+						(int) (height));
 			}
 		}
 		else
 		{
-			canvas.getGraphics().fillRoundRect(
+			canvas.getGraphics().fillRect(
 					(int) roundedRect.getX(),
 					(int) roundedRect.getY(),
 					(int) roundedRect.getWidth(),
-					(int) roundedRect.getHeight(),
-					(int) roundedRect.getArcWidth(),
-					(int) roundedRect.getArcHeight());
+					(int) roundedRect.getHeight());
 		}
 	}
 
