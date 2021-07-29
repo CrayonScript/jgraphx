@@ -3146,7 +3146,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         double tx = getPageFormat().getWidth() * 0.7 - 200;
         double ty = 294 * (templateCells.size()) + 80;
         double width = 240.0d;
-        double height = 320.0d;
+        double height = 240.0d;
         if (size > 0)
         {
             mxCell lastTemplateCell = templateCells.get(size-1);
@@ -3252,7 +3252,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         String style = name;
         String value = name;
         int width = 240;
-        int height = 320;
+        int height = 240;
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
         cell.setShape(true);
@@ -3267,7 +3267,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         String style = name;
         String value = name;
         int width = 240;
-        int height = 320;
+        int height = 240;
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
         cell.setShape(true);
@@ -3282,7 +3282,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         String style = name;
         String value = name;
         int width = 240;
-        int height = 320;
+        int height = 240;
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
         cell.setShape(true);
@@ -3297,7 +3297,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         String style = name;
         String value = name;
         int width = 240;
-        int height = 320;
+        int height = 240;
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
         cell.setShape(true);
@@ -3313,7 +3313,7 @@ public class mxGraphComponent extends JScrollPane implements Printable {
         String style = name;
         String value = name;
         int width = 240;
-        int height = 320;
+        int height = 240;
         mxCell cell = new mxCell(value, new mxGeometry(0, 0, width, height), style);
         cell.setVertex(true);
         cell.setShape(true);
