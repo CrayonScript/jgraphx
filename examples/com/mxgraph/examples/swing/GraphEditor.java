@@ -3,7 +3,6 @@
  */
 package com.mxgraph.examples.swing;
 
-import com.mxgraph.crayonscript.shapes.ColorCode;
 import com.mxgraph.crayonscript.view.CrayonScriptStylesheet;
 import com.mxgraph.examples.swing.editor.BasicGraphEditor;
 import com.mxgraph.examples.swing.editor.EditorMenuBar;
