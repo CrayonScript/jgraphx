@@ -105,7 +105,7 @@ public class mxCellEditor implements mxICellEditor
 	/**
 	 * Holds the editor for plain text editing.
 	 */
-	protected transient JTextField editorField;
+	protected transient JTextPane editorField;
 
 	/**
 	 * Holds the editor for HTML editing.
@@ -192,8 +192,11 @@ public class mxCellEditor implements mxICellEditor
 		this.graphComponent = graphComponent;
 
 		// Creates the plain text editor
-		editorField = new JTextField();
-		editorField.setHorizontalAlignment(JTextField.CENTER);
+		editorField = new JTextPane();
+		StyledDocument styledDocument = editorField.getStyledDocument();
+		SimpleAttributeSet styledDocumentAttributes = new SimpleAttributeSet();
+		StyleConstants.setAlignment(styledDocumentAttributes, StyleConstants.ALIGN_LEFT);
+		styledDocument.setParagraphAttributes(0, styledDocument.getLength(), styledDocumentAttributes, false);
 		editorField.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		editorField.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		editorField.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
@@ -782,7 +785,7 @@ public class mxCellEditor implements mxICellEditor
 		public void keyReleased(KeyEvent e) {
 			super.keyReleased(e);
 
-			JTextField textComponent = (JTextField) e.getSource();
+			JTextPane textComponent = (JTextPane) e.getSource();
 			editingCellState.setCellText(textComponent.getText());
 		}
 
